@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace api_corelation.ViewModels
+namespace TableJson.ViewModels
 {
     public class ViewModelBase : ReactiveObject
     {

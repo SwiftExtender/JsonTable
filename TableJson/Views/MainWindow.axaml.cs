@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace api_corelation.Views
+namespace TableJson.Views
 {
     public partial class MainWindow : Window
     {

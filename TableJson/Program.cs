@@ -2,7 +2,7 @@
 using Avalonia.ReactiveUI;
 using System;
 
-namespace api_corelation
+namespace TableJson
 {
     internal class Program
     {

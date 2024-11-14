@@ -1,10 +1,10 @@
-using api_corelation.ViewModels;
-using api_corelation.Views;
+using TableJson.ViewModels;
+using TableJson.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace api_corelation
+namespace TableJson
 {
     public partial class App : Application
     {
