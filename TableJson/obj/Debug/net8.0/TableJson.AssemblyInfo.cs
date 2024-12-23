@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TableJson")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7fb00f87ae3663553a4fe1002dd2cf400072e67f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f071f32e7c9317409561668f84e63481f844488d")]
 [assembly: System.Reflection.AssemblyProductAttribute("TableJson")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TableJson")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -5,55 +5,50 @@ using System.Collections.Generic;
 using System.Reactive;
 using Newtonsoft.Json;
 using AvaloniaEdit.Document;
+using System.Linq;
+using Newtonsoft.Json.Linq;
+using DynamicData;
 using System.Text.Json;
+using System.Xml.Linq;
+using static TableJson.ViewModels.MainWindowViewModel;
+using Splat.ModeDetection;
 
 namespace TableJson.ViewModels
 {
-    public class JsonTreeViewViewModel
+    public class MainWindowViewModel : ViewModelBase
     {
         private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
         public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
-        public JsonTreeViewViewModel(string jsonString)
+        public class TreeNode
         {
-            var jsonDocument = JsonDocument.Parse(jsonString);
-            BuildTree(jsonDocument.RootElement, null);
-        }
-        private void BuildTree(JsonElement element, TreeNode? parent)
-        {
-            TreeNode node = new TreeNode(element.ToString(), parent);
-
-            if (element.ValueKind == JsonValueKind.Object || element.ValueKind == JsonValueKind.Array)
+            public string Name { get; set; }
+            public TreeNode? Parent { get; set; }
+            public ObservableCollection<TreeNode> Children { get; set; } = new ObservableCollection<TreeNode>();
+            public string? Value { get; set; }
+            public TreeNode(string name, TreeNode? parent)
             {
-                foreach (var property in element.EnumerateObject())
-                {
-                    BuildTree(property.Value, node);
-                }
+                Name = name;
+                Parent = parent;
             }
-            else if (element.ValueKind == JsonValueKind.Number || element.ValueKind == JsonValueKind.String ||
-                     element.ValueKind == JsonValueKind.True || element.ValueKind == JsonValueKind.False)
-            {
-                // Handle primitive values (you might want to display these differently)
-                node.Value = element.ToString();
-            }
-
-            _treeNodes.Add(node);
         }
-    }
-    public class TreeNode
-    {
-        public string Name { get; set; }
-        public TreeNode? Parent { get; set; }
-        public ObservableCollection<TreeNode> Children { get; set; } = new ObservableCollection<TreeNode>();
-        public string? Value { get; set; }
-
-        public TreeNode(string name, TreeNode? parent)
+        public class TASK_O_ITEM
         {
-            Name = name;
-            Parent = parent;
+            public string CODE { get; set; }
+            public string NAME { get; set; }
         }
-    }
-    public class MainWindowViewModel : ViewModelBase
-    {
+        public class TASK_O
+        {
+            public List<TASK_O_ITEM> TASK_O_ITEM { get; set; }
+        }
+        public class Outputdata
+        {
+            public TASK_O TASK_O { get; set; }
+            public string ERROR_O { get; set; }
+        }
+        public class OutputParameters
+        {
+            public Outputdata Outputdata { get; set; }
+        }
         private bool _IsPinnedWindow = false;
         public bool IsPinnedWindow
         {
@@ -66,12 +61,6 @@ namespace TableJson.ViewModels
             get => _RawText;
             set => this.RaiseAndSetIfChanged(ref _RawText, value);
         }
-        private TextDocument _JsonText = new TextDocument("");
-        public TextDocument JsonText
-        {
-            get => _JsonText;
-            set => this.RaiseAndSetIfChanged(ref _JsonText, value);
-        }
         private string _StatusText = "Status: No input was parsed";
         public string StatusText
         {
@@ -79,19 +68,26 @@ namespace TableJson.ViewModels
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
         public ReactiveCommand<Unit, Unit> ParseCommand { get; }
-        private ObservableCollection<TreeNode> _JsonTable;
-        public ObservableCollection<TreeNode> JsonTable {
-            get => _JsonTable;
-            set => this.RaiseAndSetIfChanged(ref _JsonTable, value);
-        }
+        public Dictionary<string, List<string>> StatsDictionary { get; set; }
         public void JsonToTable()
         {
             try {
                 var parsed_json = JsonConvert.DeserializeObject(RawText.Text);
+                //var stats_json = JsonConvert.DeserializeObject<OutputParameters>(RawText.Text);
+                //foreach (var item in stats_json.Outputdata.TASK_O.TASK_O_ITEM)
+                //{
+                //    if (StatsDictionary.ContainsKey(item.CODE)) {
+                //        StatsDictionary[item.CODE].Add(item.NAME);
+                //    }
+                //    else
+                //    {
+                //        StatsDictionary.Add(item.CODE, new List<string> { item.NAME });
+                //    }
+                //}
                 if (parsed_json is not null)
                 {
-                    JsonText = new TextDocument(parsed_json.ToString());
-                    JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
+                    RawText = new TextDocument(parsed_json.ToString());
+                    //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
                     StatusText = "Status: JSON parsed successfully";
                 } else
                 {
@@ -106,7 +102,7 @@ namespace TableJson.ViewModels
         public MainWindowViewModel()
         {
             ParseCommand = ReactiveCommand.Create(JsonToTable);
-            JsonTable = new ObservableCollection<TreeNode>{};
+            //JsonTable = new ObservableCollection<TreeNode>{};
             //JsonRows = new ObservableCollection<HttpServerRunner>();
             //TreeDataGridInit();
         }

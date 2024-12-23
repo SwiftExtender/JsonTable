@@ -17,3 +17,4 @@ bin
 .vs
 /obj/*
 /api_corelation/obj
+/TableJson/obj

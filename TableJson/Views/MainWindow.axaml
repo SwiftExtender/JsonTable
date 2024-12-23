@@ -32,27 +32,24 @@
 			<ToggleButton IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="65" Height="30" Classes="Pin" Margin="5,5,5,5">
 			</ToggleButton>
 		</StackPanel>
-			<Label Margin="10,5,10,0" BorderBrush="Yellow">Input text</Label>
-			<StackPanel>
-			<aedit:TextEditor Height="170" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+		<StackPanel>
+			<aedit:TextEditor Height="450" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible"></aedit:TextEditor>
 			<Label Margin="5,5,5,0" Content="{Binding StatusText}"></Label>
-			<aedit:TextEditor Height="250" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding JsonText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
-                               VerticalScrollBarVisibility="Visible"></aedit:TextEditor>
-			<Button Margin="7,7,7,7" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}"></Button>
+			<Button VerticalAlignment="Stretch" Margin="7,7,7,7" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}"></Button>
 		</StackPanel>
 		<!--<TreeView ItemsSource="{Binding JsonTable}"></TreeView>-->
-		<TreeView ItemsSource="{Binding JsonTable}" SelectionMode="Multiple">
+		<!--<TreeView ItemsSource="{Binding JsonTable}" SelectionMode="Multiple">
 			<TreeView.ItemTemplate>
 				<TreeDataTemplate>
 					<DockPanel HorizontalAlignment="Stretch">
 						<TextBlock Text="{Binding Value}" />
-						<!--<TextBlock Text="{Binding Value}" />-->
-						<!--<ItemsControl ItemsSource="{Binding Children}" />-->
+						--><!--<TextBlock Text="{Binding Value}" />--><!--
+						--><!--<ItemsControl ItemsSource="{Binding Children}" />--><!--
 					</DockPanel>
 				</TreeDataTemplate>
 			</TreeView.ItemTemplate>
-		</TreeView>
+		</TreeView>-->
 	</StackPanel>
 	</Border>
 </Window>
