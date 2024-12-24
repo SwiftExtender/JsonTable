@@ -3,15 +3,12 @@ using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Reactive;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using AvaloniaEdit.Document;
 using System.Linq;
-using Newtonsoft.Json.Linq;
-using DynamicData;
 using System.Text.Json;
-using System.Xml.Linq;
-using static TableJson.ViewModels.MainWindowViewModel;
-using Splat.ModeDetection;
+using System.IO;
+using System.Text;
 
 namespace TableJson.ViewModels
 {
@@ -30,24 +27,6 @@ namespace TableJson.ViewModels
                 Name = name;
                 Parent = parent;
             }
-        }
-        public class TASK_O_ITEM
-        {
-            public string CODE { get; set; }
-            public string NAME { get; set; }
-        }
-        public class TASK_O
-        {
-            public List<TASK_O_ITEM> TASK_O_ITEM { get; set; }
-        }
-        public class Outputdata
-        {
-            public TASK_O TASK_O { get; set; }
-            public string ERROR_O { get; set; }
-        }
-        public class OutputParameters
-        {
-            public Outputdata Outputdata { get; set; }
         }
         private bool _IsPinnedWindow = false;
         public bool IsPinnedWindow
@@ -69,24 +48,67 @@ namespace TableJson.ViewModels
         }
         public ReactiveCommand<Unit, Unit> ParseCommand { get; }
         public Dictionary<string, List<string>> StatsDictionary { get; set; }
+        //public List<string> GetAllKeys(JToken token)
+        //{
+        //    var keys = new List<string>();
+        //    foreach (var item in token.)
+        //    //void Traverse(JToken jtoken, int depth = 0)
+        //    //{
+        //    //    switch (jtoken.Type)
+        //    //    {
+        //    //        case JTokenType.Object:
+        //    //            foreach (var child in jtoken.Children())
+        //    //            {
+        //    //                if (child is JObject obj)
+        //    //                {
+        //    //                    keys.AddRange(GetAllKeys(obj));
+        //    //                }
+        //    //                else if (child is JProperty prop)
+        //    //                {
+        //    //                    keys.Add(prop.Name);
+        //    //                    keys.AddRange(GetAllKeys(prop));
+        //    //                }
+        //    //            }
+        //    //            break;
+        //    //        case JTokenType.Array:
+        //    //            for (int i = 0; i < jtoken.Count(); i++)
+        //    //            {
+        //    //                Traverse(jtoken[i], depth + 1);
+        //    //            }
+        //    //            break;
+        //    //        case JTokenType.Property:
+        //    //            jtoken.
+        //    //        default:
+        //    //            //keys.Add(jtoken.ToString());
+        //    //            break;
+        //    //    }
+        //    //}
+        //    //Traverse(token);
+        //    return keys;
+        //}
+        public string GetFormatText(JsonDocument jdoc)
+        {
+            using (var stream = new MemoryStream())
+            {
+                Utf8JsonWriter writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
+                jdoc.WriteTo(writer);
+                writer.Flush();
+                return Encoding.UTF8.GetString(stream.ToArray());
+            }
+        }
         public void JsonToTable()
         {
             try {
-                var parsed_json = JsonConvert.DeserializeObject(RawText.Text);
-                //var stats_json = JsonConvert.DeserializeObject<OutputParameters>(RawText.Text);
-                //foreach (var item in stats_json.Outputdata.TASK_O.TASK_O_ITEM)
-                //{
-                //    if (StatsDictionary.ContainsKey(item.CODE)) {
-                //        StatsDictionary[item.CODE].Add(item.NAME);
-                //    }
-                //    else
-                //    {
-                //        StatsDictionary.Add(item.CODE, new List<string> { item.NAME });
-                //    }
-                //}
+                JsonDocument parsed_json = JsonDocument.Parse(RawText.Text);
+                var keys = new List<string>();
+                foreach (JsonProperty property in parsed_json.RootElement.EnumerateObject())
+                {
+                    keys.Add(property.Name);
+                    keys.Add(property.Value.ToString());
+                }
                 if (parsed_json is not null)
                 {
-                    RawText = new TextDocument(parsed_json.ToString());
+                    RawText = new TextDocument(GetFormatText(parsed_json));
                     //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
                     StatusText = "Status: JSON parsed successfully";
                 } else
