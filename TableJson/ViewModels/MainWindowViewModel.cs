@@ -3,7 +3,6 @@ using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Reactive;
-//using Newtonsoft.Json;
 using AvaloniaEdit.Document;
 using System.Linq;
 using System.Text.Json;
@@ -12,7 +11,7 @@ using System.Text;
 
 namespace TableJson.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+public class MainWindowViewModel : ViewModelBase
     {
         private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
         public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
@@ -47,45 +46,64 @@ namespace TableJson.ViewModels
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
         public ReactiveCommand<Unit, Unit> ParseCommand { get; }
-        public Dictionary<string, List<string>> StatsDictionary { get; set; }
-        //public List<string> GetAllKeys(JToken token)
-        //{
-        //    var keys = new List<string>();
-        //    foreach (var item in token.)
-        //    //void Traverse(JToken jtoken, int depth = 0)
-        //    //{
-        //    //    switch (jtoken.Type)
-        //    //    {
-        //    //        case JTokenType.Object:
-        //    //            foreach (var child in jtoken.Children())
-        //    //            {
-        //    //                if (child is JObject obj)
-        //    //                {
-        //    //                    keys.AddRange(GetAllKeys(obj));
-        //    //                }
-        //    //                else if (child is JProperty prop)
-        //    //                {
-        //    //                    keys.Add(prop.Name);
-        //    //                    keys.AddRange(GetAllKeys(prop));
-        //    //                }
-        //    //            }
-        //    //            break;
-        //    //        case JTokenType.Array:
-        //    //            for (int i = 0; i < jtoken.Count(); i++)
-        //    //            {
-        //    //                Traverse(jtoken[i], depth + 1);
-        //    //            }
-        //    //            break;
-        //    //        case JTokenType.Property:
-        //    //            jtoken.
-        //    //        default:
-        //    //            //keys.Add(jtoken.ToString());
-        //    //            break;
-        //    //    }
-        //    //}
-        //    //Traverse(token);
-        //    return keys;
-        //}
+        public List<string> GetAllValues(JsonDocument jsonDoc)
+        {
+            var keys = new List<string>();
+            void Traverse(JsonElement token)
+            {
+                if (token.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (JsonElement item in token.EnumerateArray())
+                    {
+                        Traverse(item);
+                    }
+                }
+                else if (token.ValueKind == JsonValueKind.Object)
+                {
+                    foreach (JsonProperty item in token.EnumerateObject())
+                    {
+                        Traverse(item.Value);
+                    }
+                } 
+                else
+                {
+                    keys.Add(token.ToString());
+                }   
+            }
+            Traverse(jsonDoc.RootElement);
+            return keys;
+        }
+        public List<string> GetAllKeys(JsonDocument jsonDoc)
+        {
+            var keys = new List<string>();
+            void Traverse(JsonElement token)
+            {
+                //var keys = new List<string>
+                if (token.ValueKind == JsonValueKind.Array)
+                {
+                    keys.Add(token.EnumerateArray().Current.ToString());
+                    foreach (JsonElement item in token.EnumerateArray())
+                    {
+                        Traverse(item);
+                    }
+                }
+                else if (token.ValueKind == JsonValueKind.Object)
+                {
+                    //var t = token.EnumerateObject();
+                    //keys.Add(t.Current.Name);
+                    foreach (JsonProperty item in token.EnumerateObject())
+                    {
+                        //..keys.Add(item.Name);
+                        Traverse(item.Value);
+                    }
+                } else
+                {
+                    keys.Add(token.ToString());
+                }
+            }
+            Traverse(jsonDoc.RootElement);
+            return keys;
+        }
         public string GetFormatText(JsonDocument jdoc)
         {
             using (var stream = new MemoryStream())
@@ -99,21 +117,18 @@ namespace TableJson.ViewModels
         public void JsonToTable()
         {
             try {
-                JsonDocument parsed_json = JsonDocument.Parse(RawText.Text);
-                var keys = new List<string>();
-                foreach (JsonProperty property in parsed_json.RootElement.EnumerateObject())
-                {
-                    keys.Add(property.Name);
-                    keys.Add(property.Value.ToString());
-                }
-                if (parsed_json is not null)
-                {
-                    RawText = new TextDocument(GetFormatText(parsed_json));
-                    //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
-                    StatusText = "Status: JSON parsed successfully";
-                } else
+                if (RawText.Text.Trim() == "")
                 {
                     StatusText = "Status: Input string is empty";
+                } else {
+                    using (JsonDocument parsed_json = JsonDocument.Parse(RawText.Text))
+                    {
+                        GetAllValues(parsed_json);
+                        GetAllKeys(parsed_json);
+                        RawText = new TextDocument(GetFormatText(parsed_json));
+                        //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
+                        StatusText = "Status: JSON parsed successfully";
+                    }
                 }
             } 
             catch (Exception e) 
@@ -124,9 +139,6 @@ namespace TableJson.ViewModels
         public MainWindowViewModel()
         {
             ParseCommand = ReactiveCommand.Create(JsonToTable);
-            //JsonTable = new ObservableCollection<TreeNode>{};
-            //JsonRows = new ObservableCollection<HttpServerRunner>();
-            //TreeDataGridInit();
         }
     }
 }
