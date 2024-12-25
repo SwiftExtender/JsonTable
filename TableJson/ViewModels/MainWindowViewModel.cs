@@ -46,6 +46,12 @@ public class MainWindowViewModel : ViewModelBase
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
         public ReactiveCommand<Unit, Unit> ParseCommand { get; }
+        public List<string> JsonKeys { get; }
+        public List<string> JsonValues { get; }
+        private ObservableCollection<string> _KeyEntries;
+        public ObservableCollection<string> KeyEntries { get => _KeyEntries; set => this.RaiseAndSetIfChanged(ref _KeyEntries, value); }
+        private ObservableCollection<string> _ValueEntries;
+        public ObservableCollection<string> ValueEntries { get => _ValueEntries; set => this.RaiseAndSetIfChanged(ref _ValueEntries, value); }
         public List<string> GetAllValues(JsonDocument jsonDoc)
         {
             var keys = new List<string>();
@@ -78,10 +84,8 @@ public class MainWindowViewModel : ViewModelBase
             var keys = new List<string>();
             void Traverse(JsonElement token)
             {
-                //var keys = new List<string>
                 if (token.ValueKind == JsonValueKind.Array)
                 {
-                    keys.Add(token.EnumerateArray().Current.ToString());
                     foreach (JsonElement item in token.EnumerateArray())
                     {
                         Traverse(item);
@@ -89,16 +93,11 @@ public class MainWindowViewModel : ViewModelBase
                 }
                 else if (token.ValueKind == JsonValueKind.Object)
                 {
-                    //var t = token.EnumerateObject();
-                    //keys.Add(t.Current.Name);
                     foreach (JsonProperty item in token.EnumerateObject())
                     {
-                        //..keys.Add(item.Name);
+                        keys.Add(item.Name);
                         Traverse(item.Value);
                     }
-                } else
-                {
-                    keys.Add(token.ToString());
                 }
             }
             Traverse(jsonDoc.RootElement);
@@ -123,8 +122,16 @@ public class MainWindowViewModel : ViewModelBase
                 } else {
                     using (JsonDocument parsed_json = JsonDocument.Parse(RawText.Text))
                     {
-                        GetAllValues(parsed_json);
-                        GetAllKeys(parsed_json);
+                        var v = GetAllValues(parsed_json);
+                        var k = GetAllKeys(parsed_json);
+                        foreach (var item in v)
+                        {
+                            ValueEntries.Add(item);
+                        }
+                        foreach (var item in k)
+                        {
+                            KeyEntries.Add(item);
+                        }
                         RawText = new TextDocument(GetFormatText(parsed_json));
                         //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
                         StatusText = "Status: JSON parsed successfully";

@@ -38,6 +38,21 @@
 			<Label Margin="5,5,5,0" Content="{Binding StatusText}"></Label>
 			<Button VerticalAlignment="Stretch" Margin="7,7,7,7" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}"></Button>
 		</StackPanel>
+		<DockPanel>
+			<DataGrid ItemsSource="{Binding JsonKeys}"
+          CanUserReorderColumns="True"
+          CanUserResizeColumns="True"
+          CanUserSortColumns="True"
+          GridLinesVisibility="All"
+          BorderThickness="1" BorderBrush="Gray"></DataGrid>
+			<DataGrid ItemsSource="{Binding JsonValues}"
+          CanUserReorderColumns="True"
+          CanUserResizeColumns="True"
+          CanUserSortColumns="True"
+          GridLinesVisibility="All"
+          BorderThickness="1" BorderBrush="Gray"></DataGrid>
+		</DockPanel>
+		
 		<!--<TreeView ItemsSource="{Binding JsonTable}"></TreeView>-->
 		<!--<TreeView ItemsSource="{Binding JsonTable}" SelectionMode="Multiple">
 			<TreeView.ItemTemplate>
