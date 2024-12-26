@@ -52,9 +52,9 @@ public class MainWindowViewModel : ViewModelBase
         public ObservableCollection<string> KeyEntries { get => _KeyEntries; set => this.RaiseAndSetIfChanged(ref _KeyEntries, value); }
         private ObservableCollection<string> _ValueEntries;
         public ObservableCollection<string> ValueEntries { get => _ValueEntries; set => this.RaiseAndSetIfChanged(ref _ValueEntries, value); }
-        public List<string> GetAllValues(JsonDocument jsonDoc)
+        public ObservableCollection<string> GetAllValues(JsonDocument jsonDoc)
         {
-            var keys = new List<string>();
+            var keys = new ObservableCollection<string>();
             void Traverse(JsonElement token)
             {
                 if (token.ValueKind == JsonValueKind.Array)
@@ -79,9 +79,9 @@ public class MainWindowViewModel : ViewModelBase
             Traverse(jsonDoc.RootElement);
             return keys;
         }
-        public List<string> GetAllKeys(JsonDocument jsonDoc)
+        public ObservableCollection<string> GetAllKeys(JsonDocument jsonDoc)
         {
-            var keys = new List<string>();
+            var keys = new ObservableCollection<string>();
             void Traverse(JsonElement token)
             {
                 if (token.ValueKind == JsonValueKind.Array)
@@ -122,16 +122,8 @@ public class MainWindowViewModel : ViewModelBase
                 } else {
                     using (JsonDocument parsed_json = JsonDocument.Parse(RawText.Text))
                     {
-                        var v = GetAllValues(parsed_json);
-                        var k = GetAllKeys(parsed_json);
-                        foreach (var item in v)
-                        {
-                            ValueEntries.Add(item);
-                        }
-                        foreach (var item in k)
-                        {
-                            KeyEntries.Add(item);
-                        }
+                        ValueEntries = GetAllValues(parsed_json);
+                        KeyEntries = GetAllKeys(parsed_json);
                         RawText = new TextDocument(GetFormatText(parsed_json));
                         //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
                         StatusText = "Status: JSON parsed successfully";

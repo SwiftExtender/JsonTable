@@ -7,6 +7,7 @@
     <Application.Styles>
         <SimpleTheme />
 		<StyleInclude Source="avares://AvaloniaEdit/Themes/Simple/AvaloniaEdit.xaml" />
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Simple.xaml"/>
 		<!--<StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Simple.axaml"/>-->
     </Application.Styles>
 </Application>
