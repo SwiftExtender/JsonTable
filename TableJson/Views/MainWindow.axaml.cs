@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using AvaloniaEdit;
+using System;
 
 namespace TableJson.Views
 {
@@ -6,7 +8,17 @@ namespace TableJson.Views
     {
         public MainWindow()
         {
+            this.Opened += StartFocusing;
             InitializeComponent();
+
+        }
+        private void StartFocusing(object sender, EventArgs arg)
+        {
+            var focused = this.FindControl<TextEditor>("editor");
+            if (focused != null)
+            {
+                focused.Loaded += (s, e) => focused.Focus();
+            }
         }
     }
 }
