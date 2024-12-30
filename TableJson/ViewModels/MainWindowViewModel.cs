@@ -15,6 +15,18 @@ public class MainWindowViewModel : ViewModelBase
     {
         private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
         public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
+        private bool _ShowUniqueKeys = false;
+        public bool ShowUniqueKeys
+        {
+            get => _ShowUniqueKeys;
+            set => this.RaiseAndSetIfChanged(ref _ShowUniqueKeys, value);
+        }
+        private bool _ShowUniqueValues = false;
+        public bool ShowUniqueValues
+        {
+            get => _ShowUniqueValues;
+            set => this.RaiseAndSetIfChanged(ref _ShowUniqueValues, value);
+        }
         public class TreeNode
         {
             public string Name { get; set; }
@@ -46,8 +58,12 @@ public class MainWindowViewModel : ViewModelBase
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
         public ReactiveCommand<Unit, Unit> ParseCommand { get; }
+        public ReactiveCommand<Unit, Unit> ToggleKeysShowModeCommand { get; }
+        public ReactiveCommand<Unit, Unit> ToggleValuesShowModeCommand { get; }
         public List<string> JsonKeys { get; }
+        public List<string> UniqueJsonKeys { get; }
         public List<string> JsonValues { get; }
+        public List<string> UniqueJsonValues { get; }
         private ObservableCollection<string> _KeyEntries;
         public ObservableCollection<string> KeyEntries { get => _KeyEntries; set => this.RaiseAndSetIfChanged(ref _KeyEntries, value); }
         private ObservableCollection<string> _ValueEntries;
@@ -113,6 +129,28 @@ public class MainWindowViewModel : ViewModelBase
                 return Encoding.UTF8.GetString(stream.ToArray());
             }
         }
+        public void ToggleKeysShowMode()
+        {
+            if (!ShowUniqueKeys)
+            {
+                ShowUniqueKeys = true;
+            }
+            else
+            {
+                ShowUniqueKeys = false;
+            }
+        }
+        public void ToggleValuesShowMode()
+        {
+            if (!ShowUniqueValues)
+            {
+
+                ShowUniqueValues = true;
+            } else
+            {
+                ShowUniqueValues = false;
+            }
+        }
         public void JsonToTable()
         {
             try {
@@ -138,6 +176,8 @@ public class MainWindowViewModel : ViewModelBase
         public MainWindowViewModel()
         {
             ParseCommand = ReactiveCommand.Create(JsonToTable);
+            ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);
+            ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
         }
     }
 }
