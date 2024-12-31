@@ -15,6 +15,14 @@ public class MainWindowViewModel : ViewModelBase
     {
         private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
         public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
+        public List<int> EditorFontSizes {  get; set; } = Enumerable.Range(9,72).ToList();
+        //public int[] EditorFontSizes {  get; set; } = new int[] { 0, 2, 6 };
+        private int _EditorFontSize = 14;
+        public int EditorFontSize
+        {
+            get => _EditorFontSize;
+            set => this.RaiseAndSetIfChanged(ref _EditorFontSize, value);
+        }
         private bool _ShowUniqueKeys = false;
         public bool ShowUniqueKeys
         {
