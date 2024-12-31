@@ -15,14 +15,14 @@ public class MainWindowViewModel : ViewModelBase
     {
         private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
         public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
-        public List<int> EditorFontSizes {  get; set; } = Enumerable.Range(9,72).ToList();
+        public List<double> EditorFontSizes {  get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
         //public int[] EditorFontSizes {  get; set; } = new int[] { 0, 2, 6 };
-        private int _EditorFontSize = 14;
-        public int EditorFontSize
-        {
-            get => _EditorFontSize;
-            set => this.RaiseAndSetIfChanged(ref _EditorFontSize, value);
-        }
+        //private int _EditorFontSize = 14;
+        //public int EditorFontSize
+        //{
+        //    get => _EditorFontSize;
+        //    set => this.RaiseAndSetIfChanged(ref _EditorFontSize, value);
+        //}
         private bool _ShowUniqueKeys = false;
         public bool ShowUniqueKeys
         {
@@ -127,6 +127,21 @@ public class MainWindowViewModel : ViewModelBase
             Traverse(jsonDoc.RootElement);
             return keys;
         }
+        //public void HotKeyPointerWheelHandler(object sender, PointerWheelEventArgs args)
+        //{
+        //    if ((args.KeyModifiers & KeyModifiers.Control) == KeyModifiers.Control)
+        //    {
+        //        //TextEditor editor = this.FindControl<TextEditor>("editor");
+        //        if (args.Delta.Y > 0 && EditorFontSize < 74)
+        //        {
+        //            EditorFontSize += 1; args.Handled = true;
+        //        }
+        //        if (args.Delta.Y < 0 && EditorFontSize > 9)
+        //        {
+        //            EditorFontSize -= 1; args.Handled = true;
+        //        }
+        //    }
+        //}
         public string GetFormatText(JsonDocument jdoc)
         {
             using (var stream = new MemoryStream())
@@ -152,7 +167,6 @@ public class MainWindowViewModel : ViewModelBase
         {
             if (!ShowUniqueValues)
             {
-
                 ShowUniqueValues = true;
             } else
             {

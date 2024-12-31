@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:aedit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+		xmlns:bh="using:TableJson.Behaviors"
         mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="1000"
         x:Class="TableJson.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -46,13 +47,14 @@
 		<Label Margin="10,5,10,0" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Margin="10,5,10,0" Orientation="Horizontal">
 			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>
-				<ComboBox ItemsSource="{Binding EditorFontSizes}" SelectedItem="{Binding EditorFontSize, Mode=TwoWay}" Height="30" Width="45"></ComboBox>
+				<ComboBox ItemsSource="{Binding EditorFontSizes}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}" Height="30" Width="45"></ComboBox>
 			<ToggleButton Margin="50,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="80" Height="30" Classes="Pin">
 			</ToggleButton>
 		</StackPanel>
 		<StackPanel>
-			<aedit:TextEditor x:Name="editor" FontSize="{Binding EditorFontSize}" Height="450" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
-                               VerticalScrollBarVisibility="Visible"></aedit:TextEditor>
+			<!--FontSize="{Binding EditorFontSize}"-->
+			<aedit:TextEditor x:Name="editor" Height="450" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+                               VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler"></aedit:TextEditor>
 			<Label Margin="5,5,5,0" Content="{Binding StatusText}"></Label>
 			<Button VerticalAlignment="Stretch" Margin="10,10,10,10" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}"></Button>
 		</StackPanel>
