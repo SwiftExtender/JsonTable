@@ -16,13 +16,24 @@ public class MainWindowViewModel : ViewModelBase
         private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
         public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
         public List<double> EditorFontSizes {  get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
-        //public int[] EditorFontSizes {  get; set; } = new int[] { 0, 2, 6 };
-        //private int _EditorFontSize = 14;
-        //public int EditorFontSize
-        //{
-        //    get => _EditorFontSize;
-        //    set => this.RaiseAndSetIfChanged(ref _EditorFontSize, value);
-        //}
+        private string _ResultText = "";
+        public string ResultText
+        {
+            get => _ResultText;
+            set => this.RaiseAndSetIfChanged(ref _ResultText, value);
+        }
+        private string _CompileText = "";
+        public string CompileText
+        {
+            get => _CompileText;
+            set => this.RaiseAndSetIfChanged(ref _CompileText, value);
+        }
+        private TextDocument _SourceCode;
+        public TextDocument SourceCode
+        {
+            get => _SourceCode;
+            set => this.RaiseAndSetIfChanged(ref _SourceCode, value);
+        }
         private bool _ShowUniqueKeys = false;
         public bool ShowUniqueKeys
         {
