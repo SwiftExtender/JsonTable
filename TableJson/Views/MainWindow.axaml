@@ -52,34 +52,50 @@
 			</ToggleButton>
 		</StackPanel>
 		<StackPanel>
-			<!--FontSize="{Binding EditorFontSize}"-->
 			<aedit:TextEditor x:Name="editor" Height="450" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler"></aedit:TextEditor>
 			<Label Margin="5,5,5,0" Content="{Binding StatusText}"></Label>
-			<Button VerticalAlignment="Stretch" Margin="10,10,10,10" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}"></Button>
+			<StackPanel Orientation="Horizontal">
+				<Button VerticalAlignment="Stretch" Margin="10,5,10,10" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}" Width="450" Height="35"></Button>
+				<!--<Button Margin="10,5,10,10" Content="JSON Path" Height="35"></Button>
+				<Button Margin="10,5,10,10" Content="Macros" Height="35"></Button>-->
+			</StackPanel>
 		</StackPanel>
-		<Grid IsEnabled="{Binding !!KeyEntries}" ColumnDefinitions="0.9*, 0.9*" RowDefinitions="0.1*,0.9*">
-			<Button Command="{Binding ToggleKeysShowModeCommand}" Grid.Column="0" Grid.Row="0" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
-			<ListBox SelectionMode="Multiple" Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding KeyEntries}"
-		  HorizontalAlignment="Stretch" 
-          BorderThickness="1" BorderBrush="Gray">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding}"/>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-				</ListBox>
-				<Button Command="{Binding ToggleValuesShowModeCommand}" Grid.Column="1" Grid.Row="0" Classes.UniqueValues="{Binding ShowUniqueValues}" Classes.RawValues="{Binding !ShowUniqueValues}" Margin="10,10,10,10"></Button>
-			<ListBox SelectionMode="Multiple" Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding ValueEntries}"
-	      HorizontalAlignment="Stretch"
-          BorderThickness="1" BorderBrush="Gray">
-				<ListBox.ItemTemplate>
-						<DataTemplate>
-							<TextBlock Text="{Binding}"/>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-			</ListBox>
-		</Grid>
+		<TabControl Margin="5">
+			<TabItem Header="Stats">
+				<Grid IsEnabled="{Binding !!KeyEntries}" ColumnDefinitions="0.9*, 0.9*" RowDefinitions="0.1*,0.9*">
+					<Button Command="{Binding ToggleKeysShowModeCommand}" Grid.Column="0" Grid.Row="0" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
+					<ListBox SelectionMode="Multiple" Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding KeyEntries}"
+				  HorizontalAlignment="Stretch"
+				  BorderThickness="1" BorderBrush="Gray">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding}"/>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+					<Button Command="{Binding ToggleValuesShowModeCommand}" Grid.Column="1" Grid.Row="0" Classes.UniqueValues="{Binding ShowUniqueValues}" Classes.RawValues="{Binding !ShowUniqueValues}" Margin="10,10,10,10"></Button>
+					<ListBox SelectionMode="Multiple" Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding ValueEntries}"
+				  HorizontalAlignment="Stretch"
+				  BorderThickness="1" BorderBrush="Gray">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding}"/>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Grid>
+			</TabItem>
+			<TabItem Header="JSON Path">
+				<TextBlock Margin="5">This is tab 2 content</TextBlock>
+			</TabItem>
+			<TabItem Header="Macros">
+				<TextBlock Margin="5">This is tab 3 content</TextBlock>
+			</TabItem>
+			<TabItem Header="Table">
+			</TabItem>
+		</TabControl>
+		
 	</StackPanel>
 	</Border>
 </Window>
