@@ -51,7 +51,7 @@
 			<ToggleButton Margin="50,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="80" Height="30" Classes="Pin">
 			</ToggleButton>
 		</StackPanel>
-			<aedit:TextEditor Grid.Row="2" x:Name="editor" MinHeight="150" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+			<aedit:TextEditor Grid.Row="2" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler"></aedit:TextEditor>
 		<GridSplitter Margin="10,10,10,10" Height="5" Grid.Row="3" Background="Black" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
 		<StackPanel Grid.Row="4">
