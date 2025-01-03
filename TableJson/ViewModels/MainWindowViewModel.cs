@@ -22,13 +22,19 @@ public class MainWindowViewModel : ViewModelBase
             get => _ResultText;
             set => this.RaiseAndSetIfChanged(ref _ResultText, value);
         }
+        private string _SourceCodeStatusText = "Status: No code was compiled";
+        public string SourceCodeStatusText
+        {
+            get => _SourceCodeStatusText;
+            set => this.RaiseAndSetIfChanged(ref _SourceCodeStatusText, value);
+        }
         private string _CompileText = "";
         public string CompileText
         {
             get => _CompileText;
             set => this.RaiseAndSetIfChanged(ref _CompileText, value);
         }
-        private TextDocument _SourceCode;
+        private TextDocument _SourceCode = new TextDocument("");
         public TextDocument SourceCode
         {
             get => _SourceCode;
@@ -79,6 +85,8 @@ public class MainWindowViewModel : ViewModelBase
         public ReactiveCommand<Unit, Unit> ParseCommand { get; }
         public ReactiveCommand<Unit, Unit> ToggleKeysShowModeCommand { get; }
         public ReactiveCommand<Unit, Unit> ToggleValuesShowModeCommand { get; }
+        public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
+        public ReactiveCommand<Unit, Unit> RunJsonpathQueryCommand { get; }
         public List<string> JsonKeys { get; }
         public List<string> UniqueJsonKeys { get; }
         public List<string> JsonValues { get; }
@@ -138,21 +146,6 @@ public class MainWindowViewModel : ViewModelBase
             Traverse(jsonDoc.RootElement);
             return keys;
         }
-        //public void HotKeyPointerWheelHandler(object sender, PointerWheelEventArgs args)
-        //{
-        //    if ((args.KeyModifiers & KeyModifiers.Control) == KeyModifiers.Control)
-        //    {
-        //        //TextEditor editor = this.FindControl<TextEditor>("editor");
-        //        if (args.Delta.Y > 0 && EditorFontSize < 74)
-        //        {
-        //            EditorFontSize += 1; args.Handled = true;
-        //        }
-        //        if (args.Delta.Y < 0 && EditorFontSize > 9)
-        //        {
-        //            EditorFontSize -= 1; args.Handled = true;
-        //        }
-        //    }
-        //}
         public string GetFormatText(JsonDocument jdoc)
         {
             using (var stream = new MemoryStream())
@@ -206,11 +199,21 @@ public class MainWindowViewModel : ViewModelBase
                 StatusText = e.Message.ToString();
             }            
         }
+        public void CompileSourceCode()
+        {
+
+        }
+        public void RunJsonpathQuery()
+        {
+
+        }
         public MainWindowViewModel()
         {
             ParseCommand = ReactiveCommand.Create(JsonToTable);
             ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);
             ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
+            CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
+            RunJsonpathQueryCommand = ReactiveCommand.Create(RunJsonpathQuery);
         }
     }
 }

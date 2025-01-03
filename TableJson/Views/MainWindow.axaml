@@ -53,13 +53,13 @@
 		</StackPanel>
 			<aedit:TextEditor Grid.Row="2" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler"></aedit:TextEditor>
-		<GridSplitter Margin="10,10,10,10" Height="5" Grid.Row="3" Background="Black" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
+		<GridSplitter Margin="10,5,10,5" Height="5" Grid.Row="3" Background="Black" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
 		<StackPanel Grid.Row="4">
-		<Label Margin="5,5,5,0" Content="{Binding StatusText}"></Label>
+			<SelectableTextBlock Margin="10,5,10,5" Text="{Binding StatusText}"></SelectableTextBlock>
 		<Button VerticalAlignment="Stretch" Margin="10,5,10,10" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}" HorizontalAlignment="Stretch" Height="35"></Button>
 		<TabControl Margin="10">
 			<TabItem Header="Stats">
-				<Grid IsEnabled="{Binding !!KeyEntries}" ColumnDefinitions="0.9*, 0.9*" RowDefinitions="0.1*,0.9*"  Margin="10,10,10,10">
+				<Grid IsEnabled="{Binding !!KeyEntries}" ColumnDefinitions="0.9*, 0.9*" RowDefinitions="0.1*,0.9*"  Margin="10,5,10,5">
 					<Button Command="{Binding ToggleKeysShowModeCommand}" Grid.Column="0" Grid.Row="0" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
 					<ListBox SelectionMode="Multiple" Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding KeyEntries}"
 				  HorizontalAlignment="Stretch"
@@ -83,17 +83,21 @@
 				</Grid>
 			</TabItem>
 			<TabItem Header="JSONPath Eval">
-				<StackPanel Margin="10,10,10,10">
+				<StackPanel>
 					<TextBox Margin="10,10,10,10" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
+					<StackPanel Margin="10,10,10,10" Orientation="Horizontal">
+						<Button Command="{Binding RunJsonpathQueryCommand}" Margin="10,0,10,0" Content="Run query"></Button>
+						<Button Margin="10,0,10,0" Content="Change view mode"></Button>
+					</StackPanel>
 					<TextBox Margin="10,10,10,10"></TextBox>
 				</StackPanel>
 			</TabItem>
 			<TabItem Header="Macros">
 				<StackPanel>
-					<aedit:TextEditor BorderBrush="#008b8b" Document="{Binding SourceCode, Mode=TwoWay}" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+					<aedit:TextEditor BorderBrush="#008b8b" Document="{Binding SourceCode, Mode=TwoWay}" BorderThickness="2" Margin="10,10,10,10" ShowLineNumbers="True" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible"></aedit:TextEditor>
-					<TextBox Text="{Binding ResultText}"></TextBox>
-					<Button Content="Compile" Margin="5,5,5,5"></Button>
+					<SelectableTextBlock Margin="10,10,10,10" Text="{Binding SourceCodeStatusText}"></SelectableTextBlock>
+					<Button Content="Compile" Command="{Binding CompileSourceCodeCommand}" Margin="10,10,10,10"></Button>
 				</StackPanel>
 			</TabItem>
 			<TabItem Header="Table">
