@@ -8,6 +8,10 @@ using System.Linq;
 using System.Text.Json;
 using System.IO;
 using System.Text;
+using TableJson.Models;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace TableJson.ViewModels
 {
@@ -201,7 +205,38 @@ public class MainWindowViewModel : ViewModelBase
         }
         public void CompileSourceCode()
         {
+            var m = new Macros(false);
+            var options = new CSharpCompilationOptions((OutputKind)LanguageVersion.Latest);
+            var syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
+            var compilation = CSharpCompilation.Create("DynamicAssembly")
+            .AddSyntaxTrees(syntaxTree)
+            .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
+            using (var ms = new MemoryStream())
+            {
+                var result = compilation.Emit(ms);
+                if (result.Success == true) CompileText = "Builded without errors";
+                m.BinaryExecutable = ms.ToArray();
+                if (m.IsSaved)
+                {
+                    using (var DataSource = new HelpContext())
+                    {
+                        DataSource.VoiceOperationTable.Attach(m);
+                        DataSource.VoiceOperationTable.Update(m);
+                        DataSource.SaveChanges();
+                    }
+                }
+                else
+                {
+                    using (var DataSource = new HelpContext())
+                    {
+                        m.IsSaved = true;
+                        DataSource.VoiceOperationTable.Attach(m);
+                        DataSource.VoiceOperationTable.Add(m);
+                        DataSource.SaveChanges();
+                    }
+                }
+            }
         }
         public void RunJsonpathQuery()
         {

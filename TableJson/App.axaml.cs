@@ -3,6 +3,7 @@ using TableJson.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using TableJson.Models;
 
 namespace TableJson
 {
@@ -15,6 +16,8 @@ namespace TableJson
 
         public override void OnFrameworkInitializationCompleted()
         {
+            var tempdb = new HelpContext();
+            tempdb.Database.EnsureCreated();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow
