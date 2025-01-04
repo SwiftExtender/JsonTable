@@ -26,7 +26,7 @@ namespace TableJson.Models
         {
             IsSaved = isSaved;
         }
-        public Macros(int id, bool isActive, string description, string command)
+        public Macros(int id, bool isActive, string description)
         {
             Id = id;
             IsActive = isActive;
