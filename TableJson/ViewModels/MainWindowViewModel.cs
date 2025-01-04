@@ -12,14 +12,34 @@ using TableJson.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json.Linq;
+using Tmds.DBus.Protocol;
 
 namespace TableJson.ViewModels
 {
-public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
     {
         private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
         public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
         public List<double> EditorFontSizes {  get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
+        private string _JSONPathQuery = "";
+        public string JSONPathQuery
+        {
+            get => _JSONPathQuery;
+            set => this.RaiseAndSetIfChanged(ref _JSONPathQuery, value);
+        }
+        private string _JSONPathStatus = "";
+        public string JSONPathStatus
+        {
+            get => _JSONPathStatus;
+            set => this.RaiseAndSetIfChanged(ref _JSONPathStatus, value);
+        }
+        private TextDocument _JSONPathResult = new TextDocument("");
+        public TextDocument JSONPathResult
+        {
+            get => _JSONPathResult;
+            set => this.RaiseAndSetIfChanged(ref _JSONPathResult, value);
+        }
         private string _ResultText = "";
         public string ResultText
         {
@@ -240,7 +260,27 @@ public class MainWindowViewModel : ViewModelBase
         }
         public void RunJsonpathQuery()
         {
-
+            try
+            {
+                if (RawText.Text.Trim() == "")
+                {
+                    JSONPathStatus = "Status: JSON is empty";
+                }
+                if (JSONPathQuery == "")
+                {
+                    JSONPathStatus = "Status: JSONPath query is empty";
+                }
+                else
+                {
+                    JObject JsonObject = JObject.Parse(RawText.Text);
+                    JSONPathResult =  new TextDocument((string)JsonObject.SelectToken(JSONPathQuery));
+                    JSONPathStatus = "Status: JSONPath query completed successfully";
+                }
+            }
+            catch (Exception e)
+            {
+                JSONPathStatus = e.Message.ToString();
+            }
         }
         public MainWindowViewModel()
         {

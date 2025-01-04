@@ -84,12 +84,14 @@
 			</TabItem>
 			<TabItem Header="JSONPath Eval">
 				<StackPanel>
-					<TextBox Margin="10,10,10,10" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
+					<TextBox Text="{Binding JSONPathQuery}" Margin="10,10,10,10" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
 					<StackPanel Margin="10,10,10,10" Orientation="Horizontal">
-						<Button Command="{Binding RunJsonpathQueryCommand}" Margin="10,0,10,0" Content="Run query"></Button>
-						<Button Margin="10,0,10,0" Content="Change view mode"></Button>
+						<Button Command="{Binding RunJsonpathQueryCommand}" Margin="5,0,5,0" Content="Run query"></Button>
+						<!--<Button Margin="10,0,10,0" Content="Change view mode"></Button>-->
 					</StackPanel>
-					<TextBox Margin="10,10,10,10"></TextBox>
+					<SelectableTextBlock Text="{Binding JSONPathStatus}" Margin="0,0,0,0"></SelectableTextBlock>
+					<aedit:TextEditor BorderBrush="#008b8b" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,10,10,10" ShowLineNumbers="True" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+                               VerticalScrollBarVisibility="Visible"></aedit:TextEditor>
 				</StackPanel>
 			</TabItem>
 			<TabItem Header="Macros">
