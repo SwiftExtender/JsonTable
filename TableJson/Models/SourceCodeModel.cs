@@ -36,6 +36,7 @@ namespace TableJson.Models
     public class HelpContext : DbContext
     {
         public DbSet<Macros>? VoiceOperationTable { get; set; }
+        public DbSet<JsonQuery>? JsonQueryTable { get; set; }
         private string DbPath { get; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
