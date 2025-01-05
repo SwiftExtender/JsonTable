@@ -32,6 +32,7 @@ namespace TableJson.Views
         private void StartFocusing(object sender, EventArgs arg)
         {
             TextEditor focused = this.FindControl<TextEditor>("editor");
+            focused.FontSize = 13;
             if (focused != null)
             {
                 focused.Loaded += (s, e) => focused.Focus();
