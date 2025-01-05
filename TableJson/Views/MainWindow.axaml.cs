@@ -12,7 +12,6 @@ namespace TableJson.Views
         {
             this.Opened += StartFocusing;
             InitializeComponent();
-            //HotKeyManager.SetHotKey(saveMenuItem, new KeyGesture(Key.S, KeyModifiers.Control));
         }
         public void HotKeyPointerWheelHandler(object sender, PointerWheelEventArgs args)
         {

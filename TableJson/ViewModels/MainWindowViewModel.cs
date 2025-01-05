@@ -218,7 +218,8 @@ namespace TableJson.ViewModels
                 else
                 {
                     JObject JsonObject = JObject.Parse(RawText.Text);
-                    JSONPathResult =  new TextDocument((string)JsonObject.SelectToken(JSONPathQuery));
+                    var t = JsonObject.SelectToken(JSONPathQuery).ToString(); ;
+                    JSONPathResult =  new TextDocument(t);
                     JSONPathStatus = "Status: JSONPath query completed successfully";
                 }
             }
