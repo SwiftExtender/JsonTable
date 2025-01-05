@@ -49,8 +49,8 @@ namespace TableJson.ViewModels
                 {
                     using (var DataSource = new HelpContext())
                     {
-                        DataSource.VoiceOperationTable.Attach(m);
-                        DataSource.VoiceOperationTable.Update(m);
+                        DataSource.MacrosTable.Attach(m);
+                        DataSource.MacrosTable.Update(m);
                         DataSource.SaveChanges();
                     }
                 }
@@ -59,8 +59,8 @@ namespace TableJson.ViewModels
                     using (var DataSource = new HelpContext())
                     {
                         m.IsSaved = true;
-                        DataSource.VoiceOperationTable.Attach(m);
-                        DataSource.VoiceOperationTable.Add(m);
+                        DataSource.MacrosTable.Attach(m);
+                        DataSource.MacrosTable.Add(m);
                         DataSource.SaveChanges();
                     }
                 }
