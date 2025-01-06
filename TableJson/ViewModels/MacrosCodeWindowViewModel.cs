@@ -1,18 +1,22 @@
 ﻿using System.IO;
 using AvaloniaEdit.Document;
 using Microsoft.CodeAnalysis.CSharp;
-using System;
 using ReactiveUI;
 using System.Reactive;
-using AvaloniaEdit.Document;
 using TableJson.Models;
 using Microsoft.CodeAnalysis;
-using Newtonsoft.Json.Linq;
 
 namespace TableJson.ViewModels
 {
     public class MacrosCodeWindowViewModel : ViewModelBase
     {
+        public Macros BindedMacros;
+        private string _MacrosNameText = "";
+        public string MacrosNameText
+        {
+            get => _MacrosNameText;
+            set => this.RaiseAndSetIfChanged(ref _MacrosNameText, value);
+        }
         private TextDocument _SourceCode = new TextDocument("");
         public TextDocument SourceCode
         {
@@ -43,7 +47,7 @@ namespace TableJson.ViewModels
             using (var ms = new MemoryStream())
             {
                 var result = compilation.Emit(ms);
-                if (result.Success == true) CompileStatusText = "Builded without errors";
+                if (result.Success == true) CompileStatusText = "Built without errors";
                 m.BinaryExecutable = ms.ToArray();
                 if (m.IsSaved)
                 {
@@ -67,7 +71,8 @@ namespace TableJson.ViewModels
             }
         }
         public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
-        public MacrosCodeWindowViewModel() {
+        public MacrosCodeWindowViewModel(Macros macros) {
+            BindedMacros = macros;
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
         }
     }

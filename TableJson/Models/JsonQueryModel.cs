@@ -10,16 +10,16 @@ namespace TableJson.Models
         [Key, Required]
         public int Id { get; set; }
         public string Query { get; set; }
-        public string? Description { get; set; }
+        public string Name { get; set; }
         public JsonQuery(int id)
         {
             Id = id;
         }
-        public JsonQuery(int id, string query, string description)
+        public JsonQuery(int id, string query, string name)
         {
             Id = id;
             Query = query;
-            Description = description;
+            Name = name;
         }
     }
 }

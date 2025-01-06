@@ -10,15 +10,26 @@ using System.IO;
 using System.Text;
 using TableJson.Models;
 using Microsoft.CodeAnalysis;
-
 using Newtonsoft.Json.Linq;
 
 namespace TableJson.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
-        public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
+        //private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
+        //public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
+        //public class TreeNode
+        //{
+        //    public string Name { get; set; }
+        //    public TreeNode? Parent { get; set; }
+        //    public ObservableCollection<TreeNode> Children { get; set; } = new ObservableCollection<TreeNode>();
+        //    public string? Value { get; set; }
+        //    public TreeNode(string name, TreeNode? parent)
+        //    {
+        //        Name = name;
+        //        Parent = parent;
+        //    }
+        //}
         public List<double> EditorFontSizes {  get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
         private string _JSONPathQuery = "";
         public string JSONPathQuery
@@ -56,18 +67,8 @@ namespace TableJson.ViewModels
             get => _ShowUniqueValues;
             set => this.RaiseAndSetIfChanged(ref _ShowUniqueValues, value);
         }
-        public class TreeNode
-        {
-            public string Name { get; set; }
-            public TreeNode? Parent { get; set; }
-            public ObservableCollection<TreeNode> Children { get; set; } = new ObservableCollection<TreeNode>();
-            public string? Value { get; set; }
-            public TreeNode(string name, TreeNode? parent)
-            {
-                Name = name;
-                Parent = parent;
-            }
-        }
+        private ObservableCollection<Macros> _MacrosGrid = new ObservableCollection<Macros> { };
+        public ObservableCollection<Macros> MacrosGrid { get => _MacrosGrid; set => this.RaiseAndSetIfChanged(ref _MacrosGrid, value); }
         private bool _IsPinnedWindow = false;
         public bool IsPinnedWindow
         {
@@ -89,7 +90,8 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> ParseCommand { get; }
         public ReactiveCommand<Unit, Unit> ToggleKeysShowModeCommand { get; }
         public ReactiveCommand<Unit, Unit> ToggleValuesShowModeCommand { get; }
-        public ReactiveCommand<Unit, Unit> RunJsonpathQueryCommand { get; }
+        public ReactiveCommand<Unit, Unit> RunJsonPathQueryCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
         public List<string> JsonKeys { get; }
         public List<string> UniqueJsonKeys { get; }
         public List<string> JsonValues { get; }
@@ -159,6 +161,10 @@ namespace TableJson.ViewModels
                 return Encoding.UTF8.GetString(stream.ToArray());
             }
         }
+        public void AddMacros()
+        {
+            MacrosGrid.Add(new Macros(false));
+        }
         public void ToggleKeysShowMode()
         {
             if (!ShowUniqueKeys)
@@ -175,7 +181,8 @@ namespace TableJson.ViewModels
             if (!ShowUniqueValues)
             {
                 ShowUniqueValues = true;
-            } else
+            } 
+            else
             {
                 ShowUniqueValues = false;
             }
@@ -201,9 +208,8 @@ namespace TableJson.ViewModels
             {
                 StatusText = e.Message.ToString();
             }            
-        }
-        
-        public void RunJsonpathQuery()
+        }     
+        public void RunJsonPathQuery()
         {
             try
             {
@@ -233,8 +239,9 @@ namespace TableJson.ViewModels
             ParseCommand = ReactiveCommand.Create(JsonToTable);
             ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);
             ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
-            
-            RunJsonpathQueryCommand = ReactiveCommand.Create(RunJsonpathQuery);
+            RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
+            AddMacrosCommand = ReactiveCommand.Create(AddMacros);
+            MacrosGrid = new ObservableCollection<Macros> { };
         }
     }
 }

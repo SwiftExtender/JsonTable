@@ -16,7 +16,7 @@ namespace TableJson.Models
         [Key, Required]
         public int Id { get; set; }
         public bool IsActive { get; set; } = true;
-        public string? Description { get; set; }
+        public string Name { get; set; }
         //public string MacrosType { get; set; }
         public string? SourceCode { get; set; } = "";
         public byte[]? BinaryExecutable { get; set; }
@@ -26,11 +26,11 @@ namespace TableJson.Models
         {
             IsSaved = isSaved;
         }
-        public Macros(int id, bool isActive, string description)
+        public Macros(int id, bool isActive, string name)
         {
             Id = id;
             IsActive = isActive;
-            Description = description;
+            Name = name;
         }
     }
     public class HelpContext : DbContext

@@ -3,6 +3,8 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using System;
+using TableJson.Models;
+using TableJson.ViewModels;
 
 namespace TableJson.Views
 {
@@ -27,6 +29,12 @@ namespace TableJson.Views
                     editor.FontSize -= 1; args.Handled = true;
                 }
             }
+        }
+        public void MacrosCreationWindowOpening(object sender, RoutedEventArgs e)
+        {
+            var btn = (Button)sender;
+            var w1 = new MacrosCodeWindow() {DataContext = new MacrosCodeWindowViewModel((Macros)btn.DataContext)};
+            w1.Show();
         }
         private void StartFocusing(object sender, EventArgs arg)
         {
