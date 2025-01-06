@@ -71,9 +71,15 @@ namespace TableJson.ViewModels
             }
         }
         public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
-        public MacrosCodeWindowViewModel(Macros macros) {
-            BindedMacros = macros;
+        //public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
+        //public void SaveMacros()
+        //{
+
+        //}
+        public MacrosCodeWindowViewModel(object macros) {
+            BindedMacros = (Macros)macros;
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
+            //SaveMacrosCommand = ReactiveCommand.Create(SaveMacros);
         }
     }
 }

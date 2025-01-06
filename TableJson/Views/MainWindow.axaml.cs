@@ -3,7 +3,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using System;
-using TableJson.Models;
 using TableJson.ViewModels;
 
 namespace TableJson.Views
@@ -30,12 +29,33 @@ namespace TableJson.Views
                 }
             }
         }
-        public void MacrosCreationWindowOpening(object sender, RoutedEventArgs e)
+        public void MacrosCreationWindowClick(object sender, RoutedEventArgs e)
         {
             var btn = (Button)sender;
-            var w1 = new MacrosCodeWindow() {DataContext = new MacrosCodeWindowViewModel((Macros)btn.DataContext)};
+            var w1 = new MacrosCodeWindow() {DataContext = new MacrosCodeWindowViewModel(btn.DataContext)};
             w1.Show();
         }
+        //public void RemoveMacrosClick(object sender, RoutedEventArgs e)
+        //{
+        //    var btn = (Button)sender;
+        //    try
+        //    {
+        //        TableJson.ViewModels.MainWindowViewModel. RemoveMacros(btn.DataContext);
+        //    } catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //}public void SaveMacrosClick(object sender, RoutedEventArgs e)
+        //{
+        //    var btn = (Button)sender;
+        //    try
+        //    {
+        //        SaveMacros(btn.DataContext);
+        //    } catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //}
         private void StartFocusing(object sender, EventArgs arg)
         {
             TextEditor focused = this.FindControl<TextEditor>("editor");

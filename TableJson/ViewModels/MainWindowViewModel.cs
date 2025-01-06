@@ -92,6 +92,8 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> ToggleValuesShowModeCommand { get; }
         public ReactiveCommand<Unit, Unit> RunJsonPathQueryCommand { get; }
         public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
+        public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
         public List<string> JsonKeys { get; }
         public List<string> UniqueJsonKeys { get; }
         public List<string> JsonValues { get; }
@@ -164,6 +166,14 @@ namespace TableJson.ViewModels
         public void AddMacros()
         {
             MacrosGrid.Add(new Macros(false));
+        }
+        public void RemoveMacros()
+        {
+
+        }
+        public void SaveMacros()
+        {
+
         }
         public void ToggleKeysShowMode()
         {
@@ -241,7 +251,13 @@ namespace TableJson.ViewModels
             ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
             RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
             AddMacrosCommand = ReactiveCommand.Create(AddMacros);
-            MacrosGrid = new ObservableCollection<Macros> { };
+            SaveMacrosCommand = ReactiveCommand.Create(SaveMacros);
+            RemoveMacrosCommand = ReactiveCommand.Create(RemoveMacros);
+            using (var DataSource = new HelpContext())
+            {
+                List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
+                MacrosGrid = new ObservableCollection<Macros>(selectedMacros);
+            }
         }
     }
 }
