@@ -11,9 +11,102 @@ using System.Text;
 using TableJson.Models;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json.Linq;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace TableJson.ViewModels
 {
+    public class MacrosCodeWindowViewModel : ViewModelBase
+    {
+        private ObservableCollection<Macros> _MacrosGrid = new ObservableCollection<Macros> { };
+        public ObservableCollection<Macros> MacrosGrid { get => _MacrosGrid; set => this.RaiseAndSetIfChanged(ref _MacrosGrid, value); }
+        private string _MacrosNameText = "";
+        public string MacrosNameText
+        {
+            get => _MacrosNameText;
+            set => this.RaiseAndSetIfChanged(ref _MacrosNameText, value);
+        }
+        private TextDocument _SourceCode = new TextDocument("");
+        public TextDocument SourceCode
+        {
+            get => _SourceCode;
+            set => this.RaiseAndSetIfChanged(ref _SourceCode, value);
+        }
+        private string _SourceCodeRunOutputText = "";
+        public string SourceCodeRunOutputText
+        {
+            get => _SourceCodeRunOutputText;
+            set => this.RaiseAndSetIfChanged(ref _SourceCodeRunOutputText, value);
+        }
+        private string _CompileStatusText = "Status: No code was compiled";
+        public string CompileStatusText
+        {
+            get => _CompileStatusText;
+            set => this.RaiseAndSetIfChanged(ref _CompileStatusText, value);
+        }
+        public void CompileSourceCode()
+        {
+            var m = new Macros(false);
+            var options = new CSharpCompilationOptions((OutputKind)LanguageVersion.Latest);
+            var syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
+            var compilation = CSharpCompilation.Create("DynamicAssembly")
+            .AddSyntaxTrees(syntaxTree)
+            .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+            using (var ms = new MemoryStream())
+            {
+                var result = compilation.Emit(ms);
+                if (result.Success == true) CompileStatusText = "Built without errors";
+                m.BinaryExecutable = ms.ToArray();
+                if (m.IsSaved)
+                {
+                    using (var DataSource = new HelpContext())
+                    {
+                        DataSource.MacrosTable.Attach(m);
+                        DataSource.MacrosTable.Update(m);
+                        DataSource.SaveChanges();
+                    }
+                }
+                else
+                {
+                    using (var DataSource = new HelpContext())
+                    {
+                        m.IsSaved = true;
+                        DataSource.MacrosTable.Attach(m);
+                        DataSource.MacrosTable.Add(m);
+                        DataSource.SaveChanges();
+                    }
+                }
+            }
+        }
+        public void AddMacros()
+        {
+            MacrosGrid.Add(new Macros(false));
+        }
+        public void RemoveMacros()
+        {
+
+        }
+        public void SaveMacros(object t)
+        {
+            Console.WriteLine(t);
+        }
+        public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
+        public ReactiveCommand<object, Unit> SaveMacrosCommand { get; }
+        public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
+        public MacrosCodeWindowViewModel()
+        {
+            CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
+            AddMacrosCommand = ReactiveCommand.Create(AddMacros);
+            SaveMacrosCommand = ReactiveCommand.Create<object>(SaveMacros);
+            RemoveMacrosCommand = ReactiveCommand.Create(RemoveMacros);
+            using (var DataSource = new HelpContext())
+            {
+                List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
+                MacrosGrid = new ObservableCollection<Macros>(selectedMacros);
+            }
+        }
+    }
     public class MainWindowViewModel : ViewModelBase
     {
         //private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
@@ -67,8 +160,6 @@ namespace TableJson.ViewModels
             get => _ShowUniqueValues;
             set => this.RaiseAndSetIfChanged(ref _ShowUniqueValues, value);
         }
-        private ObservableCollection<Macros> _MacrosGrid = new ObservableCollection<Macros> { };
-        public ObservableCollection<Macros> MacrosGrid { get => _MacrosGrid; set => this.RaiseAndSetIfChanged(ref _MacrosGrid, value); }
         private bool _IsPinnedWindow = false;
         public bool IsPinnedWindow
         {
@@ -91,9 +182,6 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> ToggleKeysShowModeCommand { get; }
         public ReactiveCommand<Unit, Unit> ToggleValuesShowModeCommand { get; }
         public ReactiveCommand<Unit, Unit> RunJsonPathQueryCommand { get; }
-        public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
-        public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
         public List<string> JsonKeys { get; }
         public List<string> UniqueJsonKeys { get; }
         public List<string> JsonValues { get; }
@@ -153,28 +241,6 @@ namespace TableJson.ViewModels
             Traverse(jsonDoc.RootElement);
             return keys;
         }
-        public string GetFormatText(JsonDocument jdoc)
-        {
-            using (var stream = new MemoryStream())
-            {
-                Utf8JsonWriter writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
-                jdoc.WriteTo(writer);
-                writer.Flush();
-                return Encoding.UTF8.GetString(stream.ToArray());
-            }
-        }
-        public void AddMacros()
-        {
-            MacrosGrid.Add(new Macros(false));
-        }
-        public void RemoveMacros()
-        {
-
-        }
-        public void SaveMacros()
-        {
-
-        }
         public void ToggleKeysShowMode()
         {
             if (!ShowUniqueKeys)
@@ -218,7 +284,17 @@ namespace TableJson.ViewModels
             {
                 StatusText = e.Message.ToString();
             }            
-        }     
+        }
+        public string GetFormatText(JsonDocument jdoc)
+        {
+            using (var stream = new MemoryStream())
+            {
+                Utf8JsonWriter writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
+                jdoc.WriteTo(writer);
+                writer.Flush();
+                return Encoding.UTF8.GetString(stream.ToArray());
+            }
+        }
         public void RunJsonPathQuery()
         {
             try
@@ -250,14 +326,6 @@ namespace TableJson.ViewModels
             ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);
             ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
             RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
-            AddMacrosCommand = ReactiveCommand.Create(AddMacros);
-            SaveMacrosCommand = ReactiveCommand.Create(SaveMacros);
-            RemoveMacrosCommand = ReactiveCommand.Create(RemoveMacros);
-            using (var DataSource = new HelpContext())
-            {
-                List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
-                MacrosGrid = new ObservableCollection<Macros>(selectedMacros);
-            }
         }
     }
 }

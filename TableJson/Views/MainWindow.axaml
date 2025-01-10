@@ -100,21 +100,19 @@
 			</TabItem>
 			<TabItem Header="Macros">
 				<StackPanel>
-					<DataGrid ItemsSource="{Binding MacrosGrid}" AutoGenerateColumns="False" Margin="10,0,10,0" CanUserResizeColumns="True">
+					<DataGrid x:Name="mgrid" x:DataType="vm:MacrosCodeWindowViewModel" ItemsSource="{Binding MacrosGrid}" AutoGenerateColumns="False" Margin="10,0,10,0" CanUserResizeColumns="True">
 						<DataGrid.Columns>
-							<DataGridTextColumn IsReadOnly="False" Header="Name" Binding="{Binding Name}" MinWidth="150"></DataGridTextColumn>
+							<DataGridTextColumn IsReadOnly="False" Header="Name" MinWidth="150"></DataGridTextColumn>
 							<DataGridTemplateColumn Header="Actions" MinWidth="100">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
-										<Button Content="Save" Command="{Binding SaveMacrosCommand}" CommandParameter="{Binding Path=ItemsSource}"></Button>
-										<!--<Button Content="Edit code" Command="{Binding MacrosCreationWindowCommand}" CommandParameter="{Binding .}"></Button>
-										<Button Content="Remove" Command="{Binding RemoveMacrosCommand}" CommandParameter="{Binding .}"></Button>-->
+										<Button Content="Save" x:DataType="vm:MacrosCodeWindowViewModel" Command="{Binding SaveMacrosCommand}"></Button>
 									</DataTemplate>
 								</DataGridTemplateColumn.CellTemplate>
 							</DataGridTemplateColumn>
 						</DataGrid.Columns>
 					</DataGrid>
-					<Button Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}"></Button>
+					<Button Content="Add Macros" Margin="10,10,10,10" x:DataType="vm:MacrosCodeWindowViewModel" Command="{Binding AddMacrosCommand}" DataContext="(vm:MacrosCodeWindowViewModel)DataContext"></Button>
 				</StackPanel>
 			</TabItem>
 			<TabItem Header="Table">
