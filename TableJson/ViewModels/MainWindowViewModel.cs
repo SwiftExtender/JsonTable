@@ -15,10 +15,22 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace TableJson.ViewModels
 {
-    public class MacrosCodeWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
     {
-        private ObservableCollection<Macros> _MacrosGrid = new ObservableCollection<Macros> { };
-        public ObservableCollection<Macros> MacrosGrid { get => _MacrosGrid; set => this.RaiseAndSetIfChanged(ref _MacrosGrid, value); }
+        //private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
+        //public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
+        //public class TreeNode
+        //{
+        //    public string Name { get; set; }
+        //    public TreeNode? Parent { get; set; }
+        //    public ObservableCollection<TreeNode> Children { get; set; } = new ObservableCollection<TreeNode>();
+        //    public string? Value { get; set; }
+        //    public TreeNode(string name, TreeNode? parent)
+        //    {
+        //        Name = name;
+        //        Parent = parent;
+        //    }
+        //}
         private string _MacrosNameText = "";
         public string MacrosNameText
         {
@@ -78,51 +90,17 @@ namespace TableJson.ViewModels
                 }
             }
         }
-        public void AddMacros()
-        {
-            MacrosGrid.Add(new Macros(false));
-        }
         public void RemoveMacros()
         {
 
         }
-        public void SaveMacros(object t)
+        public void SaveMacros()
         {
-            Console.WriteLine(t);
+            //Console.WriteLine(t);
         }
         public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
-        public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
-        public ReactiveCommand<object, Unit> SaveMacrosCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
-        public MacrosCodeWindowViewModel()
-        {
-            CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
-            AddMacrosCommand = ReactiveCommand.Create(AddMacros);
-            SaveMacrosCommand = ReactiveCommand.Create<object>(SaveMacros);
-            RemoveMacrosCommand = ReactiveCommand.Create(RemoveMacros);
-            using (var DataSource = new HelpContext())
-            {
-                List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
-                MacrosGrid = new ObservableCollection<Macros>(selectedMacros);
-            }
-        }
-    }
-    public class MainWindowViewModel : ViewModelBase
-    {
-        //private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
-        //public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
-        //public class TreeNode
-        //{
-        //    public string Name { get; set; }
-        //    public TreeNode? Parent { get; set; }
-        //    public ObservableCollection<TreeNode> Children { get; set; } = new ObservableCollection<TreeNode>();
-        //    public string? Value { get; set; }
-        //    public TreeNode(string name, TreeNode? parent)
-        //    {
-        //        Name = name;
-        //        Parent = parent;
-        //    }
-        //}
         public List<double> EditorFontSizes {  get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
         private string _JSONPathQuery = "";
         public string JSONPathQuery
@@ -320,12 +298,27 @@ namespace TableJson.ViewModels
                 JSONPathStatus = e.Message.ToString();
             }
         }
+        public List<Macros> MacrosRows = new();
+        private ObservableCollection<Macros> _MacrosGrid;
+        public ObservableCollection<Macros> MacrosGrid
+        {
+            get => _MacrosGrid;
+            set => this.RaiseAndSetIfChanged(ref _MacrosGrid, value);
+        }
+        public void AddMacros() { MacrosGrid.Add(new Macros(false)); }
+
+        public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
         public MainWindowViewModel()
         {
+            AddMacrosCommand = ReactiveCommand.Create(AddMacros);
             ParseCommand = ReactiveCommand.Create(JsonToTable);
             ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);
             ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
             RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
+            CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
+            SaveMacrosCommand = ReactiveCommand.Create(SaveMacros);
+            RemoveMacrosCommand = ReactiveCommand.Create(RemoveMacros);
+            MacrosGrid = new ObservableCollection<Macros>(MacrosRows);
         }
     }
 }
