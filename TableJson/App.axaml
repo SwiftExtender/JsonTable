@@ -5,9 +5,12 @@
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.Styles>
-        <SimpleTheme />
-		<StyleInclude Source="avares://AvaloniaEdit/Themes/Simple/AvaloniaEdit.xaml" />
-		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Simple.xaml"/>
+        <FluentTheme />
+		<StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+		<StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
+		<!--<SimpleTheme />
+		<StyleInclude Source="avares://AvaloniaEdit/Themes/Simple/AvaloniaEdit.xaml" />-->
 		<!--<StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Simple.axaml"/>-->
+        <!--<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Simple.xaml"/>-->
     </Application.Styles>
 </Application>
