@@ -19,6 +19,7 @@ namespace TableJson.Models
         public string Name { get; set; }
         //public string MacrosType { get; set; }
         public string? SourceCode { get; set; } = "";
+        public string? Checksum { get; set; } = "";
         public byte[]? BinaryExecutable { get; set; }
         [NotMapped]
         public bool IsSaved { get; set; } = true; //false = temp, true = in DB

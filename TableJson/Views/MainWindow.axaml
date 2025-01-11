@@ -116,19 +116,8 @@
 			</TabItem>
 			<TabItem Header="Macros">
 				<StackPanel>
-					<!--<TreeDataGrid x:Name="mgrid"  ItemsSource="{Binding MacrosGrid}" AutoGenerateColumns="False" Margin="10,0,10,0" CanUserResizeColumns="True">
-						--><!--<DataGrid.Columns>
-							<DataGridTextColumn IsReadOnly="True" Binding="{Binding Name}" Header="Name" MinWidth="150"></DataGridTextColumn>
-							<DataGridTemplateColumn Header="Actions" MinWidth="100">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
-										<Button Content="Save" ></Button>
-										--><!--Command="{Binding SaveMacrosCommand}"--><!--
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>--><!--
-					</TreeDataGrid>-->
+					<TreeDataGrid x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,0,10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True">
+					</TreeDataGrid>
 					<Button Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}">
 					</Button>
 				</StackPanel>

@@ -29,12 +29,6 @@ namespace TableJson.Views
                 }
             }
         }
-        public void MacrosCreationWindowClick(object sender, RoutedEventArgs e)
-        {
-            //var btn = (Button)sender;
-            var w1 = new MacrosCodeWindow() { DataContext = new MainWindowViewModel() };
-            w1.Show();
-        }
         private void StartFocusing(object sender, EventArgs arg)
         {
             TextEditor focused = this.FindControl<TextEditor>("editor");

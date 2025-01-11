@@ -12,6 +12,13 @@ using TableJson.Models;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json.Linq;
 using Microsoft.CodeAnalysis.CSharp;
+using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Selection;
+using Avalonia.Controls.Templates;
+using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Interactivity;
+using TableJson.Views;
 
 namespace TableJson.ViewModels
 {
@@ -90,17 +97,6 @@ namespace TableJson.ViewModels
                 }
             }
         }
-        public void RemoveMacros()
-        {
-
-        }
-        public void SaveMacros()
-        {
-            //Console.WriteLine(t);
-        }
-        public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
-        public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
         public List<double> EditorFontSizes {  get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
         private string _JSONPathQuery = "";
         public string JSONPathQuery
@@ -156,10 +152,6 @@ namespace TableJson.ViewModels
             get => _StatusText;
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
-        public ReactiveCommand<Unit, Unit> ParseCommand { get; }
-        public ReactiveCommand<Unit, Unit> ToggleKeysShowModeCommand { get; }
-        public ReactiveCommand<Unit, Unit> ToggleValuesShowModeCommand { get; }
-        public ReactiveCommand<Unit, Unit> RunJsonPathQueryCommand { get; }
         public List<string> JsonKeys { get; }
         public List<string> UniqueJsonKeys { get; }
         public List<string> JsonValues { get; }
@@ -298,16 +290,127 @@ namespace TableJson.ViewModels
                 JSONPathStatus = e.Message.ToString();
             }
         }
-        public List<Macros> MacrosRows = new();
-        private ObservableCollection<Macros> _MacrosGrid;
-        public ObservableCollection<Macros> MacrosGrid
-        {
-            get => _MacrosGrid;
-            set => this.RaiseAndSetIfChanged(ref _MacrosGrid, value);
-        }
-        public void AddMacros() { MacrosGrid.Add(new Macros(false)); }
-
         public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
+        public ReactiveCommand<Unit, Unit> ParseCommand { get; }
+        public ReactiveCommand<Unit, Unit> ToggleKeysShowModeCommand { get; }
+        public ReactiveCommand<Unit, Unit> ToggleValuesShowModeCommand { get; }
+        public ReactiveCommand<Unit, Unit> RunJsonPathQueryCommand { get; }
+        public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
+        public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
+        public void AddMacros() { MacrosRows.Add(new Macros(false)); }
+        public void RemoveMacros(object sender, RoutedEventArgs e)
+        {
+            Button removeButton = (Button)sender;
+            Macros removedMacros = (Macros)removeButton.DataContext;
+            MacrosRows.Remove(removedMacros);
+            if (removedMacros.IsSaved)
+            {
+                using (var DataSource = new HelpContext())
+                {
+                    DataSource.MacrosTable.Attach(removedMacros);
+                    DataSource.MacrosTable.Remove(removedMacros);
+                    DataSource.SaveChanges();
+                }
+            }
+        }
+        public void SaveMacros(object sender, RoutedEventArgs e)
+        {
+            Button updateButton = (Button)sender;
+            Macros updateHint = (Macros)updateButton.DataContext;
+            if (updateHint.IsSaved)
+            {
+                using (var DataSource = new HelpContext())
+                {
+                    DataSource.MacrosTable.Attach(updateHint);
+                    DataSource.MacrosTable.Update(updateHint);
+                    DataSource.SaveChanges();
+                }
+            }
+            else
+            {
+                using (var DataSource = new HelpContext())
+                {
+                    DataSource.MacrosTable.Attach(updateHint);
+                    DataSource.MacrosTable.Add(updateHint);
+                    DataSource.SaveChanges();
+                }
+                updateHint.IsSaved = true;
+            }
+        }
+        public void CodeEditMacros(object sender, RoutedEventArgs e)
+        {
+            var w1 = new MacrosCodeWindow() { DataContext = new MainWindowViewModel() };
+            w1.Show();
+        }
+        private Button UpdateButtonInit()
+        {
+            var b = new Button();
+            b.Background = new SolidColorBrush() { Color = new Color(255, 34, 139, 34) };
+            b.Content = "Add";
+            b.Click += SaveMacros;
+            return b;
+        }
+        private Button RemoveButtonInit()
+        {
+            var b = new Button();
+            b.Background = new SolidColorBrush() { Color = new Color(255, 80, 00, 20) };
+            b.Content = "Remove";
+            b.Click += RemoveMacros;
+            return b;
+        }private Button CodeEditButtonInit()
+        {
+            var b = new Button();
+            b.Background = new SolidColorBrush() { Color = new Color(255, 80, 00, 20) };
+            b.Content = "Code";
+            b.Click += CodeEditMacros;
+            return b;
+        }
+        private DockPanel ButtonsPanelInit()
+        {
+            var panel = new DockPanel();
+            panel.Children.Add(UpdateButtonInit());
+            panel.Children.Add(RemoveButtonInit());
+            panel.Children.Add(CodeEditButtonInit());
+            panel.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch;
+            return panel;
+        }
+        private ObservableCollection<Macros> _MacrosRows;
+        public ObservableCollection<Macros> MacrosRows
+        {
+            get => _MacrosRows;
+            set => this.RaiseAndSetIfChanged(ref _MacrosRows, value);
+        }
+        private FlatTreeDataGridSource<Macros>? _MacrosGridData;
+        public FlatTreeDataGridSource<Macros>? MacrosGridData
+        {
+            get => _MacrosGridData;
+            set => this.RaiseAndSetIfChanged(ref _MacrosGridData, value);
+        }
+        public void TreeDataGridInit()
+        {
+            var TextColumnLength = new GridLength(1, GridUnitType.Star);
+            var TemplateColumnLength = new GridLength(125, GridUnitType.Pixel);
+
+            var EditOptions = new TextColumnOptions<Macros>
+                {
+                    BeginEditGestures = BeginEditGestures.Tap,
+                    MinWidth = new GridLength(80, GridUnitType.Pixel),
+                    IsTextSearchEnabled = true,
+
+                };
+                TextColumn<Macros, string> MacrosNameColumn = new TextColumn<Macros, string>("Name", x => x.Name, options: EditOptions, width: TextColumnLength);
+                MacrosGridData = new FlatTreeDataGridSource<Macros>(MacrosRows)
+                {
+                    Columns =
+                    {
+                        MacrosNameColumn,
+                        new TemplateColumn<Macros>("Actions", new FuncDataTemplate<Macros>((a, e) => ButtonsPanelInit(), supportsRecycling: true), width: TemplateColumnLength),
+                    },
+                };
+
+            MacrosGridData.Selection = new TreeDataGridCellSelectionModel<Macros>(MacrosGridData);
+        }
         public MainWindowViewModel()
         {
             AddMacrosCommand = ReactiveCommand.Create(AddMacros);
@@ -316,9 +419,10 @@ namespace TableJson.ViewModels
             ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
             RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
-            SaveMacrosCommand = ReactiveCommand.Create(SaveMacros);
-            RemoveMacrosCommand = ReactiveCommand.Create(RemoveMacros);
-            MacrosGrid = new ObservableCollection<Macros>(MacrosRows);
+            //SaveMacrosCommand = ReactiveCommand.Create(SaveMacros);
+            //RemoveMacrosCommand = ReactiveCommand.Create(RemoveMacros);
+            MacrosRows = new ();
+            TreeDataGridInit();
         }
     }
 }
