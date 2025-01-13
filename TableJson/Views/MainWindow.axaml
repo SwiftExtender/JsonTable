@@ -74,14 +74,14 @@
 	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
 	<Grid RowDefinitions="0,50,*,5,*" ColumnDefinitions="*">
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
-		<StackPanel Grid.Row="1" MinHeight="50" Margin="15,20,10,0" Orientation="Horizontal">
+		<StackPanel Grid.Row="1" MinHeight="50" Margin="15,22,10,0" Orientation="Horizontal">
 			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked"></Button>
 			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>
 			<ComboBox ItemsSource="{Binding EditorFontSizes}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}" Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin">
 			</ToggleButton>
 		</StackPanel>
-			<aedit:TextEditor Grid.Row="2" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+			<aedit:TextEditor Grid.Row="2" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" Document="{Binding RawText, Mode=TwoWay}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler"></aedit:TextEditor>
 		<GridSplitter x:Name="splitter" Margin="10,5,10,5" Height="5" Grid.Row="3" Background="Black" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
 		<StackPanel Grid.Row="4">
@@ -90,7 +90,7 @@
 				<CheckBox HorizontalAlignment="Right" Margin="0,0,10,0" IsChecked="{Binding !#splitter.IsEnabled}" Content="Locked"></CheckBox>
 			</DockPanel>
 			
-		<Button Margin="10,5,10,10" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}" HorizontalAlignment="Stretch" Height="35"></Button>
+		<Button Margin="10,5,10,0" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}" HorizontalAlignment="Stretch" Height="35"></Button>
 		<TabControl FontSize="16">
 			<TabItem Header="Stats">
 				<Grid IsEnabled="{Binding !!KeyEntries}" ColumnDefinitions="0.9*, 0.9*" RowDefinitions="0.1*,0.9*"  Margin="10,5,10,5">
@@ -98,7 +98,6 @@
 						<Button Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
 						<Button Content="Copy" Margin="10,10,10,10"></Button>
 					</StackPanel>
-					
 					<ListBox Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding KeyEntries}"
 				  BorderBrush="Gray">
 						<ListBox.ItemTemplate>

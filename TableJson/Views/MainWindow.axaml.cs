@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using AvaloniaEdit;
+using AvaloniaEdit.Document;
 using System;
 using System.IO;
 using TableJson.ViewModels;
@@ -71,7 +72,9 @@ namespace TableJson.Views
                 using var streamReader = new StreamReader(stream);
                 // Reads all the content of file as a text.
                 var fileContent = await streamReader.ReadToEndAsync();
-            }
+                TextEditor editor = this.FindControl<TextEditor>("editor");
+                editor.Document = new TextDocument(fileContent);
+            }     
         }
     }
 }

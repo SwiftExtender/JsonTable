@@ -358,7 +358,8 @@ namespace TableJson.ViewModels
             b.Content = "Remove";
             b.Click += RemoveMacros;
             return b;
-        }private Button CodeEditButtonInit()
+        }
+        private Button CodeEditButtonInit()
         {
             var b = new Button();
             b.Background = new SolidColorBrush() { Color = new Color(255, 80, 00, 20) };
