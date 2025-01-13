@@ -11,15 +11,29 @@
 	    WindowStartupLocation="CenterScreen"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaTitleBarHeightHint="-1"
+		Title="TableJson"
 		Topmost="{Binding IsPinnedWindow}"
 		>
 	<Window.Styles>
 		<Style Selector="TabItem">
 			<Setter Property="FontSize" Value="16" />
 		</Style>
+		<Style Selector="ListBox">
+			<Setter Property="FontSize" Value="13" />
+			<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Visible" />
+			<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Visible" />
+			<Setter Property="SelectionMode" Value="Multiple" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="HorizontalAlignment" Value="Stretch" />
+		</Style>
 		<Style Selector="Button">
 			<Setter Property="FontSize" Value="13" />
 			<Setter Property="HorizontalContentAlignment" Value="Center" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+		<Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"></Setter>
+			<Setter Property="BorderBrush" Value="Wheat"></Setter>
 		</Style>
 		<Style Selector="ToggleButton">
 			<Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -60,10 +74,11 @@
 	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
 	<Grid RowDefinitions="0,50,*,5,*" ColumnDefinitions="*">
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
-		<StackPanel Grid.Row="1" MinHeight="50" Margin="10,20,10,0" Orientation="Horizontal">
+		<StackPanel Grid.Row="1" MinHeight="50" Margin="15,20,10,0" Orientation="Horizontal">
+			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked"></Button>
 			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>
-				<ComboBox ItemsSource="{Binding EditorFontSizes}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}" Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
-			<ToggleButton Margin="50,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin">
+			<ComboBox ItemsSource="{Binding EditorFontSizes}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}" Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
+			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin">
 			</ToggleButton>
 		</StackPanel>
 			<aedit:TextEditor Grid.Row="2" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,5,10,0" ShowLineNumbers="True" Document="{Binding RawText}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
@@ -75,24 +90,29 @@
 				<CheckBox HorizontalAlignment="Right" Margin="0,0,10,0" IsChecked="{Binding !#splitter.IsEnabled}" Content="Locked"></CheckBox>
 			</DockPanel>
 			
-		<Button VerticalAlignment="Stretch" Margin="10,5,10,10" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}" HorizontalAlignment="Stretch" Height="35"></Button>
-		<TabControl Margin="10" FontSize="16">
+		<Button Margin="10,5,10,10" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}" HorizontalAlignment="Stretch" Height="35"></Button>
+		<TabControl FontSize="16">
 			<TabItem Header="Stats">
 				<Grid IsEnabled="{Binding !!KeyEntries}" ColumnDefinitions="0.9*, 0.9*" RowDefinitions="0.1*,0.9*"  Margin="10,5,10,5">
-					<Button Command="{Binding ToggleKeysShowModeCommand}" Grid.Column="0" Grid.Row="0" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
-					<ListBox SelectionMode="Multiple" Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding KeyEntries}"
-				  HorizontalAlignment="Stretch"
-				  BorderThickness="1" BorderBrush="Gray">
+					<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
+						<Button Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
+						<Button Content="Copy" Margin="10,10,10,10"></Button>
+					</StackPanel>
+					
+					<ListBox Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding KeyEntries}"
+				  BorderBrush="Gray">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding}"/>
 							</DataTemplate>
 						</ListBox.ItemTemplate>
 					</ListBox>
-					<Button Command="{Binding ToggleValuesShowModeCommand}" Grid.Column="1" Grid.Row="0" Classes.UniqueValues="{Binding ShowUniqueValues}" Classes.RawValues="{Binding !ShowUniqueValues}" Margin="10,10,10,10"></Button>
+					<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
+						<Button Command="{Binding ToggleValuesShowModeCommand}" Classes.UniqueValues="{Binding ShowUniqueValues}" Classes.RawValues="{Binding !ShowUniqueValues}" Margin="10,10,10,10"></Button>
+						<Button Content="Copy" Margin="10,10,10,10"></Button>
+					</StackPanel>
 					<ListBox SelectionMode="Multiple" Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding ValueEntries}"
-				  HorizontalAlignment="Stretch"
-				  BorderThickness="1" BorderBrush="Gray">
+				  BorderBrush="Gray">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding}"/>
@@ -116,7 +136,7 @@
 			</TabItem>
 			<TabItem Header="Macros">
 				<StackPanel>
-					<TreeDataGrid x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,0,10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True">
+					<TreeDataGrid x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,0,10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True" >
 					</TreeDataGrid>
 					<Button Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}">
 					</Button>
