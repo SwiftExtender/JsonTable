@@ -13,6 +13,7 @@
 		ExtendClientAreaTitleBarHeightHint="-1"
 		Title="TableJson"
 		Topmost="{Binding IsPinnedWindow}"
+		
 		>
 	<Window.Styles>
 		<Style Selector="TabItem">
@@ -72,28 +73,27 @@
 		</Style>
 	</Window.Styles>
 	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
-	<Grid RowDefinitions="0,50,*,5,*" ColumnDefinitions="*">
+	<Grid RowDefinitions="0,50,*,25,*" ColumnDefinitions="*">
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Grid.Row="1" MinHeight="50" Margin="15,22,10,0" Orientation="Horizontal">
 			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked"></Button>
+			<Button Background="DarkCyan" Margin="15,0,15,0" Content="Parse" Command="{Binding ParseCommand}"></Button>
 			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>
 			<ComboBox ItemsSource="{Binding EditorFontSizes}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}" Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin">
 			</ToggleButton>
 		</StackPanel>
-			<aedit:TextEditor Grid.Row="2" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" Document="{Binding RawText, Mode=TwoWay}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+			<Grid Grid.Row="2" RowDefinitions="0.9*,0.1*">
+				<aedit:TextEditor Grid.Row="0" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" Document="{Binding RawText, Mode=TwoWay}" ScrollViewer.HorizontalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler"></aedit:TextEditor>
-		<GridSplitter x:Name="splitter" Margin="10,5,10,5" Height="5" Grid.Row="3" Background="Black" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
-		<StackPanel Grid.Row="4">
-			<DockPanel>
-				<SelectableTextBlock Margin="10,5,10,5" Text="{Binding StatusText}"></SelectableTextBlock>
-				<CheckBox HorizontalAlignment="Right" Margin="0,0,10,0" IsChecked="{Binding !#splitter.IsEnabled}" Content="Locked"></CheckBox>
-			</DockPanel>
-			
-		<Button Margin="10,5,10,0" Background="DarkCyan" Content="Parse" Command="{Binding ParseCommand}" HorizontalAlignment="Stretch" Height="35"></Button>
-		<TabControl FontSize="16">
+				<SelectableTextBlock Grid.Row="1" Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>
+				<!--<CheckBox Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,10,0" IsChecked="{Binding !#splitter.IsEnabled}" Content="Locked"></CheckBox>-->
+			</Grid>
+		<GridSplitter ShowsPreview="True" Grid.Row="3" x:Name="splitter" Margin="10,0,10,0" Height="5" Background="Blue" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
+		<DockPanel Grid.Row="4" >
+			<TabControl FontSize="16">
 			<TabItem Header="Stats">
-				<Grid IsEnabled="{Binding !!KeyEntries}" ColumnDefinitions="0.9*, 0.9*" RowDefinitions="0.1*,0.9*"  Margin="10,5,10,5">
+				<Grid IsEnabled="{Binding !!KeyEntries}" ColumnDefinitions="0.9*, 0.9*" RowDefinitions="55,0.8*"  Margin="10,5,10,5">
 					<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
 						<Button Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
 						<Button Content="Copy" Margin="10,10,10,10"></Button>
@@ -120,14 +120,15 @@
 					</ListBox>
 				</Grid>
 			</TabItem>
-			<TabItem Header="JSONPath Query" VerticalAlignment="Stretch">
+			<TabItem Header="JSONPath Query">
 				<StackPanel>
-					<TextBox Text="{Binding JSONPathQuery}" Margin="10,0,10,0" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
-					<StackPanel Margin="10,10,10,10" Orientation="Horizontal">
+					<TextBox Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
+					<DockPanel Margin="10,10,10,10">
 						<Button Command="{Binding RunJsonPathQueryCommand}" Margin="5,0,5,0" Content="Run query" Width="90"></Button>
+						<Button Content="Copy" Margin="5,0,5,0"></Button>
 						<SelectableTextBlock Text="{Binding JSONPathStatus}" Margin="15,5,5,0"></SelectableTextBlock>
 						<!--<Button Margin="10,0,10,0" Content="Change view mode"></Button>-->
-					</StackPanel>
+					</DockPanel>
 					
 					<aedit:TextEditor BorderBrush="DarkGoldenrod" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible"></aedit:TextEditor>
@@ -135,16 +136,17 @@
 			</TabItem>
 			<TabItem Header="Macros">
 				<StackPanel>
-					<TreeDataGrid x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,0,10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True" >
+					<TreeDataGrid x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,10,10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True" >
 					</TreeDataGrid>
 					<Button Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}">
 					</Button>
 				</StackPanel>
 			</TabItem>
-			<TabItem Header="Table">
-			</TabItem>
+			<!--<TabItem Header="Table">
+			</TabItem>-->
 		</TabControl>
-		</StackPanel>
+		</DockPanel>
+	
 	</Grid>
 	</Border>
 </Window>

@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -6,7 +7,6 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using System;
 using System.IO;
-using TableJson.ViewModels;
 
 namespace TableJson.Views
 {
