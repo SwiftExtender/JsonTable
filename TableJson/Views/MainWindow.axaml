@@ -13,7 +13,6 @@
 		ExtendClientAreaTitleBarHeightHint="-1"
 		Title="TableJson"
 		Topmost="{Binding IsPinnedWindow}"
-		
 		>
 	<Window.Styles>
 		<Style Selector="TabItem">
@@ -73,7 +72,7 @@
 		</Style>
 	</Window.Styles>
 	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
-	<Grid RowDefinitions="0,50,*,25,*" ColumnDefinitions="*">
+	<Grid RowDefinitions="0,50,*,10,*" ColumnDefinitions="*">
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Grid.Row="1" MinHeight="50" Margin="15,22,10,0" Orientation="Horizontal">
 			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked"></Button>
@@ -89,16 +88,19 @@
 				<SelectableTextBlock Grid.Row="1" Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>
 				<!--<CheckBox Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,10,0" IsChecked="{Binding !#splitter.IsEnabled}" Content="Locked"></CheckBox>-->
 			</Grid>
-		<GridSplitter ShowsPreview="True" Grid.Row="3" x:Name="splitter" Margin="10,0,10,0" Height="5" Background="Blue" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
+		<GridSplitter Background="DarkCyan" ShowsPreview="True" Grid.Row="3" x:Name="splitter" Margin="10,5,10,0" Height="5" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
 		<DockPanel Grid.Row="4" >
 			<TabControl FontSize="16">
 			<TabItem Header="Stats">
-				<Grid IsEnabled="{Binding !!KeyEntries}" ColumnDefinitions="0.9*, 0.9*" RowDefinitions="55,0.8*"  Margin="10,5,10,5">
+				<Grid ColumnDefinitions="0.9*, 0.9*" RowDefinitions="55,0.8*"  Margin="10,5,10,5">
+					
 					<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
-						<Button Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
-						<Button Content="Copy" Margin="10,10,10,10"></Button>
+						<ComboBox Margin="10,10,10,10"></ComboBox>
+						<Button IsEnabled="{Binding !!KeyEntries}" Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
+						<Button IsEnabled="{Binding !!KeyEntries}" Content="Copy" Margin="10,10,10,10"></Button>
 					</StackPanel>
-					<ListBox Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding KeyEntries}"
+					
+					<ListBox IsEnabled="{Binding !!KeyEntries}" Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding KeyEntries}"
 				  BorderBrush="Gray">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
@@ -106,11 +108,11 @@
 							</DataTemplate>
 						</ListBox.ItemTemplate>
 					</ListBox>
-					<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
+					<StackPanel IsEnabled="{Binding !!KeyEntries}" Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
 						<Button Command="{Binding ToggleValuesShowModeCommand}" Classes.UniqueValues="{Binding ShowUniqueValues}" Classes.RawValues="{Binding !ShowUniqueValues}" Margin="10,10,10,10"></Button>
 						<Button Content="Copy" Margin="10,10,10,10"></Button>
 					</StackPanel>
-					<ListBox SelectionMode="Multiple" Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding ValueEntries}"
+					<ListBox IsEnabled="{Binding !!KeyEntries}" SelectionMode="Multiple" Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding ValueEntries}"
 				  BorderBrush="Gray">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
