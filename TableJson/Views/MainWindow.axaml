@@ -127,12 +127,12 @@
 					<TextBox Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
 					<DockPanel Margin="10,10,10,10">
 						<Button Command="{Binding RunJsonPathQueryCommand}" Margin="5,0,5,0" Content="Run query" Width="90"></Button>
-						<Button Content="Copy" Margin="5,0,5,0"></Button>
+						<Button Content="Copy result" Margin="5,0,5,0" Click="CopyToClipboardFromJSONPathResult"></Button>
 						<SelectableTextBlock Text="{Binding JSONPathStatus}" Margin="15,5,5,0"></SelectableTextBlock>
 						<!--<Button Margin="10,0,10,0" Content="Change view mode"></Button>-->
 					</DockPanel>
 					
-					<aedit:TextEditor BorderBrush="DarkGoldenrod" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+					<aedit:TextEditor x:Name="JSONPathResultEditor" BorderBrush="DarkGoldenrod" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible"></aedit:TextEditor>
 				</StackPanel>
 			</TabItem>

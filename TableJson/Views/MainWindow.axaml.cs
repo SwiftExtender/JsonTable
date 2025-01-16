@@ -53,6 +53,14 @@ namespace TableJson.Views
                 await clipboard.SetDataObjectAsync(dataObject);
             }
         }
+        public async void CopyToClipboardFromJSONPathResult(object sender, RoutedEventArgs e)
+        {
+            TextEditor JSONPathResult = this.FindControl<TextEditor>("JSONPathResultEditor");
+            var clipboard = GetTopLevel(JSONPathResult).Clipboard;
+            var dataObject = new DataObject();
+            dataObject.Set(DataFormats.Text, JSONPathResult.Document.Text);
+            await clipboard.SetDataObjectAsync(dataObject);
+        }
         private async void ImportJsonFile_Clicked(object sender, RoutedEventArgs args)
         {
             // Get top level from the current control. Alternatively, you can use Window reference instead.
