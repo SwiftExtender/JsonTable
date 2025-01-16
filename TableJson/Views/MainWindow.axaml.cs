@@ -61,24 +61,44 @@ namespace TableJson.Views
             dataObject.Set(DataFormats.Text, JSONPathResult.Document.Text);
             await clipboard.SetDataObjectAsync(dataObject);
         }
+        public async void CopyToClipboardFromJSONKeys(object sender, RoutedEventArgs e)
+        {
+            ListBox JSONKeysList = this.FindControl<ListBox>("JSONKeysList");
+            var clipboard = GetTopLevel(JSONKeysList).Clipboard;
+            var dataObject = new DataObject();
+            string keys = "";
+            foreach (var item in JSONKeysList.ItemsSource)
+            {
+                keys += item + Environment.NewLine;
+            }
+            dataObject.Set(DataFormats.Text, keys);
+            await clipboard.SetDataObjectAsync(dataObject);
+        } 
+        public async void CopyToClipboardFromJSONValues(object sender, RoutedEventArgs e)
+        {
+            ListBox JSONValuesList = this.FindControl<ListBox>("JSONValuesList");
+            var clipboard = GetTopLevel(JSONValuesList).Clipboard;
+            var dataObject = new DataObject();
+            string values = "";
+            foreach (var item in JSONValuesList.ItemsSource)
+            {
+                values += item + Environment.NewLine;
+            }
+            dataObject.Set(DataFormats.Text, values);
+            await clipboard.SetDataObjectAsync(dataObject);
+        }
         private async void ImportJsonFile_Clicked(object sender, RoutedEventArgs args)
         {
-            // Get top level from the current control. Alternatively, you can use Window reference instead.
-            var topLevel = TopLevel.GetTopLevel(this);
-
-            // Start async operation to open the dialog.
+            var topLevel = GetTopLevel(this);
             var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 Title = "Open File with JSON",
                 AllowMultiple = false
             });
-
             if (files.Count >= 1)
             {
-                // Open reading stream from the first file.
                 await using var stream = await files[0].OpenReadAsync();
                 using var streamReader = new StreamReader(stream);
-                // Reads all the content of file as a text.
                 var fileContent = await streamReader.ReadToEndAsync();
                 TextEditor editor = this.FindControl<TextEditor>("editor");
                 editor.Document = new TextDocument(fileContent);
