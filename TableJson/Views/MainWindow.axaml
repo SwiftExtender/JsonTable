@@ -83,8 +83,16 @@
 			</ToggleButton>
 		</StackPanel>
 			<Grid Grid.Row="2" RowDefinitions="0.9*,0.1*">
-				<aedit:TextEditor Grid.Row="0" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" Document="{Binding RawText, Mode=TwoWay}" ScrollViewer.HorizontalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible"
-                               VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler"></aedit:TextEditor>
+				<aedit:TextEditor SyntaxHighlighting="None" Grid.Row="0" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" Document="{Binding RawText, Mode=TwoWay}" ScrollViewer.HorizontalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible"
+                            VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler">
+					<aedit:TextEditor.Options>
+						<aedit:TextEditorOptions EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
+					</aedit:TextEditor.Options>
+					<aedit:TextEditor.ContextMenu>
+						<ContextMenu ItemsSource="{Binding }">
+						</ContextMenu>
+					</aedit:TextEditor.ContextMenu>
+				</aedit:TextEditor>
 				<SelectableTextBlock Grid.Row="1" Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>
 				<!--<CheckBox Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,10,0" IsChecked="{Binding !#splitter.IsEnabled}" Content="Locked"></CheckBox>-->
 			</Grid>
@@ -94,7 +102,7 @@
 			<TabItem Header="Stats">
 				<Grid ColumnDefinitions="0.9*, 0.9*" RowDefinitions="55,0.8*"  Margin="10,5,10,5">
 					<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
-						<ComboBox Margin="10,10,10,10"></ComboBox>
+						<Button Margin="10,10,10,10"></Button>
 						<Button IsEnabled="{Binding !!KeyEntries}" Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
 						<Button IsEnabled="{Binding !!KeyEntries}" Content="Copy keys" Margin="10,10,10,10" Click="CopyToClipboardFromJSONKeys"></Button>
 					</StackPanel>
@@ -141,8 +149,6 @@
 					</Button>
 				</StackPanel>
 			</TabItem>
-			<!--<TabItem Header="Table">
-			</TabItem>-->
 		</TabControl>
 		</DockPanel>
 	</Grid>

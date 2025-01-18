@@ -420,9 +420,11 @@ namespace TableJson.ViewModels
             ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
             RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
-            //SaveMacrosCommand = ReactiveCommand.Create(SaveMacros);
-            //RemoveMacrosCommand = ReactiveCommand.Create(RemoveMacros);
-            MacrosRows = new ();
+            using (var DataSource = new HelpContext())
+            {
+                List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
+                MacrosRows = new ObservableCollection<Macros>(selectedMacros);
+            }
             TreeDataGridInit();
         }
     }
