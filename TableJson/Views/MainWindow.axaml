@@ -27,6 +27,13 @@
 			<Setter Property="BorderThickness" Value="1" />
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
 		</Style>
+		<Style Selector="ScrollViewer">
+			<Setter Property="AllowAutoHide" Value="False"/>
+		</Style>
+		<Style Selector="ListBoxItem">
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderBrush" Value="Gray"/>
+		</Style>
 		<Style Selector="Button">
 			<Setter Property="FontSize" Value="13" />
 			<Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -71,16 +78,12 @@
 			<Setter Property="Background" Value="OrangeRed" />
 			<Setter Property="Content" Value="Duplicate Values" />
 		</Style>
-		<Style Selector="ListBoxItem">
-			<Setter Property="BorderThickness" Value="1"/>
-			<Setter Property="BorderBrush" Value="Gray"/>
-		</Style>
 	</Window.Styles>
 	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
 	<Grid RowDefinitions="0,50,*,10,*" ColumnDefinitions="*">
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Grid.Row="1" MinHeight="50" Margin="15,22,10,0" Orientation="Horizontal">
-			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked"></Button>
+			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked" HotKey="Ctrl+O"/>
 			<Button Background="DarkCyan" Margin="15,0,15,0" Content="Parse" Command="{Binding ParseCommand}"></Button>
 			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>
 			<ComboBox ItemsSource="{Binding EditorFontSizes}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}" Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
@@ -88,8 +91,8 @@
 			</ToggleButton>
 		</StackPanel>
 			<Grid Grid.Row="2" RowDefinitions="0.9*,0.1*">
-				<aedit:TextEditor SyntaxHighlighting="None" Grid.Row="0" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" Document="{Binding RawText, Mode=TwoWay}" ScrollViewer.HorizontalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible"
-                            VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler">
+				<aedit:TextEditor SyntaxHighlighting="None" Grid.Row="0" x:Name="editor" BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" Document="{Binding RawText, Mode=TwoWay}" ScrollViewer.AllowAutoHide="False" ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                            ScrollViewer.VerticalScrollBarVisibility="Visible" PointerWheelChanged="HotKeyPointerWheelHandler">
 					<aedit:TextEditor.Options>
 						<aedit:TextEditorOptions EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
 					</aedit:TextEditor.Options>
@@ -102,11 +105,11 @@
 			</Grid>
 		<GridSplitter Background="DarkCyan" ShowsPreview="True" Grid.Row="3" x:Name="splitter" Margin="10,5,10,0" Height="5" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
 		<DockPanel Grid.Row="4" >
-			<TabControl FontSize="16">
+			<TabControl>
 			<TabItem Header="Stats">
-				<Grid ColumnDefinitions="0.9*, 0.9*" RowDefinitions="55,0.8*"  Margin="10,5,10,5">
-					<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
-						<Button Margin="10,10,10,10"></Button>
+				<Grid ColumnDefinitions="0.9*, 0.9*" RowDefinitions="55,0.8*" Margin="10,5,10,5">
+					<Button Margin="10,10,10,10" Grid.Column="0" Grid.Row="0"></Button>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="0" >
 						<Button IsEnabled="{Binding !!KeyEntries}" Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
 						<Button IsEnabled="{Binding !!KeyEntries}" Content="Copy keys" Margin="10,10,10,10" Click="CopyToClipboardFromJSONKeys"></Button>
 					</StackPanel>
@@ -118,7 +121,7 @@
 							</DataTemplate>
 						</ListBox.ItemTemplate>
 					</ListBox>
-					<StackPanel IsEnabled="{Binding !!KeyEntries}" Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
+					<StackPanel HorizontalAlignment="Right" IsEnabled="{Binding !!KeyEntries}" Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
 						<Button Command="{Binding ToggleValuesShowModeCommand}" Classes.UniqueValues="{Binding ShowUniqueValues}" Classes.RawValues="{Binding !ShowUniqueValues}" Margin="10,10,10,10"></Button>
 						<Button Content="Copy values" Margin="10,10,10,10" Click="CopyToClipboardFromJSONValues"></Button>
 					</StackPanel>
@@ -133,7 +136,7 @@
 				</Grid>
 			</TabItem>
 			<TabItem Header="JSONPath Query">
-				<Grid RowDefinitions="30,50,*">
+				<Grid RowDefinitions="30,50,*" Margin="10,5,10,5">
 					<TextBox Grid.Row="0" Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
 					<DockPanel Grid.Row="1" Margin="10,10,10,10">
 						<Button Command="{Binding RunJsonPathQueryCommand}" Margin="5,0,5,0" Content="Run query" Width="90"></Button>
@@ -142,11 +145,11 @@
 						<!--<Button Margin="10,0,10,0" Content="Change view mode"></Button>-->
 					</DockPanel>
 					<aedit:TextEditor Grid.Row="2" x:Name="JSONPathResultEditor" BorderBrush="DarkGoldenrod" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,0,10,30" ShowLineNumbers="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
-                               VerticalScrollBarVisibility="Visible"></aedit:TextEditor>
+                               VerticalScrollBarVisibility="Visible" ScrollViewer.AllowAutoHide="False"></aedit:TextEditor>
 				</Grid>
 			</TabItem>
 			<TabItem Header="Macros">
-				<Grid RowDefinitions="50,*">
+				<Grid RowDefinitions="50,*" Margin="10,5,10,5">
 					<Button Grid.Row="0" Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}">
 					</Button>
 					<TreeDataGrid Grid.Row="1" x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,10,10,30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True" >
