@@ -22,6 +22,7 @@
 			<Setter Property="FontSize" Value="13" />
 			<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Visible" />
 			<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Visible" />
+			<Setter Property="ScrollViewer.AllowAutoHide" Value="False"/>
 			<Setter Property="SelectionMode" Value="Multiple" />
 			<Setter Property="BorderThickness" Value="1" />
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -98,7 +99,6 @@
 					</aedit:TextEditor.ContextMenu>
 				</aedit:TextEditor>
 				<SelectableTextBlock Grid.Row="1" Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>
-				<!--<CheckBox Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,10,0" IsChecked="{Binding !#splitter.IsEnabled}" Content="Locked"></CheckBox>-->
 			</Grid>
 		<GridSplitter Background="DarkCyan" ShowsPreview="True" Grid.Row="3" x:Name="splitter" Margin="10,5,10,0" Height="5" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
 		<DockPanel Grid.Row="4" >
@@ -110,7 +110,7 @@
 						<Button IsEnabled="{Binding !!KeyEntries}" Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
 						<Button IsEnabled="{Binding !!KeyEntries}" Content="Copy keys" Margin="10,10,10,10" Click="CopyToClipboardFromJSONKeys"></Button>
 					</StackPanel>
-					<ListBox x:Name="JSONKeysList" IsEnabled="{Binding !!KeyEntries}" Grid.Column="0" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding KeyEntries}" ItemTemplate=""
+					<ListBox x:Name="JSONKeysList" IsEnabled="{Binding !!KeyEntries}" Grid.Column="0" Grid.Row="1" Margin="10,10,10,30" ItemsSource="{Binding KeyEntries}" ItemTemplate=""
 				  BorderBrush="Gray">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
@@ -122,7 +122,7 @@
 						<Button Command="{Binding ToggleValuesShowModeCommand}" Classes.UniqueValues="{Binding ShowUniqueValues}" Classes.RawValues="{Binding !ShowUniqueValues}" Margin="10,10,10,10"></Button>
 						<Button Content="Copy values" Margin="10,10,10,10" Click="CopyToClipboardFromJSONValues"></Button>
 					</StackPanel>
-					<ListBox x:Name="JSONValuesList" IsEnabled="{Binding !!KeyEntries}" SelectionMode="Multiple" Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" ItemsSource="{Binding ValueEntries}"
+					<ListBox x:Name="JSONValuesList" IsEnabled="{Binding !!KeyEntries}" SelectionMode="Multiple" Grid.Column="1" Grid.Row="1" Margin="10,10,10,30" ItemsSource="{Binding ValueEntries}"
 				  BorderBrush="Gray">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
@@ -133,25 +133,25 @@
 				</Grid>
 			</TabItem>
 			<TabItem Header="JSONPath Query">
-				<StackPanel>
-					<TextBox Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
-					<DockPanel Margin="10,10,10,10">
+				<Grid RowDefinitions="30,50,*">
+					<TextBox Grid.Row="0" Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
+					<DockPanel Grid.Row="1" Margin="10,10,10,10">
 						<Button Command="{Binding RunJsonPathQueryCommand}" Margin="5,0,5,0" Content="Run query" Width="90"></Button>
 						<Button Content="Copy result" Margin="5,0,5,0" Click="CopyToClipboardFromJSONPathResult"></Button>
 						<SelectableTextBlock Text="{Binding JSONPathStatus}" Margin="15,5,5,0"></SelectableTextBlock>
 						<!--<Button Margin="10,0,10,0" Content="Change view mode"></Button>-->
 					</DockPanel>
-					<aedit:TextEditor x:Name="JSONPathResultEditor" BorderBrush="DarkGoldenrod" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,0,10,0" ShowLineNumbers="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+					<aedit:TextEditor Grid.Row="2" x:Name="JSONPathResultEditor" BorderBrush="DarkGoldenrod" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,0,10,30" ShowLineNumbers="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible"></aedit:TextEditor>
-				</StackPanel>
+				</Grid>
 			</TabItem>
 			<TabItem Header="Macros">
-				<StackPanel>
-					<TreeDataGrid x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,10,10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True" >
-					</TreeDataGrid>
-					<Button Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}">
+				<Grid RowDefinitions="50,*">
+					<Button Grid.Row="0" Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}">
 					</Button>
-				</StackPanel>
+					<TreeDataGrid Grid.Row="1" x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,10,10,30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True" >
+					</TreeDataGrid>
+				</Grid>
 			</TabItem>
 		</TabControl>
 		</DockPanel>
