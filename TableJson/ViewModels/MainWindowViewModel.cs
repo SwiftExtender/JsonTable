@@ -152,17 +152,25 @@ namespace TableJson.ViewModels
             get => _StatusText;
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
-        public List<string> JsonKeys { get; }
-        public List<string> UniqueJsonKeys { get; }
-        public List<string> JsonValues { get; }
-        public List<string> UniqueJsonValues { get; }
+        private ObservableCollection<string> _OneCycleJsonKeys;
+        public ObservableCollection<string> OneCycleJsonKeys { get => _OneCycleJsonKeys; set => this.RaiseAndSetIfChanged(ref _OneCycleJsonKeys, value); }
+        private ObservableCollection<string> _OneCycleJsonValues;
+        public ObservableCollection<string> OneCycleJsonValues { get => _OneCycleJsonValues; set => this.RaiseAndSetIfChanged(ref _OneCycleJsonValues, value); }
+        private ObservableCollection<string> _JsonKeys;
+        public ObservableCollection<string> JsonKeys { get => _JsonKeys; set => this.RaiseAndSetIfChanged(ref _JsonKeys, value); }
+        private ObservableCollection<string> _UniqueJsonKeys;
+        public ObservableCollection<string> UniqueJsonKeys { get => _UniqueJsonKeys; set => this.RaiseAndSetIfChanged(ref _UniqueJsonKeys, value); }
+        private ObservableCollection<string> _JsonValues;
+        public ObservableCollection<string> JsonValues { get => _JsonValues; set => this.RaiseAndSetIfChanged(ref _JsonValues, value); }
+        private ObservableCollection<string> _UniqueJsonValues;
+        public ObservableCollection<string> UniqueJsonValues { get => _UniqueJsonValues; set => this.RaiseAndSetIfChanged(ref _UniqueJsonValues, value); }
         private ObservableCollection<string> _KeyEntries;
         public ObservableCollection<string> KeyEntries { get => _KeyEntries; set => this.RaiseAndSetIfChanged(ref _KeyEntries, value); }
         private ObservableCollection<string> _ValueEntries;
         public ObservableCollection<string> ValueEntries { get => _ValueEntries; set => this.RaiseAndSetIfChanged(ref _ValueEntries, value); }
-        public ObservableCollection<string> GetAllValues(JsonDocument jsonDoc)
+        public ObservableCollection<string> GetAllValuesRecursively(JsonDocument jsonDoc)
         {
-            var keys = new ObservableCollection<string>();
+            var values = new ObservableCollection<string>();
             void Traverse(JsonElement token)
             {
                 if (token.ValueKind == JsonValueKind.Array)
@@ -181,13 +189,13 @@ namespace TableJson.ViewModels
                 } 
                 else
                 {
-                    keys.Add(token.ToString());
+                    values.Add(token.ToString());
                 }   
             }
             Traverse(jsonDoc.RootElement);
-            return keys;
+            return values;
         }
-        public ObservableCollection<string> GetAllKeys(JsonDocument jsonDoc)
+        public ObservableCollection<string> GetAllKeysRecursively(JsonDocument jsonDoc)
         {
             var keys = new ObservableCollection<string>();
             void Traverse(JsonElement token)
@@ -210,6 +218,15 @@ namespace TableJson.ViewModels
             }
             Traverse(jsonDoc.RootElement);
             return keys;
+        }
+        public ObservableCollection<string> GetAllKeysOneCycle(JsonDocument jsonDoc) {
+            var keys = new ObservableCollection<string>();
+            return keys;
+        }
+        public ObservableCollection<string> GetAllValuesOneCycle(JsonDocument jsonDoc)
+        {
+            var values = new ObservableCollection<string>();
+            return values;
         }
         public void ToggleKeysShowMode()
         {
@@ -242,8 +259,12 @@ namespace TableJson.ViewModels
                 } else {
                     using (JsonDocument parsed_json = JsonDocument.Parse(RawText.Text))
                     {
-                        ValueEntries = GetAllValues(parsed_json);
-                        KeyEntries = GetAllKeys(parsed_json);
+                        JsonValues = GetAllValuesRecursively(parsed_json);
+                        JsonKeys = GetAllKeysRecursively(parsed_json);
+                        OneCycleJsonKeys = GetAllKeysOneCycle(parsed_json);
+                        OneCycleJsonValues = GetAllValuesOneCycle(parsed_json);
+                        ValueEntries = new ObservableCollection<string>(JsonValues.Distinct());
+                        KeyEntries = JsonKeys;
                         RawText = new TextDocument(GetFormatText(parsed_json));
                         //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
                         StatusText = "Status: JSON parsed successfully";
