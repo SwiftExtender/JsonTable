@@ -17,3 +17,4 @@ bin
 .vs
 /obj/*
 /TableJson/obj/*
+/TableJson/Properties/PublishProfiles
