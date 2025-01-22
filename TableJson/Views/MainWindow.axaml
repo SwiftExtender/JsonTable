@@ -108,7 +108,10 @@
 			<TabControl>
 			<TabItem Header="Stats">
 				<Grid ColumnDefinitions="0.9*, 0.9*" RowDefinitions="55,0.8*" Margin="10,5,10,5">
-					<Button Margin="10,10,10,10" Grid.Column="0" Grid.Row="0"></Button>
+					<DockPanel Grid.Column="0" Grid.Row="0">
+						<Button IsEnabled="{Binding !!ParsedJson}" Margin="10,10,10,10" Content="One cycle" Command="{Binding OneCycleJsonTablifyCommand}"/>
+						<Button IsEnabled="{Binding !!ParsedJson}" Margin="10,10,10,10" Content="Recursive" Command="{Binding RecursiveJsonTablifyCommand}"/>
+					</DockPanel>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="0" >
 						<Button IsEnabled="{Binding !!KeyEntries}" Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
 						<Button IsEnabled="{Binding !!KeyEntries}" Content="Copy keys" Margin="10,10,10,10" Click="CopyToClipboardFromJSONKeys"></Button>

@@ -24,20 +24,6 @@ namespace TableJson.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        //private ObservableCollection<TreeNode> _treeNodes = new ObservableCollection<TreeNode>();
-        //public ObservableCollection<TreeNode> TreeNodes => _treeNodes;
-        //public class TreeNode
-        //{
-        //    public string Name { get; set; }
-        //    public TreeNode? Parent { get; set; }
-        //    public ObservableCollection<TreeNode> Children { get; set; } = new ObservableCollection<TreeNode>();
-        //    public string? Value { get; set; }
-        //    public TreeNode(string name, TreeNode? parent)
-        //    {
-        //        Name = name;
-        //        Parent = parent;
-        //    }
-        //}
         private string _MacrosNameText = "";
         public string MacrosNameText
         {
@@ -146,6 +132,17 @@ namespace TableJson.ViewModels
             get => _RawText;
             set => this.RaiseAndSetIfChanged(ref _RawText, value);
         }
+        private JsonDocument _ParsedJson;
+        public JsonDocument ParsedJson
+        {
+            get => _ParsedJson;
+            set { 
+                if (_ParsedJson != null) {
+                    _ParsedJson.Dispose();
+                }
+                this.RaiseAndSetIfChanged(ref _ParsedJson, value);  
+            }
+        }
         private string _StatusText = "Status: No input was parsed";
         public string StatusText
         {
@@ -219,13 +216,35 @@ namespace TableJson.ViewModels
             Traverse(jsonDoc.RootElement);
             return keys;
         }
-        public ObservableCollection<string> GetAllKeysOneCycle(JsonDocument jsonDoc) {
+        public ObservableCollection<string> GetAllKeysOneCycle(JsonDocument jsonDoc) 
+        {
             var keys = new ObservableCollection<string>();
+            if (jsonDoc.RootElement.ValueKind == JsonValueKind.Object)
+            {
+                foreach (JsonProperty item in jsonDoc.RootElement.EnumerateObject())
+                {
+                    keys.Add(item.Name);
+                }
+            }
             return keys;
         }
         public ObservableCollection<string> GetAllValuesOneCycle(JsonDocument jsonDoc)
         {
             var values = new ObservableCollection<string>();
+            if (jsonDoc.RootElement.ValueKind == JsonValueKind.Array)
+            {
+                foreach (JsonElement item in jsonDoc.RootElement.EnumerateArray())
+                {
+                    values.Add(item.ToString());
+                }
+            }
+            else if (jsonDoc.RootElement.ValueKind == JsonValueKind.Object)
+            {
+                foreach (JsonProperty item in jsonDoc.RootElement.EnumerateObject())
+                {
+                    values.Add(item.Value.ToString());
+                }
+            }
             return values;
         }
         public void ToggleKeysShowMode()
@@ -257,24 +276,28 @@ namespace TableJson.ViewModels
                 {
                     StatusText = "Status: Input string is empty";
                 } else {
-                    using (JsonDocument parsed_json = JsonDocument.Parse(RawText.Text))
-                    {
-                        JsonValues = GetAllValuesRecursively(parsed_json);
-                        JsonKeys = GetAllKeysRecursively(parsed_json);
-                        OneCycleJsonKeys = GetAllKeysOneCycle(parsed_json);
-                        OneCycleJsonValues = GetAllValuesOneCycle(parsed_json);
-                        ValueEntries = new ObservableCollection<string>(JsonValues.Distinct());
-                        KeyEntries = JsonKeys;
-                        RawText = new TextDocument(GetFormatText(parsed_json));
-                        //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
-                        StatusText = "Status: JSON parsed successfully";
-                    }
+                    ParsedJson = JsonDocument.Parse(RawText.Text);
+                    //ValueEntries = new ObservableCollection<string>(JsonValues.Distinct());
+                    //KeyEntries = JsonKeys;
+                    RawText = new TextDocument(GetFormatText(ParsedJson));
+                    //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
+                    StatusText = "Status: JSON parsed successfully";
                 }
             } 
             catch (Exception e) 
             {
                 StatusText = e.Message.ToString();
             }            
+        }
+        public void OneCycleJsonTablify()
+        {
+            KeyEntries = GetAllKeysOneCycle(ParsedJson);
+            ValueEntries = GetAllValuesOneCycle(ParsedJson);
+        }
+        public void RecursiveJsonTablify()
+        {
+            KeyEntries = GetAllKeysRecursively(ParsedJson);
+            ValueEntries = GetAllValuesRecursively(ParsedJson);    
         }
         public string GetFormatText(JsonDocument jdoc)
         {
@@ -319,6 +342,8 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
+        public ReactiveCommand<Unit, Unit> OneCycleJsonTablifyCommand { get; }
+        public ReactiveCommand<Unit, Unit> RecursiveJsonTablifyCommand { get; }
         public void AddMacros() { MacrosRows.Add(new Macros(false)); }
         public void RemoveMacros(object sender, RoutedEventArgs e)
         {
@@ -441,6 +466,8 @@ namespace TableJson.ViewModels
             ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
             RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
+            OneCycleJsonTablifyCommand = ReactiveCommand.Create(OneCycleJsonTablify);
+            RecursiveJsonTablifyCommand = ReactiveCommand.Create(RecursiveJsonTablify);
             using (var DataSource = new HelpContext())
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
