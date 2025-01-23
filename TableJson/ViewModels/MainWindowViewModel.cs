@@ -149,6 +149,8 @@ namespace TableJson.ViewModels
             get => _StatusText;
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
+        private ObservableCollection<string> _TempJsonKeys;
+        private ObservableCollection<string> _TempJsonValues;
         private ObservableCollection<string> _OneCycleJsonKeys;
         public ObservableCollection<string> OneCycleJsonKeys { get => _OneCycleJsonKeys; set => this.RaiseAndSetIfChanged(ref _OneCycleJsonKeys, value); }
         private ObservableCollection<string> _OneCycleJsonValues;
@@ -251,10 +253,13 @@ namespace TableJson.ViewModels
         {
             if (!ShowUniqueKeys)
             {
+                _TempJsonKeys = KeyEntries;
+                KeyEntries = new ObservableCollection<string>(KeyEntries.Distinct());
                 ShowUniqueKeys = true;
             }
             else
             {
+                KeyEntries = new ObservableCollection<string>(_TempJsonKeys);
                 ShowUniqueKeys = false;
             }
         }
@@ -262,10 +267,13 @@ namespace TableJson.ViewModels
         {
             if (!ShowUniqueValues)
             {
+                _TempJsonValues = ValueEntries;
+                ValueEntries = new ObservableCollection<string>(ValueEntries.Distinct());
                 ShowUniqueValues = true;
             } 
             else
             {
+                ValueEntries = new ObservableCollection<string>(_TempJsonValues);
                 ShowUniqueValues = false;
             }
         }
@@ -277,8 +285,6 @@ namespace TableJson.ViewModels
                     StatusText = "Status: Input string is empty";
                 } else {
                     ParsedJson = JsonDocument.Parse(RawText.Text);
-                    //ValueEntries = new ObservableCollection<string>(JsonValues.Distinct());
-                    //KeyEntries = JsonKeys;
                     RawText = new TextDocument(GetFormatText(ParsedJson));
                     //JsonTable = new JsonTreeViewViewModel(parsed_json.ToString()).TreeNodes;
                     StatusText = "Status: JSON parsed successfully";
@@ -297,7 +303,13 @@ namespace TableJson.ViewModels
         public void RecursiveJsonTablify()
         {
             KeyEntries = GetAllKeysRecursively(ParsedJson);
-            ValueEntries = GetAllValuesRecursively(ParsedJson);    
+            ValueEntries = GetAllValuesRecursively(ParsedJson);
+        }
+        public void GetUniqueJsonKeys()
+        {
+            
+        }
+        public void GetUniqueJsonValues() { 
         }
         public string GetFormatText(JsonDocument jdoc)
         {
@@ -344,6 +356,8 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> OneCycleJsonTablifyCommand { get; }
         public ReactiveCommand<Unit, Unit> RecursiveJsonTablifyCommand { get; }
+        //public ReactiveCommand<Unit, Unit> GetUniqueJsonKeysCommand { get; }
+        //public ReactiveCommand<Unit, Unit> GetUniqueJsonValuesCommand { get; }
         public void AddMacros() { MacrosRows.Add(new Macros(false)); }
         public void RemoveMacros(object sender, RoutedEventArgs e)
         {
@@ -468,6 +482,8 @@ namespace TableJson.ViewModels
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
             OneCycleJsonTablifyCommand = ReactiveCommand.Create(OneCycleJsonTablify);
             RecursiveJsonTablifyCommand = ReactiveCommand.Create(RecursiveJsonTablify);
+            //GetUniqueJsonKeysCommand = ReactiveCommand.Create(GetUniqueJsonKeys);
+            //GetUniqueJsonValuesCommand = ReactiveCommand.Create(GetUniqueJsonValues);
             using (var DataSource = new HelpContext())
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
