@@ -24,6 +24,12 @@ namespace TableJson.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private ObservableCollection<string>? _JsonQuerys;
+        public ObservableCollection<string>? JsonQuerys
+        {
+            get => _JsonQuerys;
+            set => this.RaiseAndSetIfChanged(ref _JsonQuerys, value);
+        }
         private string _MacrosNameText = "";
         public string MacrosNameText
         {
