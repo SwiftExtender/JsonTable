@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:aedit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+		xmlns:bh="using:TableJson.Behaviors"
+		xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
         mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="1000"
         x:Class="TableJson.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -139,8 +141,12 @@
 				</Grid>
 			</TabItem>
 			<TabItem Header="JSONPath Query">
-				<Grid RowDefinitions="30,50,*" Margin="10,5,10,5">
-					<TextBox Grid.Row="0" Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" HorizontalAlignment="Stretch"></TextBox>
+				<Grid RowDefinitions="35,50,*" Margin="10,5,10,5">
+					<AutoCompleteBox FilterMode="None" Grid.Row="0" Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" Height="33" HorizontalAlignment="Stretch">
+						<i:Interaction.Behaviors>
+							<bh:DropdownBehavior/>
+						</i:Interaction.Behaviors>
+					</AutoCompleteBox>
 					<DockPanel Grid.Row="1" Margin="10,10,10,10">
 						<Button Command="{Binding RunJsonPathQueryCommand}" Margin="5,0,5,0" Content="Run query" Width="90"></Button>
 						<Button Content="Copy result" Margin="5,0,5,0" Click="CopyToClipboardFromJSONPathResult"></Button>
