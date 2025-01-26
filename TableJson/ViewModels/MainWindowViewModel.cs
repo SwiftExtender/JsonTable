@@ -155,6 +155,18 @@ namespace TableJson.ViewModels
             get => _StatusText;
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
+        private string _ValuesNumberText = "";
+        public string ValuesNumberText
+        {
+            get => _ValuesNumberText;
+            set => this.RaiseAndSetIfChanged(ref _ValuesNumberText, value);
+        }
+        private string _KeysNumberText = "";
+        public string KeysNumberText
+        {
+            get => _KeysNumberText;
+            set => this.RaiseAndSetIfChanged(ref _KeysNumberText, value);
+        }
         private ObservableCollection<string> _TempJsonKeys;
         private ObservableCollection<string> _TempJsonValues;
         private ObservableCollection<string> _OneCycleJsonKeys;

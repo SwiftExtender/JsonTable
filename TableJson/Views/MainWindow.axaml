@@ -108,13 +108,14 @@
 		<GridSplitter Background="DarkCyan" ShowsPreview="True" Grid.Row="3" x:Name="splitter" Margin="10,5,10,0" Height="5" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
 		<DockPanel Grid.Row="4" >
 			<TabControl>
-			<TabItem Header="Stats">
+			<TabItem Header="Columns">
 				<Grid ColumnDefinitions="0.9*, 0.9*" RowDefinitions="55,0.8*" Margin="10,5,10,5">
 					<DockPanel Grid.Column="0" Grid.Row="0">
 						<Button IsEnabled="{Binding !!ParsedJson}" Margin="10,10,10,10" Content="One cycle" Command="{Binding OneCycleJsonTablifyCommand}"/>
 						<Button IsEnabled="{Binding !!ParsedJson}" Margin="10,10,10,10" Content="Recursive" Command="{Binding RecursiveJsonTablifyCommand}"/>
 					</DockPanel>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="0" >
+						<TextBlock Text="{Binding KeysNumberText}" Margin="0,18,10,0" IsEnabled="{Binding !!KeyEntries}"/>
 						<Button IsEnabled="{Binding !!KeyEntries}" Command="{Binding ToggleKeysShowModeCommand}" Classes.UniqueKeys="{Binding ShowUniqueKeys}" Classes.RawKeys="{Binding !ShowUniqueKeys}" Margin="10,10,10,10"></Button>
 						<Button IsEnabled="{Binding !!KeyEntries}" Content="Copy keys" Margin="10,10,10,10" Click="CopyToClipboardFromJSONKeys"></Button>
 					</StackPanel>
@@ -127,6 +128,7 @@
 						</ListBox.ItemTemplate>
 					</ListBox>
 					<StackPanel HorizontalAlignment="Right" IsEnabled="{Binding !!KeyEntries}" Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
+						<TextBlock Text="{Binding ValuesNumberText}" Margin="0,18,10,0" IsEnabled="{Binding !!KeyEntries}"/>
 						<Button Command="{Binding ToggleValuesShowModeCommand}" Classes.UniqueValues="{Binding ShowUniqueValues}" Classes.RawValues="{Binding !ShowUniqueValues}" Margin="10,10,10,10"></Button>
 						<Button Content="Copy values" Margin="10,10,10,10" Click="CopyToClipboardFromJSONValues"></Button>
 					</StackPanel>
