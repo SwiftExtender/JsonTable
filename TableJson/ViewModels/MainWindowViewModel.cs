@@ -323,12 +323,6 @@ namespace TableJson.ViewModels
             KeyEntries = GetAllKeysRecursively(ParsedJson);
             ValueEntries = GetAllValuesRecursively(ParsedJson);
         }
-        public void GetUniqueJsonKeys()
-        {
-            
-        }
-        public void GetUniqueJsonValues() { 
-        }
         public string GetFormatText(JsonDocument jdoc)
         {
             using (var stream = new MemoryStream())
@@ -374,8 +368,6 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> OneCycleJsonTablifyCommand { get; }
         public ReactiveCommand<Unit, Unit> RecursiveJsonTablifyCommand { get; }
-        //public ReactiveCommand<Unit, Unit> GetUniqueJsonKeysCommand { get; }
-        //public ReactiveCommand<Unit, Unit> GetUniqueJsonValuesCommand { get; }
         public void AddMacros() { MacrosRows.Add(new Macros(false)); }
         public void RemoveMacros(object sender, RoutedEventArgs e)
         {
@@ -500,8 +492,6 @@ namespace TableJson.ViewModels
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
             OneCycleJsonTablifyCommand = ReactiveCommand.Create(OneCycleJsonTablify);
             RecursiveJsonTablifyCommand = ReactiveCommand.Create(RecursiveJsonTablify);
-            //GetUniqueJsonKeysCommand = ReactiveCommand.Create(GetUniqueJsonKeys);
-            //GetUniqueJsonValuesCommand = ReactiveCommand.Create(GetUniqueJsonValues);
             using (var DataSource = new HelpContext())
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
