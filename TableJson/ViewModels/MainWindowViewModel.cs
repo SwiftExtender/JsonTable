@@ -280,6 +280,7 @@ namespace TableJson.ViewModels
                 KeyEntries = new ObservableCollection<string>(_TempJsonKeys);
                 ShowUniqueKeys = false;
             }
+            KeysNumberText = "Keys: "+KeyEntries.Count;
         }
         public void ToggleValuesShowMode()
         {
@@ -294,6 +295,7 @@ namespace TableJson.ViewModels
                 ValueEntries = new ObservableCollection<string>(_TempJsonValues);
                 ShowUniqueValues = false;
             }
+            ValuesNumberText = "Values: " + ValueEntries.Count;
         }
         public void JsonToTable()
         {
@@ -317,11 +319,15 @@ namespace TableJson.ViewModels
         {
             KeyEntries = GetAllKeysOneCycle(ParsedJson);
             ValueEntries = GetAllValuesOneCycle(ParsedJson);
+            KeysNumberText = "Keys: " + KeyEntries.Count;
+            ValuesNumberText = "Values: " + ValueEntries.Count;
         }
         public void RecursiveJsonTablify()
         {
             KeyEntries = GetAllKeysRecursively(ParsedJson);
             ValueEntries = GetAllValuesRecursively(ParsedJson);
+            KeysNumberText = "Keys: " + KeyEntries.Count;
+            ValuesNumberText = "Values: " + ValueEntries.Count;
         }
         public string GetFormatText(JsonDocument jdoc)
         {
