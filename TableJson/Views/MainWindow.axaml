@@ -99,7 +99,13 @@
 						<aedit:TextEditorOptions EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
 					</aedit:TextEditor.Options>
 					<aedit:TextEditor.ContextMenu>
-						<ContextMenu ItemsSource="{Binding }">
+						<ContextMenu ItemsSource="{Binding MacrosContextMenu}" >
+							<ContextMenu.ItemTemplate>
+								<DataTemplate x:DataType="vm:MacrosItem">
+									<MenuItem Command="" CommandParameter="" Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
+									<!--HeaderTextColorBackground="{Binding BackgroundColor}"-->
+								</DataTemplate>
+							</ContextMenu.ItemTemplate>
 						</ContextMenu>
 					</aedit:TextEditor.ContextMenu>
 				</aedit:TextEditor>
@@ -121,6 +127,15 @@
 					</StackPanel>
 					<ListBox x:Name="JSONKeysList" IsEnabled="{Binding !!KeyEntries}" Grid.Column="0" Grid.Row="1" Margin="10,10,10,30" ItemsSource="{Binding KeyEntries}" ItemTemplate=""
 				  BorderBrush="Gray">
+						<ListBox.ContextMenu>
+							<ContextMenu ItemsSource="{Binding MacrosContextMenu}" >
+								<ContextMenu.ItemTemplate>
+									<DataTemplate x:DataType="vm:MacrosItem">
+										<MenuItem Command="" CommandParameter="" Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
+									</DataTemplate>
+								</ContextMenu.ItemTemplate>
+							</ContextMenu>
+						</ListBox.ContextMenu>
 						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding}"/>
@@ -134,6 +149,15 @@
 					</StackPanel>
 					<ListBox x:Name="JSONValuesList" IsEnabled="{Binding !!KeyEntries}" SelectionMode="Multiple" Grid.Column="1" Grid.Row="1" Margin="10,10,10,30" ItemsSource="{Binding ValueEntries}"
 				  BorderBrush="Gray">
+						<ListBox.ContextMenu>
+							<ContextMenu ItemsSource="{Binding MacrosContextMenu}" >
+								<ContextMenu.ItemTemplate>
+									<DataTemplate x:DataType="vm:MacrosItem">
+										<MenuItem Command="" CommandParameter="" Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
+									</DataTemplate>
+								</ContextMenu.ItemTemplate>
+							</ContextMenu>
+						</ListBox.ContextMenu>
 						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding}"/>

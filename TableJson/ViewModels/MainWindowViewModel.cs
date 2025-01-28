@@ -19,9 +19,18 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Interactivity;
 using TableJson.Views;
+using System.Windows.Input;
 
 namespace TableJson.ViewModels
 {
+    public class MacrosItem()
+    {
+        public string Header { get; set; }
+        public ICommand? Macros { get; set; }
+        public object? MacrosParameter { get; set; }
+        public IBrush? BackgroundColor { get; set; }
+        public IBrush? HeaderTextColor { get; set; }
+    }
     public class MainWindowViewModel : ViewModelBase
     {
         private ObservableCollection<string>? _JsonQuerys;
@@ -89,7 +98,7 @@ namespace TableJson.ViewModels
                 }
             }
         }
-        public List<double> EditorFontSizes {  get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
+        public List<double> EditorFontSizes { get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
         private string _JSONPathQuery = "";
         public string JSONPathQuery
         {
@@ -166,6 +175,11 @@ namespace TableJson.ViewModels
         {
             get => _KeysNumberText;
             set => this.RaiseAndSetIfChanged(ref _KeysNumberText, value);
+        }
+        private ObservableCollection<MacrosItem> _MacrosContextMenu = new ObservableCollection<MacrosItem>() { new MacrosItem() { Header="test", HeaderTextColor=Brushes.Green,BackgroundColor=Brushes.Honeydew } };
+        public ObservableCollection<MacrosItem> MacrosContextMenu { 
+            get => _MacrosContextMenu; 
+            set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value); 
         }
         private ObservableCollection<string> _TempJsonKeys;
         private ObservableCollection<string> _TempJsonValues;
