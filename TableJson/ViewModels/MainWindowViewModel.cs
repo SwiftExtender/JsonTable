@@ -16,40 +16,28 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Interactivity;
 using TableJson.Views;
-using System.Windows.Input;
 
 namespace TableJson.ViewModels
 {
     public class MacrosItem()
     {
         public string Header { get; set; }
-        public ICommand? Macros { get; set; }
-        public object? MacrosParameter { get; set; }
+        //public ReactiveCommand<string, Unit> Macros { get; set; }
+        //public object? MacrosParameter { get; set; }
         public IBrush? BackgroundColor { get; set; }
         public IBrush? HeaderTextColor { get; set; }
     }
     public class MainWindowViewModel : ViewModelBase
     {
-        private ObservableCollection<string>? _JsonQuerys;
-        public ObservableCollection<string>? JsonQuerys
-        {
-            get => _JsonQuerys;
-            set => this.RaiseAndSetIfChanged(ref _JsonQuerys, value);
-        }
         private string _MacrosNameText = "";
         public string MacrosNameText
         {
             get => _MacrosNameText;
             set => this.RaiseAndSetIfChanged(ref _MacrosNameText, value);
-        }
-        private TextDocument _SourceCode = new TextDocument("");
-        public TextDocument SourceCode
-        {
-            get => _SourceCode;
-            set => this.RaiseAndSetIfChanged(ref _SourceCode, value);
         }
         private string _SourceCodeRunOutputText = "";
         public string SourceCodeRunOutputText
@@ -111,12 +99,6 @@ namespace TableJson.ViewModels
             get => _JSONPathStatus;
             set => this.RaiseAndSetIfChanged(ref _JSONPathStatus, value);
         }
-        private TextDocument _JSONPathResult = new TextDocument("");
-        public TextDocument JSONPathResult
-        {
-            get => _JSONPathResult;
-            set => this.RaiseAndSetIfChanged(ref _JSONPathResult, value);
-        }
         private string _ResultText = "";
         public string ResultText
         {
@@ -147,6 +129,12 @@ namespace TableJson.ViewModels
             get => _RawText;
             set => this.RaiseAndSetIfChanged(ref _RawText, value);
         }
+        private TextDocument _SourceCode = new TextDocument("");
+        public TextDocument SourceCode
+        {
+            get => _SourceCode;
+            set => this.RaiseAndSetIfChanged(ref _SourceCode, value);
+        }
         private JsonDocument _ParsedJson;
         public JsonDocument ParsedJson
         {
@@ -157,6 +145,12 @@ namespace TableJson.ViewModels
                 }
                 this.RaiseAndSetIfChanged(ref _ParsedJson, value);  
             }
+        }
+        private TextDocument _JSONPathResult = new TextDocument("");
+        public TextDocument JSONPathResult
+        {
+            get => _JSONPathResult;
+            set => this.RaiseAndSetIfChanged(ref _JSONPathResult, value);
         }
         private string _StatusText = "Status: No input was parsed";
         public string StatusText
@@ -176,10 +170,16 @@ namespace TableJson.ViewModels
             get => _KeysNumberText;
             set => this.RaiseAndSetIfChanged(ref _KeysNumberText, value);
         }
-        private ObservableCollection<MacrosItem> _MacrosContextMenu = new ObservableCollection<MacrosItem>() { new MacrosItem() { Header="test", HeaderTextColor=Brushes.Green,BackgroundColor=Brushes.Honeydew } };
+        private ObservableCollection<MacrosItem> _MacrosContextMenu = new ObservableCollection<MacrosItem>();
         public ObservableCollection<MacrosItem> MacrosContextMenu { 
             get => _MacrosContextMenu; 
             set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value); 
+        }
+        private ObservableCollection<string>? _JsonQuerys;
+        public ObservableCollection<string>? JsonQuerys
+        {
+            get => _JsonQuerys;
+            set => this.RaiseAndSetIfChanged(ref _JsonQuerys, value);
         }
         private ObservableCollection<string> _TempJsonKeys;
         private ObservableCollection<string> _TempJsonValues;
@@ -504,6 +504,9 @@ namespace TableJson.ViewModels
         }
         public MainWindowViewModel()
         {
+            MacrosContextMenu = new ObservableCollection<MacrosItem> { new MacrosItem()
+            { Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
+            //Macros = ReactiveCommand.Create<string>(CopyText)}
             AddMacrosCommand = ReactiveCommand.Create(AddMacros);
             ParseCommand = ReactiveCommand.Create(JsonToTable);
             ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);

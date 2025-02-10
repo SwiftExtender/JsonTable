@@ -7,6 +7,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using System;
 using System.IO;
+using TableJson.ViewModels;
 
 namespace TableJson.Views
 {
@@ -104,5 +105,15 @@ namespace TableJson.Views
                 editor.Document = new TextDocument(fileContent);
             }     
         }
+        //public async void CopyText(object sender, RoutedEventArgs args)
+        //{
+        //    if (!string.IsNullOrEmpty(selectedText))
+        //    {
+        //        var clipboard = GetTopLevel(sender).Clipboard;
+        //        var dataObject = new DataObject();
+        //        dataObject.Set(DataFormats.Text, selectedText);
+        //        _mainWindow.Clipboard.SetDataObjectAsync(dataObject);
+        //    }
+        //}
     }
 }

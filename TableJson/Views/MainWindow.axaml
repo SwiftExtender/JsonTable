@@ -99,11 +99,21 @@
 						<aedit:TextEditorOptions EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
 					</aedit:TextEditor.Options>
 					<aedit:TextEditor.ContextMenu>
-						<ContextMenu ItemsSource="{Binding MacrosContextMenu}" >
+						<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
 							<ContextMenu.ItemTemplate>
 								<DataTemplate x:DataType="vm:MacrosItem">
-									<MenuItem Command="" CommandParameter="" Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
-									<!--HeaderTextColorBackground="{Binding BackgroundColor}"-->
+								<MenuItem 
+										  CommandParameter="{Binding ElementName=editor, Path=SelectedText}"
+										  Header="{Binding Header}">
+									<!--Command ="{Binding Macros}"-->
+									<MenuItem.ItemContainerTheme>
+										<ControlTheme TargetType="MenuItem" x:DataType="vm:MacrosItem">
+											<Setter Property="Background" Value="{Binding BackgroundColor}"/>
+											<Setter Property="Foreground" Value="{Binding HeaderTextColor}"/>
+										</ControlTheme>
+
+									</MenuItem.ItemContainerTheme>
+								</MenuItem>
 								</DataTemplate>
 							</ContextMenu.ItemTemplate>
 						</ContextMenu>
@@ -150,12 +160,13 @@
 					<ListBox x:Name="JSONValuesList" IsEnabled="{Binding !!KeyEntries}" SelectionMode="Multiple" Grid.Column="1" Grid.Row="1" Margin="10,10,10,30" ItemsSource="{Binding ValueEntries}"
 				  BorderBrush="Gray">
 						<ListBox.ContextMenu>
-							<ContextMenu ItemsSource="{Binding MacrosContextMenu}" >
-								<ContextMenu.ItemTemplate>
+							<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
+								<!--<ContextMenu.SelectedItem>DataContext="{x:Static local:}-->
 									<DataTemplate x:DataType="vm:MacrosItem">
-										<MenuItem Command="" CommandParameter="" Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
+										<!--CommandParameter="{Binding ElementName=JSONValuesList, Path=}"-->
+										<MenuItem Command=""  Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
 									</DataTemplate>
-								</ContextMenu.ItemTemplate>
+								<!--</ContextMenu.SelectedItem>-->
 							</ContextMenu>
 						</ListBox.ContextMenu>
 						<ListBox.ItemTemplate>
