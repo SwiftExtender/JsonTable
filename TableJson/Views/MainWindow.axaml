@@ -101,13 +101,12 @@
 					<aedit:TextEditor.ContextMenu>
 						<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
 							<ContextMenu.ItemTemplate>
-								<DataTemplate x:DataType="vm:MacrosItem">
+								<DataTemplate x:DataType="vm:MacrosMenuItem">
 								<MenuItem 
 										  CommandParameter="{Binding ElementName=editor, Path=SelectedText}"
-										  Header="{Binding Header}">
-									<!--Command ="{Binding Macros}"-->
+										  Header="{Binding Header}" >
 									<MenuItem.ItemContainerTheme>
-										<ControlTheme TargetType="MenuItem" x:DataType="vm:MacrosItem">
+										<ControlTheme TargetType="MenuItem" x:DataType="vm:MacrosMenuItem">
 											<Setter Property="Background" Value="{Binding BackgroundColor}"/>
 											<Setter Property="Foreground" Value="{Binding HeaderTextColor}"/>
 										</ControlTheme>
@@ -140,7 +139,7 @@
 						<ListBox.ContextMenu>
 							<ContextMenu ItemsSource="{Binding MacrosContextMenu}" >
 								<ContextMenu.ItemTemplate>
-									<DataTemplate x:DataType="vm:MacrosItem">
+									<DataTemplate x:DataType="vm:MacrosMenuItem">
 										<MenuItem Command="" CommandParameter="" Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
 									</DataTemplate>
 								</ContextMenu.ItemTemplate>
@@ -162,7 +161,7 @@
 						<ListBox.ContextMenu>
 							<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
 								<!--<ContextMenu.SelectedItem>DataContext="{x:Static local:}-->
-									<DataTemplate x:DataType="vm:MacrosItem">
+									<DataTemplate x:DataType="vm:MacrosMenuItem">
 										<!--CommandParameter="{Binding ElementName=JSONValuesList, Path=}"-->
 										<MenuItem Command=""  Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
 									</DataTemplate>
@@ -179,7 +178,7 @@
 			</TabItem>
 			<TabItem Header="JSONPath Query">
 				<Grid RowDefinitions="35,50,*" Margin="10,5,10,5">
-					<AutoCompleteBox FilterMode="None" Grid.Row="0" Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" Height="33" HorizontalAlignment="Stretch">
+					<AutoCompleteBox FilterMode="None" Grid.Row="0" ItemsSource="{Binding JSONQueryContextMenu}" Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" Height="33" HorizontalAlignment="Stretch">
 						<i:Interaction.Behaviors>
 							<bh:DropdownBehavior/>
 						</i:Interaction.Behaviors>

@@ -77,7 +77,7 @@ namespace TableJson.Behaviors
                 ClickMode = ClickMode.Press
             };
             btn.Click += (s, e) => ShowDropdown();
-
+            btn.Margin = new(0, 0, 4, 0);
             //tb.InnerRightContent = btn;
             return btn;
         }

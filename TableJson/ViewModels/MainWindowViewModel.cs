@@ -23,13 +23,17 @@ using TableJson.Views;
 
 namespace TableJson.ViewModels
 {
-    public class MacrosItem()
+    public class MacrosMenuItem()
     {
         public string Header { get; set; }
         //public ReactiveCommand<string, Unit> Macros { get; set; }
         //public object? MacrosParameter { get; set; }
         public IBrush? BackgroundColor { get; set; }
         public IBrush? HeaderTextColor { get; set; }
+    }
+    public class JSONQueryMenuItem()
+    {
+
     }
     public class MainWindowViewModel : ViewModelBase
     {
@@ -170,8 +174,14 @@ namespace TableJson.ViewModels
             get => _KeysNumberText;
             set => this.RaiseAndSetIfChanged(ref _KeysNumberText, value);
         }
-        private ObservableCollection<MacrosItem> _MacrosContextMenu = new ObservableCollection<MacrosItem>();
-        public ObservableCollection<MacrosItem> MacrosContextMenu { 
+        private ObservableCollection<JSONQueryMenuItem> _JSONQueryContextMenu = new ObservableCollection<JSONQueryMenuItem>();
+        public ObservableCollection<JSONQueryMenuItem> JSONQueryContextMenu
+        {
+            get => _JSONQueryContextMenu;
+            set => this.RaiseAndSetIfChanged(ref _JSONQueryContextMenu, value);
+        }
+        private ObservableCollection<MacrosMenuItem> _MacrosContextMenu = new ObservableCollection<MacrosMenuItem>();
+        public ObservableCollection<MacrosMenuItem> MacrosContextMenu { 
             get => _MacrosContextMenu; 
             set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value); 
         }
@@ -504,7 +514,7 @@ namespace TableJson.ViewModels
         }
         public MainWindowViewModel()
         {
-            MacrosContextMenu = new ObservableCollection<MacrosItem> { new MacrosItem()
+            MacrosContextMenu = new ObservableCollection<MacrosMenuItem> { new MacrosMenuItem()
             { Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
             //Macros = ReactiveCommand.Create<string>(CopyText)}
             AddMacrosCommand = ReactiveCommand.Create(AddMacros);
