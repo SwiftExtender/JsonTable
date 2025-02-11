@@ -100,6 +100,21 @@
 					</aedit:TextEditor.Options>
 					<aedit:TextEditor.ContextMenu>
 						<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
+							<ContextMenu.ItemContainerTheme>
+								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
+											  x:DataType="vm:MacrosMenuItem">
+									<Setter Property="Background" Value="{Binding BackgroundColor}"/>
+									<Setter Property="Foreground" Value="{Binding HeaderTextColor}"/>
+									<Setter Property="CommandParameter" Value="{Binding ElementName=editor, Path=SelectedText}"/>
+								</ControlTheme>
+							</ContextMenu.ItemContainerTheme>
+							<ContextMenu.ItemTemplate>
+								<DataTemplate x:DataType="vm:MacrosMenuItem">
+									<TextBlock Text="{Binding Header}"/>
+								</DataTemplate>
+							</ContextMenu.ItemTemplate>
+						</ContextMenu>
+						<!--<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
 							<ContextMenu.ItemTemplate>
 								<DataTemplate x:DataType="vm:MacrosMenuItem">
 								<MenuItem 
@@ -115,7 +130,7 @@
 								</MenuItem>
 								</DataTemplate>
 							</ContextMenu.ItemTemplate>
-						</ContextMenu>
+						</ContextMenu>-->
 					</aedit:TextEditor.ContextMenu>
 				</aedit:TextEditor>
 				<SelectableTextBlock Grid.Row="1" Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>

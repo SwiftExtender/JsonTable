@@ -33,7 +33,8 @@ namespace TableJson.ViewModels
     }
     public class JSONQueryMenuItem()
     {
-
+        public string Query { get; set; }
+        public string Description { get; set; }
     }
     public class MainWindowViewModel : ViewModelBase
     {
@@ -514,6 +515,7 @@ namespace TableJson.ViewModels
         }
         public MainWindowViewModel()
         {
+            JSONQueryContextMenu = new ObservableCollection<JSONQueryMenuItem> { new JSONQueryMenuItem() { Description="lol",Query="kek"} };
             MacrosContextMenu = new ObservableCollection<MacrosMenuItem> { new MacrosMenuItem()
             { Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
             //Macros = ReactiveCommand.Create<string>(CopyText)}

@@ -50,8 +50,8 @@ namespace TableJson.Behaviors
         {
             if (AssociatedObject is not null && !AssociatedObject.IsDropDownOpen)
             {
-                //typeof(AutoCompleteBox).GetMethod("PopulateDropDown", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.Invoke(AssociatedObject, new object[] { AssociatedObject, EventArgs.Empty });
-                //typeof(AutoCompleteBox).GetMethod("OpeningDropDown", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.Invoke(AssociatedObject, new object[] { false });
+                typeof(AutoCompleteBox).GetMethod("PopulateDropDown", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.Invoke(AssociatedObject, new object[] { AssociatedObject, EventArgs.Empty });
+                typeof(AutoCompleteBox).GetMethod("OpeningDropDown", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.Invoke(AssociatedObject, new object[] { false });
 
                 //if (!AssociatedObject.IsDropDownOpen)
                 {
@@ -67,9 +67,6 @@ namespace TableJson.Behaviors
 
         private Button CreateDropdownButton()
         {
-            //var prop = AssociatedObject.GetType().GetProperty("TextBox", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            //var tb = (TextBox?)prop?.GetValue(AssociatedObject);
-
             var btn = new Button()
             {
                 Content = "↓",
