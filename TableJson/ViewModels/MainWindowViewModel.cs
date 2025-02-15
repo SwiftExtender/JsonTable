@@ -20,24 +20,42 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Interactivity;
 using TableJson.Views;
+using System.ComponentModel;
 
 namespace TableJson.ViewModels
 {
     public class MacrosMenuItem()
     {
         public string Header { get; set; }
-        //public ReactiveCommand<string, Unit> Macros { get; set; }
+        public ReactiveCommand<string, Unit> Macros { get; set; }
         //public object? MacrosParameter { get; set; }
         public IBrush? BackgroundColor { get; set; }
         public IBrush? HeaderTextColor { get; set; }
     }
-    public class JSONQueryMenuItem()
+    public class JsonQueryMenuItem
     {
-        public string Query { get; set; }
-        public string Description { get; set; }
+        public string? Query { get; set; }
+        public string? Description { get; set; }
+        public JsonQueryMenuItem(string query, string desc)
+        {
+            Query = query;
+            Description = desc;
+        }
     }
     public class MainWindowViewModel : ViewModelBase
     {
+        private string _QueryText = "";
+        public string QueryText
+        {
+            get => _QueryText;
+            set => this.RaiseAndSetIfChanged(ref _QueryText, value);
+        }
+        private string _DescriptionText = "";
+        public string DescriptionText
+        {
+            get => _DescriptionText;
+            set => this.RaiseAndSetIfChanged(ref _DescriptionText, value);
+        }
         private string _MacrosNameText = "";
         public string MacrosNameText
         {
@@ -175,8 +193,8 @@ namespace TableJson.ViewModels
             get => _KeysNumberText;
             set => this.RaiseAndSetIfChanged(ref _KeysNumberText, value);
         }
-        private ObservableCollection<JSONQueryMenuItem> _JSONQueryContextMenu = new ObservableCollection<JSONQueryMenuItem>();
-        public ObservableCollection<JSONQueryMenuItem> JSONQueryContextMenu
+        private ObservableCollection<JsonQueryMenuItem>? _JSONQueryContextMenu = new ObservableCollection<JsonQueryMenuItem>();
+        public ObservableCollection<JsonQueryMenuItem> JSONQueryContextMenu
         {
             get => _JSONQueryContextMenu;
             set => this.RaiseAndSetIfChanged(ref _JSONQueryContextMenu, value);
@@ -399,6 +417,7 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> OneCycleJsonTablifyCommand { get; }
         public ReactiveCommand<Unit, Unit> RecursiveJsonTablifyCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveQueryCommand { get; }
         public void AddMacros() { MacrosRows.Add(new Macros(false)); }
         public void RemoveMacros(object sender, RoutedEventArgs e)
         {
@@ -513,9 +532,30 @@ namespace TableJson.ViewModels
 
             MacrosGridData.Selection = new TreeDataGridCellSelectionModel<Macros>(MacrosGridData);
         }
+        public void UpdateQueries()
+        {
+            using (var DataSource = new HelpContext())
+            {
+                JSONQueryContextMenu = new ObservableCollection<JsonQueryMenuItem>();
+                List<JsonQuery> querylist = DataSource.JsonQueryTable.ToList();
+                foreach (JsonQuery item in querylist)
+                {
+                    JSONQueryContextMenu.Add(new JsonQueryMenuItem(item.Query, item.Description));
+                }
+            }
+        }
+        public void SaveQuery()
+        {
+            var AddedQuery = new JsonQuery(QueryText, DescriptionText);
+            using (var DataSource = new HelpContext())
+            {
+                DataSource.JsonQueryTable.Attach(AddedQuery);
+                DataSource.JsonQueryTable.Add(AddedQuery);
+                DataSource.SaveChanges();
+            }
+        }
         public MainWindowViewModel()
         {
-            JSONQueryContextMenu = new ObservableCollection<JSONQueryMenuItem> { new JSONQueryMenuItem() { Description="lol",Query="kek"} };
             MacrosContextMenu = new ObservableCollection<MacrosMenuItem> { new MacrosMenuItem()
             { Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
             //Macros = ReactiveCommand.Create<string>(CopyText)}
@@ -532,6 +572,7 @@ namespace TableJson.ViewModels
                 List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
                 MacrosRows = new ObservableCollection<Macros>(selectedMacros);
             }
+            UpdateQueries();
             TreeDataGridInit();
         }
     }

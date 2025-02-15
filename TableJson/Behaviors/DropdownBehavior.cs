@@ -3,6 +3,8 @@ using Avalonia.Media;
 using Avalonia.Xaml.Interactivity;
 using System.Threading.Tasks;
 using System;
+using TableJson.Views;
+using TableJson.ViewModels;
 
 namespace TableJson.Behaviors
 {
@@ -31,7 +33,6 @@ namespace TableJson.Behaviors
 
             base.OnDetaching();
         }
-
         private void OnKeyUp(object? sender, Avalonia.Input.KeyEventArgs e)
         {
             if (e.Key == Avalonia.Input.Key.Down)
@@ -42,6 +43,7 @@ namespace TableJson.Behaviors
 
         private void DropDownOpening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
+            //MainWindowViewModel.UpdateQueries();
             //var prop = AssociatedObject.GetType().GetProperty("TextBox", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             //var tb = (TextBox?)prop?.GetValue(AssociatedObject);
         }
@@ -64,7 +66,6 @@ namespace TableJson.Behaviors
                 }
             }
         }
-
         private Button CreateDropdownButton()
         {
             var btn = new Button()
@@ -75,7 +76,6 @@ namespace TableJson.Behaviors
             };
             btn.Click += (s, e) => ShowDropdown();
             btn.Margin = new(0, 0, 4, 0);
-            //tb.InnerRightContent = btn;
             return btn;
         }
         private Button CreateSaveQueryButton()
@@ -83,14 +83,14 @@ namespace TableJson.Behaviors
             var btn = new Button()
             {
                 Content = "Save",
-                //Margin = new(1),
+                Margin = new(1),
                 ClickMode = ClickMode.Press,
                 Width = 50,
                 Height = 28
             };
             btn.Background = new SolidColorBrush() { Color = new Color(255, 16, 157, 62) };
             btn.Margin = new(0, 0, 4, 0);
-            //btn.Click += (s, e) => CleanTextBox();
+            btn.Click += (s, e) => { var w1 = new SaveWindow() {DataContext = new MainWindowViewModel() }; w1.Show(); };
             return btn;
 
         }
@@ -100,9 +100,7 @@ namespace TableJson.Behaviors
             {
                 var panel = new DockPanel()
                 {
-                    //Content = "Ⅹ",
                     Margin = new(1),
-                    //ClickMode = ClickMode.Press
                 };
                 AssociatedObject.InnerRightContent = panel;
                 panel.Children.Add(CreateSaveQueryButton());

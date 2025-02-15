@@ -114,23 +114,6 @@
 								</DataTemplate>
 							</ContextMenu.ItemTemplate>
 						</ContextMenu>
-						<!--<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
-							<ContextMenu.ItemTemplate>
-								<DataTemplate x:DataType="vm:MacrosMenuItem">
-								<MenuItem 
-										  CommandParameter="{Binding ElementName=editor, Path=SelectedText}"
-										  Header="{Binding Header}" >
-									<MenuItem.ItemContainerTheme>
-										<ControlTheme TargetType="MenuItem" x:DataType="vm:MacrosMenuItem">
-											<Setter Property="Background" Value="{Binding BackgroundColor}"/>
-											<Setter Property="Foreground" Value="{Binding HeaderTextColor}"/>
-										</ControlTheme>
-
-									</MenuItem.ItemContainerTheme>
-								</MenuItem>
-								</DataTemplate>
-							</ContextMenu.ItemTemplate>
-						</ContextMenu>-->
 					</aedit:TextEditor.ContextMenu>
 				</aedit:TextEditor>
 				<SelectableTextBlock Grid.Row="1" Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>
@@ -152,10 +135,18 @@
 					<ListBox x:Name="JSONKeysList" IsEnabled="{Binding !!KeyEntries}" Grid.Column="0" Grid.Row="1" Margin="10,10,10,30" ItemsSource="{Binding KeyEntries}" ItemTemplate=""
 				  BorderBrush="Gray">
 						<ListBox.ContextMenu>
-							<ContextMenu ItemsSource="{Binding MacrosContextMenu}" >
+							<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
+								<ContextMenu.ItemContainerTheme>
+									<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
+												  x:DataType="vm:MacrosMenuItem">
+										<Setter Property="Background" Value="{Binding BackgroundColor}"/>
+										<Setter Property="Foreground" Value="{Binding HeaderTextColor}"/>
+										<Setter Property="CommandParameter" Value="{Binding ElementName=editor, Path=SelectedText}"/>
+									</ControlTheme>
+								</ContextMenu.ItemContainerTheme>
 								<ContextMenu.ItemTemplate>
 									<DataTemplate x:DataType="vm:MacrosMenuItem">
-										<MenuItem Command="" CommandParameter="" Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
+										<TextBlock Text="{Binding Header}"/>
 									</DataTemplate>
 								</ContextMenu.ItemTemplate>
 							</ContextMenu>
@@ -175,12 +166,19 @@
 				  BorderBrush="Gray">
 						<ListBox.ContextMenu>
 							<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
-								<!--<ContextMenu.SelectedItem>DataContext="{x:Static local:}-->
+								<ContextMenu.ItemContainerTheme>
+									<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
+												  x:DataType="vm:MacrosMenuItem">
+										<Setter Property="Background" Value="{Binding BackgroundColor}"/>
+										<Setter Property="Foreground" Value="{Binding HeaderTextColor}"/>
+										<Setter Property="CommandParameter" Value="{Binding ElementName=editor, Path=SelectedText}"/>
+									</ControlTheme>
+								</ContextMenu.ItemContainerTheme>
+								<ContextMenu.ItemTemplate>
 									<DataTemplate x:DataType="vm:MacrosMenuItem">
-										<!--CommandParameter="{Binding ElementName=JSONValuesList, Path=}"-->
-										<MenuItem Command=""  Header="{Binding Header}" Background="{Binding BackgroundColor}" Foreground="{Binding HeaderTextColor}"/>
+										<TextBlock Text="{Binding Header}"/>
 									</DataTemplate>
-								<!--</ContextMenu.SelectedItem>-->
+								</ContextMenu.ItemTemplate>
 							</ContextMenu>
 						</ListBox.ContextMenu>
 						<ListBox.ItemTemplate>
@@ -194,6 +192,15 @@
 			<TabItem Header="JSONPath Query">
 				<Grid RowDefinitions="35,50,*" Margin="10,5,10,5">
 					<AutoCompleteBox FilterMode="None" Grid.Row="0" ItemsSource="{Binding JSONQueryContextMenu}" Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" Height="33" HorizontalAlignment="Stretch">
+						<AutoCompleteBox.DataTemplates>
+							<DataTemplate x:DataType="vm:JsonQueryMenuItem">
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding Query}" />
+									<TextBlock Text="{Binding Description}" />
+									<Button Content="Ⅹ"/>
+								</StackPanel>
+							</DataTemplate>
+						</AutoCompleteBox.DataTemplates>
 						<i:Interaction.Behaviors>
 							<bh:DropdownBehavior/>
 						</i:Interaction.Behaviors>

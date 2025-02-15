@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TableJson.Models
 {
@@ -10,16 +7,11 @@ namespace TableJson.Models
         [Key, Required]
         public int Id { get; set; }
         public string Query { get; set; }
-        public string Descripttion { get; set; }
-        public JsonQuery(int id)
+        public string Description { get; set; }
+        public JsonQuery(string query, string description)
         {
-            Id = id;
-        }
-        public JsonQuery(int id, string query, string description)
-        {
-            Id = id;
             Query = query;
-            Descripttion = description;
+            Description = description;
         }
     }
 }

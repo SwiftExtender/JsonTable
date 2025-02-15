@@ -1,0 +1,31 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="using:TableJson.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TableJson.Views.SaveWindow"
+		x:DataType="vm:MainWindowViewModel"
+        Title="SaveWindow"
+		WindowStartupLocation="CenterScreen"
+		ExtendClientAreaToDecorationsHint="True"
+		ExtendClientAreaTitleBarHeightHint="-1"
+		CanResize="False"
+		Width="450"
+		Height="250"
+		>
+	<Window.Styles>
+		<Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"></Setter>
+			<Setter Property="BorderBrush" Value="Wheat"></Setter>
+		</Style>
+	</Window.Styles>
+	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
+		<Grid RowDefinitions="40,50,50,50" ColumnDefinitions="*">
+			<Label Grid.Row="0" Margin="5,5,5,0" BorderBrush="Wheat">Save JSON QUery</Label>
+			<TextBox Margin="10,10,10,10" Grid.Row="1" Text="{Binding QueryText}" Watermark="JSON Query"></TextBox>
+			<TextBox Margin="10,10,10,10" Grid.Row="2" Text="{Binding DescriptionText}" Watermark="Description"></TextBox>
+			<Button Margin="10,10,10,10" Grid.Row="3" Content="Save" Command="{Binding SaveQueryCommand}"></Button>
+		</Grid>
+	</Border>
+</Window>
