@@ -1,9 +1,7 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Media;
 using Avalonia.Xaml.Interactivity;
 using System.Threading.Tasks;
 using System;
-using TableJson.Views;
 using TableJson.ViewModels;
 
 namespace TableJson.Behaviors
@@ -16,12 +14,20 @@ namespace TableJson.Behaviors
             {
                 AssociatedObject.KeyUp += OnKeyUp;
                 AssociatedObject.DropDownOpening += DropDownOpening;
+                //AssociatedObject.SelectionChanged += SelectionQuery;
                 AssociatedObject.Focus();
                 Task.Delay(100).ContinueWith(_ => Avalonia.Threading.Dispatcher.UIThread.Invoke(() => { CreatePanel(); }));
             }
 
             base.OnAttached();
         }
+
+        //private void SelectionQuery(object? sender, SelectionChangedEventArgs e)
+        //{
+        //    AutoCompleteBox t = (AutoCompleteBox)sender;
+        //    JsonQueryMenuItem v = (JsonQueryMenuItem)t.SelectedItem;
+        //    AssociatedObject.SelectedItem = v.Query;
+        //}
 
         protected override void OnDetaching()
         {
@@ -40,14 +46,12 @@ namespace TableJson.Behaviors
                 ShowDropdown();
             }
         }
-
         private void DropDownOpening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             //MainWindowViewModel.UpdateQueries();
             //var prop = AssociatedObject.GetType().GetProperty("TextBox", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             //var tb = (TextBox?)prop?.GetValue(AssociatedObject);
         }
-
         private void ShowDropdown()
         {
             if (AssociatedObject is not null && !AssociatedObject.IsDropDownOpen)
@@ -75,24 +79,8 @@ namespace TableJson.Behaviors
                 ClickMode = ClickMode.Press
             };
             btn.Click += (s, e) => ShowDropdown();
-            btn.Margin = new(0, 0, 4, 0);
+            btn.Margin = new(0, 0, 2, 0);
             return btn;
-        }
-        private Button CreateSaveQueryButton()
-        {
-            var btn = new Button()
-            {
-                Content = "Save",
-                Margin = new(1),
-                ClickMode = ClickMode.Press,
-                Width = 50,
-                Height = 28
-            };
-            btn.Background = new SolidColorBrush() { Color = new Color(255, 16, 157, 62) };
-            btn.Margin = new(0, 0, 4, 0);
-            btn.Click += (s, e) => { var w1 = new SaveWindow() {DataContext = new MainWindowViewModel() }; w1.Show(); };
-            return btn;
-
         }
         private void CreatePanel()
         {
@@ -103,7 +91,6 @@ namespace TableJson.Behaviors
                     Margin = new(1),
                 };
                 AssociatedObject.InnerRightContent = panel;
-                panel.Children.Add(CreateSaveQueryButton());
                 panel.Children.Add(CreateDropdownButton());
                 panel.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch;
             }

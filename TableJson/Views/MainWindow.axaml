@@ -86,7 +86,7 @@
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Grid.Row="1" MinHeight="50" Margin="15,22,10,0" Orientation="Horizontal">
 			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked" HotKey="Ctrl+O"/>
-			<Button Background="DarkCyan" Margin="15,0,15,0" Content="Parse" Command="{Binding ParseCommand}"></Button>
+			<Button Background="DarkCyan" Margin="15,0,15,0" Content="Parse" Command="{Binding ParseCommand}"/>
 			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>
 			<ComboBox ItemsSource="{Binding EditorFontSizes}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}" Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin">
@@ -190,14 +190,13 @@
 				</Grid>
 			</TabItem>
 			<TabItem Header="JSONPath Query">
-				<Grid RowDefinitions="35,50,*" Margin="10,5,10,5">
-					<AutoCompleteBox FilterMode="None" Grid.Row="0" ItemsSource="{Binding JSONQueryContextMenu}" Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" Height="33" HorizontalAlignment="Stretch">
+				<Grid RowDefinitions="35,50,*" ColumnDefinitions="0.9*,0.1*" Margin="10,5,10,5">
+					<AutoCompleteBox FilterMode="None" ValueMemberBinding="{Binding Query}" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding JSONQueryContextMenu}" Text="{Binding JSONPathQuery}" Margin="10,10,10,0" Watermark="Input JSONPath" Height="33" HorizontalAlignment="Stretch">
 						<AutoCompleteBox.DataTemplates>
 							<DataTemplate x:DataType="vm:JsonQueryMenuItem">
 								<StackPanel Orientation="Horizontal">
 									<TextBlock Text="{Binding Query}" />
 									<TextBlock Text="{Binding Description}" />
-									<Button Content="Ⅹ"/>
 								</StackPanel>
 							</DataTemplate>
 						</AutoCompleteBox.DataTemplates>
@@ -205,22 +204,21 @@
 							<bh:DropdownBehavior/>
 						</i:Interaction.Behaviors>
 					</AutoCompleteBox>
-					<DockPanel Grid.Row="1" Margin="10,10,10,10">
-						<Button Command="{Binding RunJsonPathQueryCommand}" Margin="5,0,5,0" Content="Run query" Width="90"></Button>
-						<Button Content="Copy result" Margin="5,0,5,0" Click="CopyToClipboardFromJSONPathResult"></Button>
-						<SelectableTextBlock Text="{Binding JSONPathStatus}" Margin="15,5,5,0"></SelectableTextBlock>
+					<Button Background="Green" Content="Save" Grid.Row="0" Grid.Column="1" Command="{Binding SaveQueryFastWindowCommand}" Height="33" HorizontalAlignment="Stretch" Margin="0,10,10,10"/>
+					<DockPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="10,10,10,10">
+						<Button Command="{Binding RunJsonPathQueryCommand}" Margin="5,0,5,0" Content="Run query" Width="90"/>
+						<Button Content="Copy result" Margin="5,0,5,0" Click="CopyToClipboardFromJSONPathResult"/>
+						<SelectableTextBlock Text="{Binding JSONPathStatus}" Margin="15,5,5,0"/>
 						<!--<Button Margin="10,0,10,0" Content="Change view mode"></Button>-->
 					</DockPanel>
-					<aedit:TextEditor Grid.Row="2" x:Name="JSONPathResultEditor" BorderBrush="DarkGoldenrod" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,0,10,30" ShowLineNumbers="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
-                               VerticalScrollBarVisibility="Visible" ScrollViewer.AllowAutoHide="False"></aedit:TextEditor>
+					<aedit:TextEditor Grid.Row="2" Grid.ColumnSpan="2" x:Name="JSONPathResultEditor" BorderBrush="DarkGoldenrod" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,0,10,30" ShowLineNumbers="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+                               VerticalScrollBarVisibility="Visible" ScrollViewer.AllowAutoHide="False"/>
 				</Grid>
 			</TabItem>
 			<TabItem Header="Macros">
 				<Grid RowDefinitions="50,*" Margin="10,5,10,5">
-					<Button Grid.Row="0" Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}">
-					</Button>
-					<TreeDataGrid Grid.Row="1" x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,10,10,30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True" >
-					</TreeDataGrid>
+					<Button Grid.Row="0" Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}"/>
+					<TreeDataGrid Grid.Row="1" x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,10,10,30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True"/>
 				</Grid>
 			</TabItem>
 		</TabControl>

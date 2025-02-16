@@ -44,18 +44,6 @@ namespace TableJson.ViewModels
     }
     public class MainWindowViewModel : ViewModelBase
     {
-        private string _QueryText = "";
-        public string QueryText
-        {
-            get => _QueryText;
-            set => this.RaiseAndSetIfChanged(ref _QueryText, value);
-        }
-        private string _DescriptionText = "";
-        public string DescriptionText
-        {
-            get => _DescriptionText;
-            set => this.RaiseAndSetIfChanged(ref _DescriptionText, value);
-        }
         private string _MacrosNameText = "";
         public string MacrosNameText
         {
@@ -417,7 +405,7 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> OneCycleJsonTablifyCommand { get; }
         public ReactiveCommand<Unit, Unit> RecursiveJsonTablifyCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveQueryCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveQueryFastWindowCommand { get; }
         public void AddMacros() { MacrosRows.Add(new Macros(false)); }
         public void RemoveMacros(object sender, RoutedEventArgs e)
         {
@@ -461,6 +449,12 @@ namespace TableJson.ViewModels
         public void CodeEditMacros(object sender, RoutedEventArgs e)
         {
             var w1 = new MacrosCodeWindow() { DataContext = new MainWindowViewModel() };
+            w1.Show();
+        }
+        public void SaveQueryFastWindow()
+        {
+            var w1 = new SaveWindow() { DataContext = new SaveWindowViewModel(JSONPathQuery) };
+            w1.Closed += UpdateQueriesEvent;
             w1.Show();
         }
         private Button UpdateButtonInit()
@@ -532,7 +526,7 @@ namespace TableJson.ViewModels
 
             MacrosGridData.Selection = new TreeDataGridCellSelectionModel<Macros>(MacrosGridData);
         }
-        public void UpdateQueries()
+        private void UpdateQueries()
         {
             using (var DataSource = new HelpContext())
             {
@@ -544,15 +538,9 @@ namespace TableJson.ViewModels
                 }
             }
         }
-        public void SaveQuery()
+        public void UpdateQueriesEvent(object? sender, EventArgs e)
         {
-            var AddedQuery = new JsonQuery(QueryText, DescriptionText);
-            using (var DataSource = new HelpContext())
-            {
-                DataSource.JsonQueryTable.Attach(AddedQuery);
-                DataSource.JsonQueryTable.Add(AddedQuery);
-                DataSource.SaveChanges();
-            }
+            UpdateQueries();
         }
         public MainWindowViewModel()
         {
@@ -567,6 +555,7 @@ namespace TableJson.ViewModels
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
             OneCycleJsonTablifyCommand = ReactiveCommand.Create(OneCycleJsonTablify);
             RecursiveJsonTablifyCommand = ReactiveCommand.Create(RecursiveJsonTablify);
+            SaveQueryFastWindowCommand = ReactiveCommand.Create(SaveQueryFastWindow);
             using (var DataSource = new HelpContext())
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
