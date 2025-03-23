@@ -83,7 +83,7 @@
 		</Style>
 	</Window.Styles>
 	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
-	<Grid RowDefinitions="0,50,*,10,*" ColumnDefinitions="*">
+	<Grid RowDefinitions="0,50,*" ColumnDefinitions="*">
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Grid.Row="1" MinHeight="50" Margin="15,22,10,0" Orientation="Horizontal">
 			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked" HotKey="Ctrl+O"/>
@@ -91,18 +91,17 @@
 			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>
 			<ComboBox ItemsSource="{Binding EditorFontSizes}"  Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin"/>
-			
 		</StackPanel>
 		<StackPanel>
-		<TabControl>
+		<TabControl Grid.Row="2" ItemsSource="{Binding Tabs}">
 			<TabControl.ItemTemplate>
-				<DataTemplate>
-					<v:TabWindow/>
+				<DataTemplate x:DataType="vm:TabWindowViewModel">
+					<v:TabWindow></v:TabWindow>
 				</DataTemplate>
 			</TabControl.ItemTemplate>
-			<TabItem>
+			<!--<TabItem>
 			
-			</TabItem>
+			</TabItem>-->
 		</TabControl>
 		</StackPanel>
 	</Grid>

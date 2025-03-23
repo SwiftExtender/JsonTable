@@ -20,6 +20,11 @@ namespace TableJson.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private ObservableCollection<TabWindowViewModel> _Tabs = new ObservableCollection<TabWindowViewModel>() {new TabWindowViewModel() };
+        public ObservableCollection<TabWindowViewModel> Tabs {
+            get => _Tabs;
+            set => this.RaiseAndSetIfChanged(ref _Tabs, value);
+        }
         public List<double> EditorFontSizes { get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
         private bool _IsPinnedWindow = false;
         public bool IsPinnedWindow
