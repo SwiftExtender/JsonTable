@@ -92,16 +92,18 @@
 			<ComboBox ItemsSource="{Binding EditorFontSizes}"  Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin"/>
 		</StackPanel>
-		<StackPanel>
-		<TabControl Grid.Row="2" ItemsSource="{Binding Tabs}">
-			<TabControl.ItemTemplate>
-				<DataTemplate x:DataType="vm:TabWindowViewModel">
-					<v:TabWindow></v:TabWindow>
-				</DataTemplate>
-			</TabControl.ItemTemplate>
-			<!--<TabItem>
-			
-			</TabItem>-->
+		<StackPanel Grid.Row="2" >
+		<TabControl ItemsSource="{Binding Tabs}">
+			<TabControl.ItemContainerTheme>
+				<ControlTheme TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}" x:DataType="vm:TabWindowViewModel">
+					<Setter Property="Header" Value="1"/>
+					<Setter Property="ContentTemplate">
+						<DataTemplate>
+							<v:TabWindow DataContext="vm:TabWindowViewModel"/>
+						</DataTemplate>
+					</Setter>
+				</ControlTheme>
+			</TabControl.ItemContainerTheme>
 		</TabControl>
 		</StackPanel>
 	</Grid>

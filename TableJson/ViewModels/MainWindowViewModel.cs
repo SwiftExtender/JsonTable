@@ -18,13 +18,35 @@ using TableJson.Views;
 
 namespace TableJson.ViewModels
 {
+    //public class TabItemViewModel
+    //{
+    //    public string Header { get; set; }
+    //    public string Content { get; set; }
+    //}
+    //public class CustomTabItem : TabItem
+    //{
+    //    public CustomTabItem() {
+    //        Header = "1";
+    //        Item
+    //    }
+    //}
     public class MainWindowViewModel : ViewModelBase
     {
-        private ObservableCollection<TabWindow> _Tabs = new ObservableCollection<TabWindow>() { new TabWindow() };
-        public ObservableCollection<TabWindow> Tabs {
+        //public ObservableCollection<TabItemViewModel> Tabs { get; } = new();
+        private void AddTab()
+        {
+            var t = new TabItem() { Header = "1", Content = "2"};
+        }
+        private ObservableCollection<TabItem> _Tabs = new ObservableCollection<TabItem>() { new TabItem() {DataContext=new TabWindowViewModel() }, new TabItem() { DataContext = new TabWindowViewModel() }, new TabItem() { DataContext = new TabWindowViewModel() } };
+        public ObservableCollection<TabItem> Tabs {
             get => _Tabs;
             set => this.RaiseAndSetIfChanged(ref _Tabs, value);
         }
+        //private ObservableCollection<TabWindowViewModel> _Tabs = new ObservableCollection<TabWindowViewModel>() { new TabWindowViewModel() {} };
+        //public ObservableCollection<TabWindowViewModel> Tabs {
+        //    get => _Tabs;
+        //    set => this.RaiseAndSetIfChanged(ref _Tabs, value);
+        //}
         public List<double> EditorFontSizes { get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
         private bool _IsPinnedWindow = false;
         public bool IsPinnedWindow
@@ -75,7 +97,6 @@ namespace TableJson.ViewModels
             get => _MacrosGridData;
             set => this.RaiseAndSetIfChanged(ref _MacrosGridData, value);
         }
-        public void AddTab() { }
         public void RemoveTab() { }
         public void AddMacros() { MacrosRows.Add(new Macros(false)); }
         public void RemoveMacros(object sender, RoutedEventArgs e)
@@ -218,8 +239,10 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddTabCommand { get; }
         public MainWindowViewModel()
         {
+            AddTabCommand = ReactiveCommand.Create(AddTab);
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
             AddMacrosCommand = ReactiveCommand.Create(AddMacros);
             using (var DataSource = new HelpContext())

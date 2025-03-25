@@ -21,8 +21,6 @@ using Avalonia.Media;
 using Avalonia.Interactivity;
 using TableJson.Views;
 using System.ComponentModel;
-using Avalonia;
-using System.Collections;
 
 namespace TableJson.ViewModels
 {
@@ -44,168 +42,117 @@ namespace TableJson.ViewModels
             Description = desc;
         }
     }
-    public class TabWindowViewModel : UserControl
+    public class TabWindowViewModel : ViewModelBase
     {
-        public static DirectProperty<TabWindowViewModel, string> JSONPathQueryProperty = 
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, string>(nameof(JSONPathQuery), o => o.JSONPathQuery, (o, v) => o.JSONPathQuery = v);
+        private string _JSONPathQuery = "";
         public string JSONPathQuery
         {
-            get => GetValue(JSONPathQueryProperty);
-            set => SetValue(JSONPathQueryProperty, value);
+            get => _JSONPathQuery;
+            set => this.RaiseAndSetIfChanged(ref _JSONPathQuery, value);
         }
-        public static DirectProperty<TabWindowViewModel, string> JSONPathStatusProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, string>(nameof(JSONPathStatus), o => o.JSONPathStatus, (o, v) => o.JSONPathStatus = v);
+        private string _JSONPathStatus = "";
         public string JSONPathStatus
         {
-            get => GetValue(JSONPathStatusProperty);
-            set => SetValue(JSONPathStatusProperty, value);
+            get => _JSONPathStatus;
+            set => this.RaiseAndSetIfChanged(ref _JSONPathStatus, value);
         }
-        public static DirectProperty<TabWindowViewModel, string> ResultTextProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, string>(nameof(ResultText), o => o.ResultText, (o, v) => o.ResultText = v);
+        private string _ResultText = "";
         public string ResultText
         {
-            get => GetValue(ResultTextProperty);
-            set => SetValue(ResultTextProperty, value);
+            get => _ResultText;
+            set => this.RaiseAndSetIfChanged(ref _ResultText, value);
         }
-        public static DirectProperty<TabWindowViewModel, bool> ShowUniqueKeysProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, bool>(nameof(ShowUniqueKeys), o => o.ShowUniqueKeys, (o, v) => o.ShowUniqueKeys = v);
+        private bool _ShowUniqueKeys = false;
         public bool ShowUniqueKeys
         {
-            get => GetValue(ShowUniqueKeysProperty);
-            set => SetValue(ShowUniqueKeysProperty, value);
+            get => _ShowUniqueKeys;
+            set => this.RaiseAndSetIfChanged(ref _ShowUniqueKeys, value);
         }
-        public static DirectProperty<TabWindowViewModel, bool> ShowUniqueValuesProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, bool>(nameof(ShowUniqueValues), o => o.ShowUniqueValues, (o, v) => o.ShowUniqueValues = v);
+        private bool _ShowUniqueValues = false;
         public bool ShowUniqueValues
         {
-            get => GetValue(ShowUniqueValuesProperty);
-            set => SetValue(ShowUniqueValuesProperty, value);
+            get => _ShowUniqueValues;
+            set => this.RaiseAndSetIfChanged(ref _ShowUniqueValues, value);
         }
-        public static DirectProperty<TabWindowViewModel, TextDocument> RawTextProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, TextDocument>(nameof(RawText), o => o.RawText, (o, v) => o.RawText = v);
+        private TextDocument _RawText = new TextDocument("");
         public TextDocument RawText
         {
-            get => GetValue(RawTextProperty);
-            set => SetValue(RawTextProperty, value);
+            get => _RawText;
+            set => this.RaiseAndSetIfChanged(ref _RawText, value);
         }
-        public static DirectProperty<TabWindowViewModel, JsonDocument> ParsedJsonProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, JsonDocument>(nameof(ParsedJson), o => o.ParsedJson, (o, v) => o.ParsedJson = v);
+        private JsonDocument _ParsedJson;
         public JsonDocument ParsedJson
         {
-            get => GetValue(ParsedJsonProperty);
+            get => _ParsedJson;
             set
             {
-                //if (_ParsedJson != null)
-                //{
-                //    _ParsedJson.Dispose();
-                //}
-                SetValue(RawTextProperty, value);
+                if (_ParsedJson != null)
+                {
+                    _ParsedJson.Dispose();
+                }
+                this.RaiseAndSetIfChanged(ref _ParsedJson, value);
             }
         }
-        public static DirectProperty<TabWindowViewModel, TextDocument> JSONPathResultProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, TextDocument>(nameof(JSONPathResult), o => o.JSONPathResult, (o, v) => o.JSONPathResult = v);
+        private TextDocument _JSONPathResult = new TextDocument("");
         public TextDocument JSONPathResult
         {
-            get => GetValue(JSONPathResultProperty);
-            set => SetValue(JSONPathResultProperty, value);
+            get => _JSONPathResult;
+            set => this.RaiseAndSetIfChanged(ref _JSONPathResult, value);
         }
-        public static DirectProperty<TabWindowViewModel, string> StatusTextProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, string>(nameof(StatusText), o => o.StatusText, (o, v) => o.StatusText = v);
+        private string _StatusText = "Status: No input was parsed";
         public string StatusText
         {
-            get => GetValue(StatusTextProperty);
-            set => SetValue(StatusTextProperty, value);
+            get => _StatusText;
+            set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
-        public static DirectProperty<TabWindowViewModel, string> ValuesNumberTextProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, string>(nameof(ValuesNumberText), o => o.ValuesNumberText, (o, v) => o.ValuesNumberText = v);
-
+        private string _ValuesNumberText = "";
         public string ValuesNumberText
         {
-            get => GetValue(ValuesNumberTextProperty);
-            set => SetValue(ValuesNumberTextProperty, value);
+            get => _ValuesNumberText;
+            set => this.RaiseAndSetIfChanged(ref _ValuesNumberText, value);
         }
-        public static DirectProperty<TabWindowViewModel, string> KeysNumberTextProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, string>(nameof(KeysNumberText), o => o.KeysNumberText, (o, v) => o.KeysNumberText = v);
+        private string _KeysNumberText = "";
         public string KeysNumberText
         {
-            get => GetValue(KeysNumberTextProperty);
-            set => SetValue(KeysNumberTextProperty, value);
+            get => _KeysNumberText;
+            set => this.RaiseAndSetIfChanged(ref _KeysNumberText, value);
         }
         private ObservableCollection<JsonQueryMenuItem>? _JSONQueryContextMenu = new ObservableCollection<JsonQueryMenuItem>();
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<JsonQueryMenuItem>> JSONQueryContextMenuProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<JsonQueryMenuItem>>(
-                nameof(JSONQueryContextMenu), o => o._JSONQueryContextMenu, (o, v) => o._JSONQueryContextMenu = v);
         public ObservableCollection<JsonQueryMenuItem> JSONQueryContextMenu
         {
-            get => GetValue(JSONQueryContextMenuProperty);
-            set => SetValue(JSONQueryContextMenuProperty, value);
+            get => _JSONQueryContextMenu;
+            set => this.RaiseAndSetIfChanged(ref _JSONQueryContextMenu, value);
         }
-        private ObservableCollection<MacrosMenuItem>? _MacrosContextMenu = new ObservableCollection<MacrosMenuItem>();
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<MacrosMenuItem>> MacrosContextMenuProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<MacrosMenuItem>>(nameof(MacrosContextMenu), o => o._MacrosContextMenu, (o, v) => o._MacrosContextMenu = v);
+        private ObservableCollection<MacrosMenuItem> _MacrosContextMenu = new ObservableCollection<MacrosMenuItem>();
         public ObservableCollection<MacrosMenuItem> MacrosContextMenu
         {
-            get => GetValue(MacrosContextMenuProperty);
-            set => SetValue(MacrosContextMenuProperty, value);
+            get => _MacrosContextMenu;
+            set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value);
         }
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<string> > JsonQuerysProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<string> >(nameof(JsonQuerys), o => o.JsonQuerys, (o, v) => o.JsonQuerys = v);
+        private ObservableCollection<string>? _JsonQuerys;
         public ObservableCollection<string>? JsonQuerys
         {
-            get => GetValue(JsonQuerysProperty);
-            set => SetValue(JsonQuerysProperty, value);
+            get => _JsonQuerys;
+            set => this.RaiseAndSetIfChanged(ref _JsonQuerys, value);
         }
         private ObservableCollection<string> _TempJsonKeys;
         private ObservableCollection<string> _TempJsonValues;
         private ObservableCollection<string> _OneCycleJsonKeys;
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<string>> OneCycleJsonKeysProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<string>>(nameof(OneCycleJsonKeys), o => o.OneCycleJsonKeys, (o, v) => o.OneCycleJsonKeys = v);
-        public ObservableCollection<string> OneCycleJsonKeys { 
-            get => GetValue(OneCycleJsonKeysProperty); 
-            set => SetValue(OneCycleJsonKeysProperty, value);
-        }
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<string>> OneCycleJsonValuesProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<string>>(nameof(OneCycleJsonValues), o => o.OneCycleJsonValues, (o, v) => o.OneCycleJsonValues = v);
-        public ObservableCollection<string> OneCycleJsonValues { 
-            get => GetValue(OneCycleJsonValuesProperty); 
-            set => SetValue(OneCycleJsonValuesProperty, value); 
-        }
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<string>> JsonKeysProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<string>>(nameof(JsonKeys), o => o.JsonKeys, (o, v) => o.JsonKeys = v);
-        public ObservableCollection<string> JsonKeys { 
-            get => GetValue(JsonKeysProperty); 
-            set => SetValue(JsonKeysProperty, value); 
-        }
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<string>> UniqueJsonKeysProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<string>>(nameof(UniqueJsonKeys), o => o.UniqueJsonKeys, (o, v) => o.UniqueJsonKeys = v);
-        public ObservableCollection<string> UniqueJsonKeys { 
-            get => GetValue(UniqueJsonKeysProperty); 
-            set => SetValue(UniqueJsonKeysProperty, value); 
-        }
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<string>> JsonValuesProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<string>>(nameof(JsonValues), o => o.JsonValues, (o, v) => o.JsonValues = v);
-        public ObservableCollection<string> JsonValues { 
-            get => GetValue(JsonValuesProperty);
-            set => SetValue(JsonValuesProperty, value);
-        }
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<string>> UniqueJsonValuesProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<string>>(nameof(UniqueJsonValues), o => o.UniqueJsonValues, (o, v) => o.UniqueJsonValues = v);
-        public ObservableCollection<string> UniqueJsonValues { 
-            get => GetValue(UniqueJsonValuesProperty);
-            set => SetValue(UniqueJsonValuesProperty, value);
-        }
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<string>> KeyEntriesProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<string>>(nameof(KeyEntries), o => o.KeyEntries, (o, v) => o.KeyEntries = v);
-        public ObservableCollection<string> KeyEntries { 
-            get => GetValue(KeyEntriesProperty);
-            set => SetValue(KeyEntriesProperty, value);
-        }
-        public static DirectProperty<TabWindowViewModel, ObservableCollection<string>> ValueEntriesProperty =
-            AvaloniaProperty.RegisterDirect<TabWindowViewModel, ObservableCollection<string>>(nameof(ValueEntries), o => o.ValueEntries, (o, v) => o.ValueEntries = v);
-        public ObservableCollection<string> ValueEntries { 
-            get => GetValue(ValueEntriesProperty);
-            set => SetValue(ValueEntriesProperty, value);
-        }
+        public ObservableCollection<string> OneCycleJsonKeys { get => _OneCycleJsonKeys; set => this.RaiseAndSetIfChanged(ref _OneCycleJsonKeys, value); }
+        private ObservableCollection<string> _OneCycleJsonValues;
+        public ObservableCollection<string> OneCycleJsonValues { get => _OneCycleJsonValues; set => this.RaiseAndSetIfChanged(ref _OneCycleJsonValues, value); }
+        private ObservableCollection<string> _JsonKeys;
+        public ObservableCollection<string> JsonKeys { get => _JsonKeys; set => this.RaiseAndSetIfChanged(ref _JsonKeys, value); }
+        private ObservableCollection<string> _UniqueJsonKeys;
+        public ObservableCollection<string> UniqueJsonKeys { get => _UniqueJsonKeys; set => this.RaiseAndSetIfChanged(ref _UniqueJsonKeys, value); }
+        private ObservableCollection<string> _JsonValues;
+        public ObservableCollection<string> JsonValues { get => _JsonValues; set => this.RaiseAndSetIfChanged(ref _JsonValues, value); }
+        private ObservableCollection<string> _UniqueJsonValues;
+        public ObservableCollection<string> UniqueJsonValues { get => _UniqueJsonValues; set => this.RaiseAndSetIfChanged(ref _UniqueJsonValues, value); }
+        private ObservableCollection<string> _KeyEntries;
+        public ObservableCollection<string> KeyEntries { get => _KeyEntries; set => this.RaiseAndSetIfChanged(ref _KeyEntries, value); }
+        private ObservableCollection<string> _ValueEntries;
+        public ObservableCollection<string> ValueEntries { get => _ValueEntries; set => this.RaiseAndSetIfChanged(ref _ValueEntries, value); }
         public ObservableCollection<string> GetAllValuesRecursively(JsonDocument jsonDoc)
         {
             var values = new ObservableCollection<string>();
@@ -318,7 +265,7 @@ namespace TableJson.ViewModels
             }
             ValuesNumberText = "Values: " + ValueEntries.Count;
         }
-        
+
         public void OneCycleJsonTablify()
         {
             KeyEntries = GetAllKeysOneCycle(ParsedJson);
@@ -358,15 +305,12 @@ namespace TableJson.ViewModels
                 JSONPathStatus = e.Message.ToString();
             }
         }
-        
         public ReactiveCommand<Unit, Unit> ToggleKeysShowModeCommand { get; }
         public ReactiveCommand<Unit, Unit> ToggleValuesShowModeCommand { get; }
         public ReactiveCommand<Unit, Unit> RunJsonPathQueryCommand { get; }
-        
         public ReactiveCommand<Unit, Unit> OneCycleJsonTablifyCommand { get; }
         public ReactiveCommand<Unit, Unit> RecursiveJsonTablifyCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveQueryFastWindowCommand { get; }
-        
         public void SaveQueryFastWindow()
         {
             var w1 = new SaveWindow() { DataContext = new SaveWindowViewModel(JSONPathQuery) };
@@ -391,21 +335,21 @@ namespace TableJson.ViewModels
         }
         public TabWindowViewModel()
         {
-            //MacrosContextMenu = new ObservableCollection<MacrosMenuItem> { new MacrosMenuItem()
-            //{ Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
+            MacrosContextMenu = new ObservableCollection<MacrosMenuItem> { new MacrosMenuItem()
+            { Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
             //Macros = ReactiveCommand.Create<string>(CopyText)}
-            
-            
+
+
             ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);
             ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
             RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
-            
+
             OneCycleJsonTablifyCommand = ReactiveCommand.Create(OneCycleJsonTablify);
             RecursiveJsonTablifyCommand = ReactiveCommand.Create(RecursiveJsonTablify);
             SaveQueryFastWindowCommand = ReactiveCommand.Create(SaveQueryFastWindow);
-            
+
             UpdateQueries();
-            
+
         }
     }
 }
