@@ -20,8 +20,8 @@ namespace TableJson.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private ObservableCollection<TabWindowViewModel> _Tabs = new ObservableCollection<TabWindowViewModel>() {new TabWindowViewModel() };
-        public ObservableCollection<TabWindowViewModel> Tabs {
+        private ObservableCollection<TabWindow> _Tabs = new ObservableCollection<TabWindow>() { new TabWindow() };
+        public ObservableCollection<TabWindow> Tabs {
             get => _Tabs;
             set => this.RaiseAndSetIfChanged(ref _Tabs, value);
         }
