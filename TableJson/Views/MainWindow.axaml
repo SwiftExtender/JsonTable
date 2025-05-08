@@ -81,6 +81,37 @@
 			<Setter Property="Background" Value="OrangeRed" />
 			<Setter Property="Content" Value="Duplicate Values" />
 		</Style>
+		<!--<Style Selector="TabControl">
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+
+						--><!-- Tab Headers --><!--
+						<ScrollViewer HorizontalScrollBarVisibility="Auto"
+									  VerticalScrollBarVisibility="Hidden">
+							<ItemsPresenter Name="PART_ItemsPresenter"
+											Margin="2"
+											Grid.Row="0"/>
+						</ScrollViewer>
+
+						--><!-- Custom Content Area --><!--
+						<Border Grid.Row="1"
+								BorderBrush="Gray"
+								BorderThickness="1"
+								Margin="5"
+								Background="#F0F0F0">
+							<ContentPresenter Name="PART_SelectedContentHost"
+											  Content="{Binding SelectedContent, RelativeSource={RelativeSource TemplatedParent}}"
+											  Margin="10"/>
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter>
+		</Style>-->
 	</Window.Styles>
 	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
 	<Grid RowDefinitions="0,50,*" ColumnDefinitions="*">
@@ -93,7 +124,29 @@
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin"/>
 		</StackPanel>
 		<StackPanel Grid.Row="2" >
-		<TabControl ItemsSource="{Binding Tabs}">
+		<TabControl ItemsSource="{Binding Tabs}" x:Name="MultiTab">
+			<TabControl.Template>
+				<ControlTemplate>
+					<Grid RowDefinitions="50,*">
+						<ScrollViewer Grid.Row="0"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Hidden">
+							<ItemsPresenter Name="PART_ItemsPresenter">
+								<ItemsPresenter.ItemsPanel>
+									<ItemsPanelTemplate>
+										<StackPanel Orientation="Horizontal"/>
+									</ItemsPanelTemplate>
+								</ItemsPresenter.ItemsPanel>
+							</ItemsPresenter>
+						</ScrollViewer>
+						<Border Grid.Row="1">
+							<ContentPresenter Name="PART_SelectedContentHost"
+											  Content="{Binding SelectedContent, RelativeSource={RelativeSource TemplatedParent}}"
+											  Margin="10"/>
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</TabControl.Template>
 			<TabControl.ItemContainerTheme>
 				<ControlTheme TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}" x:DataType="vm:TabWindowViewModel">
 					<Setter Property="Header" Value="1"/>

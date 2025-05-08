@@ -17,6 +17,33 @@ namespace TableJson.Views
         {
             //this.Opened += StartFocusing;
             InitializeComponent();
+            AddTabButton();
+            AddTab("New", new TabWindow() {DataContext= new TabWindowViewModel() });
+            //AddTab("New1", new TabWindow() {DataContext= new TabWindowViewModel() });
+            //AddTab("New2", new TabWindow() {DataContext= new TabWindowViewModel() });
+        }
+        private void AddTab(string header, Control content)
+        {
+            var newItem = new TabItem()
+            {
+                Header = header,
+                Content = content
+            };
+            TabControl multiTab = this.FindControl<TabControl>("MultiTab");
+            multiTab.Items.Add(newItem);
+        }
+        private void AddTabButton()
+        {
+            var addButton = new Button { Content = "+" };
+            addButton.Click += OnAddTabClicked;
+            TabControl multiTab = this.FindControl<TabControl>("MultiTab");
+            multiTab.Items.Add(addButton);
+        }
+        private void OnAddTabClicked(object? sender, RoutedEventArgs e)
+        {
+            TabControl multiTab = this.FindControl<TabControl>("MultiTab");
+            var newTabNumber = multiTab.Items.Count;
+            AddTab("New "+newTabNumber, new TabWindow() { DataContext = new TabWindowViewModel() });
         }
         //private void StartFocusing(object sender, EventArgs arg)
         //{

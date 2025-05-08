@@ -37,8 +37,8 @@ namespace TableJson.ViewModels
         {
             var t = new TabItem() { Header = "1", Content = "2"};
         }
-        private ObservableCollection<TabItem> _Tabs = new ObservableCollection<TabItem>() { new TabItem() {DataContext=new TabWindowViewModel() }, new TabItem() { DataContext = new TabWindowViewModel() }, new TabItem() { DataContext = new TabWindowViewModel() } };
-        public ObservableCollection<TabItem> Tabs {
+        private ObservableCollection<TabWindow> _Tabs = new ObservableCollection<TabWindow>();// { new TabWindow() {DataContext=new TabWindowViewModel() }, new TabWindow() { DataContext = new TabWindowViewModel() }, new TabWindow() { DataContext = new TabWindowViewModel() } };
+        public ObservableCollection<TabWindow> Tabs {
             get => _Tabs;
             set => this.RaiseAndSetIfChanged(ref _Tabs, value);
         }
