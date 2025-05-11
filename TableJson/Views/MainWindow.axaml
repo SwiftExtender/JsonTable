@@ -124,7 +124,8 @@
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin"/>
 		</StackPanel>
 		<StackPanel Grid.Row="2" >
-		<TabControl ItemsSource="{Binding Tabs}" x:Name="MultiTab">
+		<TabControl x:Name="MultiTab">
+			<!--ItemsSource="{Binding Tabs}"-->
 			<TabControl.Template>
 				<ControlTemplate>
 					<Grid RowDefinitions="50,*">

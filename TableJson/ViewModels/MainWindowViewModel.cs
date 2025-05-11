@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 using Avalonia.Media;
 using System.Collections.Generic;
 using System.Linq;
-using TableJson.Views;
+//using TableJson.Views;
 
 namespace TableJson.ViewModels
 {
@@ -37,11 +37,11 @@ namespace TableJson.ViewModels
         {
             var t = new TabItem() { Header = "1", Content = "2"};
         }
-        private ObservableCollection<TabWindow> _Tabs = new ObservableCollection<TabWindow>();// { new TabWindow() {DataContext=new TabWindowViewModel() }, new TabWindow() { DataContext = new TabWindowViewModel() }, new TabWindow() { DataContext = new TabWindowViewModel() } };
-        public ObservableCollection<TabWindow> Tabs {
-            get => _Tabs;
-            set => this.RaiseAndSetIfChanged(ref _Tabs, value);
-        }
+        //private ObservableCollection<TabWindow> _Tabs = new ObservableCollection<TabWindow>();// { new TabWindow() {DataContext=new TabWindowViewModel() }, new TabWindow() { DataContext = new TabWindowViewModel() }, new TabWindow() { DataContext = new TabWindowViewModel() } };
+        //public ObservableCollection<TabWindow> Tabs {
+        //    get => _Tabs;
+        //    set => this.RaiseAndSetIfChanged(ref _Tabs, value);
+        //}
         //private ObservableCollection<TabWindowViewModel> _Tabs = new ObservableCollection<TabWindowViewModel>() { new TabWindowViewModel() {} };
         //public ObservableCollection<TabWindowViewModel> Tabs {
         //    get => _Tabs;
@@ -218,23 +218,23 @@ namespace TableJson.ViewModels
             var panel = new DockPanel();
             panel.Children.Add(UpdateButtonInit());
             panel.Children.Add(RemoveButtonInit());
-            panel.Children.Add(CodeEditButtonInit());
+            //panel.Children.Add(CodeEditButtonInit());
             panel.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch;
             return panel;
         }
-        private Button CodeEditButtonInit()
-        {
-            var b = new Button();
-            b.Background = new SolidColorBrush() { Color = new Color(255, 80, 00, 20) };
-            b.Content = "Code";
-            b.Click += CodeEditMacros;
-            return b;
-        }
-        public void CodeEditMacros(object sender, RoutedEventArgs e)
-        {
-            var w1 = new MacrosCodeWindow() { DataContext = this };
-            w1.Show();
-        }
+        //private Button CodeEditButtonInit()
+        //{
+        //    var b = new Button();
+        //    b.Background = new SolidColorBrush() { Color = new Color(255, 80, 00, 20) };
+        //    b.Content = "Code";
+        //    b.Click += CodeEditMacros;
+        //    return b;
+        //}
+        //public void CodeEditMacros(object sender, RoutedEventArgs e)
+        //{
+        //    var w1 = new MacrosCodeWindow() { DataContext = this };
+        //    w1.Show();
+        //}
         public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
         public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }

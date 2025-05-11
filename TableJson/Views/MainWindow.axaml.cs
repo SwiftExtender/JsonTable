@@ -7,6 +7,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using System;
 using System.IO;
+using System.Reflection.Metadata;
 using TableJson.ViewModels;
 
 namespace TableJson.Views
@@ -18,16 +19,20 @@ namespace TableJson.Views
             //this.Opened += StartFocusing;
             InitializeComponent();
             AddTabButton();
-            AddTab("New", new TabWindow() {DataContext= new TabWindowViewModel() });
+            //AddTab("New", new TabWindow() {DataContext= new TabWindowViewModel() });
             //AddTab("New1", new TabWindow() {DataContext= new TabWindowViewModel() });
             //AddTab("New2", new TabWindow() {DataContext= new TabWindowViewModel() });
         }
         private void AddTab(string header, Control content)
         {
+            var panel = new DockPanel();
+            panel.Children.Add(new Label() { Content = header });
+            panel.Children.Add(new Button() { Content="X"});
             var newItem = new TabItem()
             {
-                Header = header,
-                Content = content
+                Header = panel,
+                Content = content,
+                
             };
             TabControl multiTab = this.FindControl<TabControl>("MultiTab");
             multiTab.Items.Add(newItem);
@@ -36,8 +41,14 @@ namespace TableJson.Views
         {
             var addButton = new Button { Content = "+" };
             addButton.Click += OnAddTabClicked;
+            var addTabItem = new TabItem()
+            {
+                Header = addButton,
+                //Content = addButton,
+
+            };
             TabControl multiTab = this.FindControl<TabControl>("MultiTab");
-            multiTab.Items.Add(addButton);
+            multiTab.Items.Add(addTabItem);
         }
         private void OnAddTabClicked(object? sender, RoutedEventArgs e)
         {
