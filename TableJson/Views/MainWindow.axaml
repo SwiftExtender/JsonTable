@@ -18,6 +18,10 @@
 		Topmost="{Binding IsPinnedWindow}"
 		>
 	<Window.Styles>
+		<!--<Style Selector="Avalonia.Controls|TabControl#HighestMultiTab /template/ Avalonia.Controls|ScrollViewer /template/ Avalonia.Controls.Primitives|ScrollBar#PART_HorizontalScrollBar:horizontal">
+			<Setter Property="Height" Value="11"/>
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>-->
 		<Style Selector="TabItem">
 			<Setter Property="FontSize" Value="16" />
 		</Style>
@@ -124,12 +128,16 @@
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin"/>
 		</StackPanel>
 		<StackPanel Grid.Row="2" >
-		<TabControl x:Name="MultiTab">
+		<TabControl x:Name="HighestMultiTab">
 			<!--ItemsSource="{Binding Tabs}"-->
 			<TabControl.Template>
 				<ControlTemplate>
 					<Grid RowDefinitions="50,*">
-						<ScrollViewer Grid.Row="0"
+						
+						<!--<ScrollViewer HorizontalScrollBarVisibility="Auto">
+        --><!-- Your content --><!--
+							</ScrollViewer>	-->				
+							<ScrollViewer Grid.Row="0"
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Hidden">
 							<ItemsPresenter Name="PART_ItemsPresenter">

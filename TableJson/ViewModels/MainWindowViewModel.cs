@@ -1,19 +1,22 @@
-﻿using ReactiveUI;
-using AvaloniaEdit.Document;
-using System.IO;
-using TableJson.Models;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using System.Reactive;
+﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
-using System.Collections.ObjectModel;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
+using AvaloniaEdit.Document;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using ReactiveUI;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Reactive;
+using TableJson.Models;
 //using TableJson.Views;
 
 namespace TableJson.ViewModels
@@ -242,7 +245,9 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> AddTabCommand { get; }
         public MainWindowViewModel()
         {
+            //startup opening of 1 tab
             AddTabCommand = ReactiveCommand.Create(AddTab);
+
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
             AddMacrosCommand = ReactiveCommand.Create(AddMacros);
             using (var DataSource = new HelpContext())
