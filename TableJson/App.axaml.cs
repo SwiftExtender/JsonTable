@@ -22,6 +22,7 @@ namespace TableJson
             {
                 desktop.MainWindow = new MainWindow
                 {
+                    WindowState = Avalonia.Controls.WindowState.Maximized,
                     DataContext = new MainWindowViewModel(),
                 };
             }
