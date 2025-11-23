@@ -24,6 +24,8 @@ namespace TableJson.Views
             this.Name += "TheHighestWindow";
             InitializeComponent();
             AddTabButton();
+            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
+            AddTab("New " + multiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
             //AddTab("New", new TabWindow() {DataContext= new TabWindowViewModel() });
             //AddTab("New1", new TabWindow() {DataContext= new TabWindowViewModel() });
             //AddTab("New2", new TabWindow() {DataContext= new TabWindowViewModel() });
@@ -57,9 +59,7 @@ namespace TableJson.Views
             var addButton = new Button { Content = "+" };
             addButton.Click += (sender, e) =>
             {
-                
-                var newTabNumber = multiTab.Items.Count;
-                AddTab("New " + newTabNumber, new TabWindow() { DataContext = new TabWindowViewModel() });
+                AddTab("New " + multiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
             };
             var addTabItem = new TabItem()
             {
@@ -77,7 +77,11 @@ namespace TableJson.Views
         //        focused.Loaded += (s, e) => focused.Focus();
         //    }
         //}
-        private async void ImportJsonFile_Clicked(object sender, RoutedEventArgs args)
+        public async void MacrosOpenWindow_Clicked(object sender, RoutedEventArgs args) {
+            MacrosCodeWindow w1 = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Normal };
+            w1.Show();
+        }
+        public async void ImportJsonFile_Clicked(object sender, RoutedEventArgs args)
         {
             var topLevel = GetTopLevel(this);
             var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions

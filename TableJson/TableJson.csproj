@@ -41,6 +41,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
-  <ItemGroup> 
+  <ItemGroup>
+    <Folder Include="Constructors\UI\" />
+    <Folder Include="Constructors\Logic\" />
   </ItemGroup>
 </Project>

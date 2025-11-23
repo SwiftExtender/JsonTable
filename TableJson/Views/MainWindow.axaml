@@ -18,11 +18,11 @@
 		Topmost="{Binding IsPinnedWindow}"
 		>
 	<Window.Styles>
-		<!--<Style Selector="ScrollBar:horizontal">
+		<Style Selector="ScrollBar:horizontal">
 			<Setter Property="Background" Value="Blue"/>
 			<Setter Property="MinHeight" Value="2"/>
 			<Setter Property="Height" Value="11"/>
-		</Style>-->
+		</Style>
 		<Style Selector="TabItem">
 			<Setter Property="FontSize" Value="16" />
 		</Style>
@@ -122,14 +122,16 @@
 	<Grid RowDefinitions="0,50,*" ColumnDefinitions="*">
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Grid.Row="1" Margin="10,22,10,0" Orientation="Horizontal">
+			
 			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked" HotKey="Ctrl+O"/>
+			<Button Content="Macros" Background="DarkSalmon" Click="MacrosOpenWindow_Clicked" HotKey="Ctrl+Q"/>
 			<!--<Button Background="DarkCyan" Margin="15,0,15,0" Content="Parse" Command="{Binding ParseCommand}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}"/>-->
 			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>
 			<ComboBox ItemsSource="{Binding EditorFontSizes}"  Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin"/>
 		</StackPanel>
 		<!--<StackPanel Grid.Row="2" >-->
-		<TabControl  Grid.Row="2" x:Name="HighestMultiTab">
+		<TabControl Grid.Row="2" x:Name="HighestMultiTab">
 			<!--ItemsSource="{Binding Tabs}"-->
 			<TabControl.Template>
 				<ControlTemplate>

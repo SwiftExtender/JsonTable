@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:bh="using:TableJson.ViewModels"
 		x:Class="TableJson.Views.MacrosCodeWindow"
-		x:DataType="vm:MainWindowViewModel"
+		x:DataType="vm:MacrosWindowViewModel"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
 		WindowStartupLocation="CenterScreen"
@@ -14,10 +14,11 @@
 		WindowState="Maximized"
 		Title="Macros editor"
 		>
+	<Border BorderThickness="1.5" BorderBrush="DarkSalmon" IsVisible="True">
 	<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-		<!--<DockPanel>
+		<DockPanel>
 			<TextBox Watermark="Macros Name" Text="{Binding MacrosNameText}" Margin="10,35,10,10"></TextBox>
-		</DockPanel>-->
+		</DockPanel>
 		<Grid RowDefinitions="50,*" Margin="10,5,10,5">
 				<Button Grid.Row="0" Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}"/>
 				<TreeDataGrid Grid.Row="1" x:Name="mgrid" Source="{Binding MacrosGridData}" Margin="10,10,10,30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray" CanUserResizeColumns="True"/>
@@ -29,6 +30,7 @@
 			</ae:TextEditor.Options>
 		</ae:TextEditor>
 			<SelectableTextBlock Text="{Binding CompileStatusText}"></SelectableTextBlock>
-			<Button Content="Compile" Margin="10,5,10,5" Command="{Binding CompileSourceCodeCommand}"></Button>
+			<Button Background="LightSeaGreen" Content="Compile" Margin="10,5,10,5" Command="{Binding CompileSourceCodeCommand}" HotKey="Ctrl+Shift+B"/>
 	</StackPanel>
+	</Border>
 </Window>
