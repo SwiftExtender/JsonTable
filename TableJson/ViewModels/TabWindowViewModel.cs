@@ -1,26 +1,28 @@
-﻿using System;
-using ReactiveUI;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Reactive;
-using AvaloniaEdit.Document;
-using System.Linq;
-using System.Text.Json;
-using System.IO;
-using System.Text;
-using TableJson.Models;
-using Microsoft.CodeAnalysis;
-using Newtonsoft.Json.Linq;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
-using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Media;
 using Avalonia.Interactivity;
-using TableJson.Views;
+using Avalonia.Media;
+using Avalonia.Threading;
+using AvaloniaEdit.Document;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Newtonsoft.Json.Linq;
+using ReactiveUI;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Reactive;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using TableJson.Models;
+using TableJson.Views;
 
 namespace TableJson.ViewModels
 {
@@ -44,6 +46,7 @@ namespace TableJson.ViewModels
     }
     public class TabWindowViewModel : ViewModelBase
     {
+
         private string _JSONPathQuery = "";
         public string JSONPathQuery
         {
@@ -329,12 +332,64 @@ namespace TableJson.ViewModels
                 }
             }
         }
+
+
+        public async Task LoadFileAsync(string filePath)
+        {
+            // Read the file asynchronously
+            string text;
+            using (var reader = File.OpenText(filePath))
+            {
+                text = await reader.ReadToEndAsync();
+            }
+
+            // Since we are going to set the Document property of AvaloniaEdit, which is a UI property,
+            // we must do it on the UI thread.
+            // However, if the document is very large, creating the document might be heavy.
+            // We can use the Dispatcher to avoid blocking the UI.
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                // Assuming you have a TextEditor named editor
+                RawText = new TextDocument(text);
+            }, DispatcherPriority.Background);
+        }
         public void UpdateQueriesEvent(object? sender, EventArgs e)
         {
             UpdateQueries();
         }
+        //private void OnDataRequested(object? sender, string data)
+        //{
+        //    // Handle the method call
+        //    LoadFileAsync(data);
+        //}
+        //public void Dispose()
+        //{
+        //    MainWindowViewModel.DataRequested -= OnDataRequested;
+        //}
+        public TabWindowViewModel(string filepath)
+        {
+            LoadFileAsync(filepath);
+
+            MacrosContextMenu = new ObservableCollection<MacrosMenuItem> { new MacrosMenuItem()
+            { Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
+            //Macros = ReactiveCommand.Create<string>(CopyText)}
+
+
+            ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);
+            ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
+            RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
+
+            OneCycleJsonTablifyCommand = ReactiveCommand.Create(OneCycleJsonTablify);
+            RecursiveJsonTablifyCommand = ReactiveCommand.Create(RecursiveJsonTablify);
+            SaveQueryFastWindowCommand = ReactiveCommand.Create(SaveQueryFastWindow);
+
+            UpdateQueries();
+
+        }
         public TabWindowViewModel()
         {
+            //MainWindowViewModel.DataRequested += OnDataRequested;
+
             MacrosContextMenu = new ObservableCollection<MacrosMenuItem> { new MacrosMenuItem()
             { Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
             //Macros = ReactiveCommand.Create<string>(CopyText)}

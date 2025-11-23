@@ -18,9 +18,10 @@
 		Topmost="{Binding IsPinnedWindow}"
 		>
 	<Window.Styles>
-		<!--<Style Selector="Avalonia.Controls|TabControl#HighestMultiTab /template/ Avalonia.Controls|ScrollViewer /template/ Avalonia.Controls.Primitives|ScrollBar#PART_HorizontalScrollBar:horizontal">
+		<!--<Style Selector="ScrollBar:horizontal">
+			<Setter Property="Background" Value="Blue"/>
+			<Setter Property="MinHeight" Value="2"/>
 			<Setter Property="Height" Value="11"/>
-			<Setter Property="Background" Value="Transparent"/>
 		</Style>-->
 		<Style Selector="TabItem">
 			<Setter Property="FontSize" Value="16" />

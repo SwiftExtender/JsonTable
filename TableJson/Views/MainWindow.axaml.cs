@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using System;
@@ -84,17 +85,25 @@ namespace TableJson.Views
             });
             if (files.Count == 1)
             {
-                await using var stream = await files[0].OpenReadAsync();
-                using var streamReader = new StreamReader(stream);
-                var fileContent = await streamReader.ReadToEndAsync();
+                //await using var stream = await files[0].OpenReadAsync();
+                //using var streamReader = new StreamReader(stream);
+               //var fileContent = await streamReader.ReadToEndAsync();
                 //TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
-                TabWindow fromFileTab = new TabWindow() { DataContext = new TabWindowViewModel() };
-                AddTab(files[0].Name, fromFileTab);
+                //TabWindow fromFileTab = new TabWindow() { }; //DataContext = new TabWindowViewModel()
+                //AddTab(files[0].Name, fromFileTab);
 
-                TextEditor editor = fromFileTab.FindControl<TextEditor>("editor");
-                editor.Document = new TextDocument(fileContent);
-                //TextEditor editor = this.FindControl<TextEditor>("editor");
+                //TextEditor editor = fromFileTab.FindControl<TextEditor>("editor");
                 //editor.Document = new TextDocument(fileContent);
+                //MainWindowViewModel.DataRequested?.Invoke(this, dataToSend);
+                //fromFileTab.Ch
+                //TextEditor editor = this.FindControl<TextEditor>("editor");
+                Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    TabWindow fromFileTab = new TabWindow() { };
+                    fromFileTab.DataContext = new TabWindowViewModel() { FilePath = files[0].Name };
+                    AddTab(files[0].Name, fromFileTab);
+                });
+
             }     
         }
         //public async void CopyText(object sender, RoutedEventArgs args)
