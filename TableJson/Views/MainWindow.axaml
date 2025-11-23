@@ -128,8 +128,8 @@
 			<ComboBox ItemsSource="{Binding EditorFontSizes}"  Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin"/>
 		</StackPanel>
-		<StackPanel Grid.Row="2" >
-		<TabControl x:Name="HighestMultiTab">
+		<!--<StackPanel Grid.Row="2" >-->
+		<TabControl  Grid.Row="2" x:Name="HighestMultiTab">
 			<!--ItemsSource="{Binding Tabs}"-->
 			<TabControl.Template>
 				<ControlTemplate>
@@ -168,7 +168,7 @@
 				</ControlTheme>
 			</TabControl.ItemContainerTheme>
 		</TabControl>
-		</StackPanel>
+		<!--</StackPanel>-->
 	</Grid>
 	</Border>
 </Window>

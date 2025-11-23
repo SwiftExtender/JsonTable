@@ -10,9 +10,12 @@
         x:Class="TableJson.Views.TabWindow"
 	    x:DataType="vm:TabWindowViewModel"
         >
-	<StackPanel>
-	<Grid Grid.Row="2" RowDefinitions="0.9*,0.1*">
-		<aedit:TextEditor  SyntaxHighlighting="None" Grid.Row="0" x:Name="editor" 
+	<DockPanel VerticalAlignment="Stretch" LastChildFill="True">
+	<Grid DockPanel.Dock="Top" Grid.Row="2" RowDefinitions="0.9*, 0.1*" ColumnDefinitions="*" HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch">
+		<aedit:TextEditor
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch" MaxHeight="670" SyntaxHighlighting="None" Grid.Row="0" x:Name="editor" 
 						   BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="10,0,10,0" 
 						   ShowLineNumbers="True" Document="{Binding RawText, Mode=TwoWay}" 
 						   ScrollViewer.AllowAutoHide="False" ScrollViewer.HorizontalScrollBarVisibility="Visible" WordWrap="False"
@@ -40,8 +43,8 @@
 		</aedit:TextEditor>
 		<SelectableTextBlock Grid.Row="1" Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>
 	</Grid>
-	<GridSplitter Background="DarkCyan" ShowsPreview="True" Grid.Row="3" x:Name="splitter" Margin="10,5,10,0" Height="5" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
-	<DockPanel Grid.Row="4" >
+	<!--<GridSplitter Background="DarkCyan" ShowsPreview="True" Grid.Row="3" x:Name="splitter" Margin="10,5,10,0" Height="5" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
+	<DockPanel DockPanel.Dock="Bottom" Grid.Row="4" >
 		<TabControl>
 			<TabItem Header="Columns">
 				<Grid ColumnDefinitions="0.9*, 0.9*" RowDefinitions="55,0.8*" Margin="10,5,10,5">
@@ -131,13 +134,13 @@
 						<Button Command="{Binding RunJsonPathQueryCommand}" Margin="5,0,5,0" Content="Run query" Width="90"/>
 						<Button Content="Copy result" Margin="5,0,5,0" Click="CopyToClipboardFromJSONPathResult"/>
 						<SelectableTextBlock Text="{Binding JSONPathStatus}" Margin="15,5,5,0"/>
-						<!--<Button Margin="10,0,10,0" Content="Change view mode"></Button>-->
+						--><!--<Button Margin="10,0,10,0" Content="Change view mode"></Button>--><!--
 					</DockPanel>
 					<aedit:TextEditor Grid.Row="2" Grid.ColumnSpan="2" x:Name="JSONPathResultEditor" BorderBrush="DarkGoldenrod" Document="{Binding JSONPathResult}" BorderThickness="2" Margin="10,0,10,30" ShowLineNumbers="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
 							   VerticalScrollBarVisibility="Visible" ScrollViewer.AllowAutoHide="False"/>
 				</Grid>
 			</TabItem>
 		</TabControl>
+	</DockPanel>-->
 	</DockPanel>
-	</StackPanel>
 </UserControl>
