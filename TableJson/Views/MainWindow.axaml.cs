@@ -17,6 +17,8 @@ namespace TableJson.Views
 {
     public partial class MainWindow : Window
     {
+        internal double DynamicMaxHeight;
+
         public MainWindow()
         {
             this.Name += "TheHighestWindow";
@@ -85,25 +87,12 @@ namespace TableJson.Views
             });
             if (files.Count == 1)
             {
-                //await using var stream = await files[0].OpenReadAsync();
-                //using var streamReader = new StreamReader(stream);
-               //var fileContent = await streamReader.ReadToEndAsync();
-                //TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
-                //TabWindow fromFileTab = new TabWindow() { }; //DataContext = new TabWindowViewModel()
-                //AddTab(files[0].Name, fromFileTab);
-
-                //TextEditor editor = fromFileTab.FindControl<TextEditor>("editor");
-                //editor.Document = new TextDocument(fileContent);
-                //MainWindowViewModel.DataRequested?.Invoke(this, dataToSend);
-                //fromFileTab.Ch
-                //TextEditor editor = this.FindControl<TextEditor>("editor");
                 Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     TabWindow fromFileTab = new TabWindow() { };
-                    fromFileTab.DataContext = new TabWindowViewModel() { FilePath = files[0].Name };
+                    fromFileTab.DataContext = new TabWindowViewModel(files[0].TryGetLocalPath());
                     AddTab(files[0].Name, fromFileTab);
                 });
-
             }     
         }
         //public async void CopyText(object sender, RoutedEventArgs args)

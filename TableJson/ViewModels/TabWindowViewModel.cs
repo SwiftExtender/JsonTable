@@ -333,7 +333,6 @@ namespace TableJson.ViewModels
             }
         }
 
-
         public async Task LoadFileAsync(string filePath)
         {
             // Read the file asynchronously
@@ -342,14 +341,8 @@ namespace TableJson.ViewModels
             {
                 text = await reader.ReadToEndAsync();
             }
-
-            // Since we are going to set the Document property of AvaloniaEdit, which is a UI property,
-            // we must do it on the UI thread.
-            // However, if the document is very large, creating the document might be heavy.
-            // We can use the Dispatcher to avoid blocking the UI.
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
-                // Assuming you have a TextEditor named editor
                 RawText = new TextDocument(text);
             }, DispatcherPriority.Background);
         }
@@ -357,15 +350,6 @@ namespace TableJson.ViewModels
         {
             UpdateQueries();
         }
-        //private void OnDataRequested(object? sender, string data)
-        //{
-        //    // Handle the method call
-        //    LoadFileAsync(data);
-        //}
-        //public void Dispose()
-        //{
-        //    MainWindowViewModel.DataRequested -= OnDataRequested;
-        //}
         public TabWindowViewModel(string filepath)
         {
             LoadFileAsync(filepath);
