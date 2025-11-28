@@ -1,9 +1,11 @@
-using TableJson.ViewModels;
-using TableJson.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using System;
+using System.Runtime;
 using TableJson.Models;
+using TableJson.ViewModels;
+using TableJson.Views;
 
 namespace TableJson
 {
@@ -16,6 +18,9 @@ namespace TableJson
 
         public override void OnFrameworkInitializationCompleted()
         {
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            //AppContext.SetData("GCHeapHardLimit", 0x1600000000);
+            AppContext.SetData("GCAllowVeryLargeObjects", true);
             var tempdb = new HelpContext();
             tempdb.Database.EnsureCreated();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

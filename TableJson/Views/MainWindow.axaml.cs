@@ -25,13 +25,14 @@ namespace TableJson.Views
             InitializeComponent();
             AddTabButton();
             TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
-            AddTab("New " + multiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
-            //AddTab("New", new TabWindow() {DataContext= new TabWindowViewModel() });
-            //AddTab("New1", new TabWindow() {DataContext= new TabWindowViewModel() });
-            //AddTab("New2", new TabWindow() {DataContext= new TabWindowViewModel() });
+            TabItem initTab = AddTab("New " + multiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
+            if (initTab != null)
+            {
+                initTab.IsSelected = true;
+            }
         }
         
-        private void AddTab(string header, Control content)
+        private TabItem AddTab(string header, Control content)
         {
             TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
             var panel = new DockPanel();
@@ -52,6 +53,7 @@ namespace TableJson.Views
             };
             
             multiTab.Items.Add(newItem);
+            return newItem;
         }
         private void AddTabButton()
         {
@@ -94,10 +96,11 @@ namespace TableJson.Views
                 Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     TabWindow fromFileTab = new TabWindow() { };
-                    fromFileTab.DataContext = new TabWindowViewModel(files[0].TryGetLocalPath());
+                    //fromFileTab.DataContext = new TabWindowViewModel(files[0]);
+                    fromFileTab.DataContext = new TabWindowViewModel(files[0]);
                     AddTab(files[0].Name, fromFileTab);
                 });
-            }     
+            }
         }
         //public async void CopyText(object sender, RoutedEventArgs args)
         //{

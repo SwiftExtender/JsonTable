@@ -1,11 +1,14 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
+using Avalonia.Controls.Shapes;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -16,13 +19,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.IO.MemoryMappedFiles;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Reactive;
+using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using TableJson.Models;
 using TableJson.Views;
+using Tmds.DBus.Protocol;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TableJson.ViewModels
 {
@@ -333,26 +343,70 @@ namespace TableJson.ViewModels
             }
         }
 
+        //public async Task LoadFileAs(IStorageFile file) {
+        //    await using var stream = await file.OpenReadAsync();
+        //    using var streamReader = new StreamReader(stream);
+        //    var fileContent = await streamReader.ReadToEndAsync();
+        //    await Dispatcher.UIThread.InvokeAsync(() =>
+        //    {
+        //        RawText = new TextDocument(fileContent);
+        //    }, DispatcherPriority.Background);
+        //}
+        //public static async Task<string> ReadFileToStringMappedAsync(
+        //    string filePath,
+        //    Encoding encoding = null,
+        //    int bufferSize = 4096)
+        //{
+        //    if (!File.Exists(filePath))
+        //        throw new FileNotFoundException($"File not found: {filePath}");
+
+        //    encoding ??= Encoding.UTF8;
+
+        //    var fileInfo = new FileInfo(filePath);
+        //    long fileLength = fileInfo.Length;
+
+        //    using (var mmf = MemoryMappedFile.CreateFromFile(filePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read))
+        //    {
+        //        using (var stream = mmf.CreateViewStream(0, fileLength, MemoryMappedFileAccess.Read))
+        //        {
+        //            using (var reader = new StreamReader(stream, encoding, false, bufferSize))
+        //            {
+        //                // Convert all text content to string
+        //                return await reader.ReadToEndAsync();
+        //            }
+        //        }
+        //    }
+        //}
+
         public async Task LoadFileAsync(string filePath)
         {
-            // Read the file asynchronously
-            string text;
-            using (var reader = File.OpenText(filePath))
+            using var reader = new StreamReader(filePath);
+            StringBuilder sb = new StringBuilder();
+            string line;
+            while ((line = reader.ReadLine()) != null)
             {
-                text = await reader.ReadToEndAsync();
+                sb.AppendLine(line);
             }
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
-                RawText = new TextDocument(text);
+                   try
+                   {
+                        RawText = new TextDocument(sb.ToString()) ;
+                   } catch (Exception e) {
+                        RawText = new TextDocument(e.ToString());
+                   }        
             }, DispatcherPriority.Background);
+            GC.Collect(2);
         }
         public void UpdateQueriesEvent(object? sender, EventArgs e)
         {
             UpdateQueries();
         }
-        public TabWindowViewModel(string filepath)
+        public TabWindowViewModel(IStorageFile file)
         {
-            LoadFileAsync(filepath);
+            LoadFileAsync(file.TryGetLocalPath());
+            //ProcessLargeFile(file.TryGetLocalPath());
+            //LoadFileAsync(file.TryGetLocalPath());
 
             MacrosContextMenu = new ObservableCollection<MacrosMenuItem> { new MacrosMenuItem()
             { Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
