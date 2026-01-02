@@ -380,9 +380,16 @@ namespace TableJson.ViewModels
 
         public async Task LoadFileAsync(string filePath)
         {
-            using var reader = new StreamReader(filePath);
+            using var fileStream = new FileStream(
+                filePath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite);
+
+            using var reader = new StreamReader(fileStream);
             StringBuilder sb = new StringBuilder();
             string line;
+
             while ((line = reader.ReadLine()) != null)
             {
                 sb.AppendLine(line);
@@ -396,7 +403,6 @@ namespace TableJson.ViewModels
                         RawText = new TextDocument(e.ToString());
                    }        
             }, DispatcherPriority.Background);
-            GC.Collect(2);
         }
         public void UpdateQueriesEvent(object? sender, EventArgs e)
         {
