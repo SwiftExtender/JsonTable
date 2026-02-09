@@ -132,12 +132,41 @@ namespace TableJson.Views
             TabWindowViewModel? tabWindowViewModel = tabWindow.DataContext as TabWindowViewModel;
             if (tabWindowViewModel.FileFullPath == "")
             {
-                
-            } else
-            {
-                File.WriteAllText(tabWindowViewModel.FileFullPath, tabWindowViewModel.RawText.Text);
+                var topLevel = GetTopLevel(this);
+                var saveOptions = new FilePickerSaveOptions { Title = "Save new file" };
+                var file = await topLevel.StorageProvider.SaveFilePickerAsync(saveOptions);
+                if (file != null)
+                {
+                    try
+                    {
+                        await using (var stream = await file.OpenWriteAsync())
+                        {
+                            using (StreamWriter writer = new StreamWriter(stream))
+                            {
+                                await writer.WriteAsync(tabWindowViewModel.RawText.Text);
+                            }
+                        }
+                        tabWindowViewModel.StatusText = "New file saved " + file.TryGetLocalPath();
+                    }
+                    catch (Exception e)
+                    {
+                        tabWindowViewModel.StatusText = "Exception: New file saving error " + e.ToString();
+                    }
+                }
+
             }
-            tabWindowViewModel.StatusText = "File saved " + tabWindowViewModel.FileFullPath;
+            else
+            {
+                try
+                {
+                    File.WriteAllText(tabWindowViewModel.FileFullPath, tabWindowViewModel.RawText.Text);
+                    tabWindowViewModel.StatusText = "File saved " + tabWindowViewModel.FileFullPath;
+                }
+                catch (Exception e)
+                {
+                    tabWindowViewModel.StatusText = "Exception: file saving error " + e.ToString();
+                }
+            }
         }
         public async void CopyText(object sender, RoutedEventArgs args)
         {
