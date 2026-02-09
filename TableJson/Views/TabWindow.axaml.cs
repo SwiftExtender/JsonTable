@@ -1,5 +1,3 @@
-using Avalonia;
-using Avalonia.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -42,7 +40,7 @@ namespace TableJson.Views
             Window highestWindow = this.FindControl<Window>("TheHighestWindow");
             if (highestWindow.Clipboard == null) return;
             ListBox JSONKeysList = this.FindControl<ListBox>("JSONKeysList");
-            
+
             var dataObject = new DataObject();
             string keys = "";
             foreach (var item in JSONKeysList.ItemsSource)
