@@ -146,6 +146,7 @@ namespace TableJson.Views
                                 await writer.WriteAsync(tabWindowViewModel.RawText.Text);
                             }
                         }
+                        file.Dispose();
                         tabWindowViewModel.StatusText = "New file saved " + file.TryGetLocalPath();
                     }
                     catch (Exception e)
