@@ -1,22 +1,7 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
-using Avalonia.Controls.Selection;
-using Avalonia.Controls.Templates;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Media;
-using AvaloniaEdit.Document;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis;
 using ReactiveUI;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Reactive;
-using TableJson.Models;
 //using TableJson.Views;
 
 namespace TableJson.ViewModels
@@ -57,12 +42,12 @@ namespace TableJson.ViewModels
         {
             get => _StatusText;
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
-        }    
+        }
         public MainWindowViewModel()
         {
             //startup opening of 1 tab
             //AddTabCommand = ReactiveCommand.Create(AddTab);
-            
+
         }
     }
 }

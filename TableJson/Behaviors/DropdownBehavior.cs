@@ -1,8 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Xaml.Interactivity;
-using System.Threading.Tasks;
 using System;
-using TableJson.ViewModels;
+using System.Threading.Tasks;
 
 namespace TableJson.Behaviors
 {

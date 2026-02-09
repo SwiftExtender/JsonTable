@@ -1,38 +1,20 @@
-﻿using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
-using Avalonia.Controls.Selection;
-using Avalonia.Controls.Shapes;
-using Avalonia.Controls.Templates;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using AvaloniaEdit;
 using AvaloniaEdit.Document;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json.Linq;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
-using System.IO.MemoryMappedFiles;
-using System.IO.Pipelines;
 using System.Linq;
 using System.Reactive;
-using System.Reflection;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 using TableJson.Models;
 using TableJson.Views;
-using Tmds.DBus.Protocol;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TableJson.ViewModels
 {
@@ -56,7 +38,12 @@ namespace TableJson.ViewModels
     }
     public class TabWindowViewModel : ViewModelBase
     {
-
+        private string _FileFullPath = "";
+        public string FileFullPath
+        {
+            get => _FileFullPath;
+            set => this.RaiseAndSetIfChanged(ref _FileFullPath, value);
+        }
         private string _JSONPathQuery = "";
         public string JSONPathQuery
         {
@@ -396,12 +383,14 @@ namespace TableJson.ViewModels
             }
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
-                   try
-                   {
-                        RawText = new TextDocument(sb.ToString()) ;
-                   } catch (Exception e) {
-                        RawText = new TextDocument(e.ToString());
-                   }        
+                try
+                {
+                    RawText = new TextDocument(sb.ToString());
+                }
+                catch (Exception e)
+                {
+                    RawText = new TextDocument(e.ToString());
+                }
             }, DispatcherPriority.Background);
         }
         public void UpdateQueriesEvent(object? sender, EventArgs e)
@@ -411,6 +400,8 @@ namespace TableJson.ViewModels
         public TabWindowViewModel(IStorageFile file)
         {
             LoadFileAsync(file.TryGetLocalPath());
+            //FileFullPath = file.Path.ToString();
+            FileFullPath = file.TryGetLocalPath();
             //ProcessLargeFile(file.TryGetLocalPath());
             //LoadFileAsync(file.TryGetLocalPath());
 

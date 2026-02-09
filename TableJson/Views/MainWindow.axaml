@@ -123,7 +123,8 @@
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Grid.Row="1" Margin="10,22,10,0" Orientation="Horizontal">
 			
-			<Button Content="Load from file" Background="BlueViolet" Click="ImportJsonFile_Clicked" HotKey="Ctrl+O"/>
+			<Button Content="Load from file" Background="BlueViolet" Click="OpenFile_Clicked" HotKey="Ctrl+O"/>
+			<Button Content="Save" Background="Green" Click="SaveFile_Clicked" HotKey="Ctrl+S"/>
 			<Button Content="Macros" Background="DarkSalmon" Click="MacrosOpenWindow_Clicked" HotKey="Ctrl+Q"/>
 			<!--<Button Background="DarkCyan" Margin="15,0,15,0" Content="Parse" Command="{Binding ParseCommand}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}"/>-->
 			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>

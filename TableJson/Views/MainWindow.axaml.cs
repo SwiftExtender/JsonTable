@@ -1,16 +1,9 @@
-using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
-using Avalonia.Styling;
 using Avalonia.Threading;
-using AvaloniaEdit;
-using AvaloniaEdit.Document;
 using System;
 using System.IO;
-using System.Reflection.Metadata;
 using TableJson.ViewModels;
 
 namespace TableJson.Views
@@ -30,9 +23,14 @@ namespace TableJson.Views
             {
                 initTab.IsSelected = true;
             }
+            //StartFocusing();
         }
-        
-        private TabItem AddTab(string header, Control content)
+        private TabItem GetActiveTab()
+        {
+            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
+            return (TabItem)multiTab.SelectedItem;
+        }
+        private TabItem AddTab(string header, TabWindow content)
         {
             TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
             var panel = new DockPanel();
@@ -51,7 +49,30 @@ namespace TableJson.Views
                 Header = panel,
                 Content = content,
             };
-            
+
+            multiTab.Items.Add(newItem);
+            return newItem;
+        }
+        private TabItem AddTab(IStorageFile file, Control content)
+        {
+            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
+            var panel = new DockPanel();
+            panel.Children.Add(new Label() { Content = file.Name });
+            Button btn = new Button() { Content = "X" };
+            btn.Click += (sender, e) =>
+            {
+                if (sender is Button btn && btn.Parent is DockPanel dckPanel && dckPanel.Parent is TabItem titem)
+                {
+                    multiTab.Items.Remove(titem);
+                }
+            };
+            panel.Children.Add(btn);
+            var newItem = new TabItem()
+            {
+                Header = panel,
+                Content = content,
+            };
+
             multiTab.Items.Add(newItem);
             return newItem;
         }
@@ -70,20 +91,22 @@ namespace TableJson.Views
             };
             multiTab.Items.Add(addTabItem);
         }
-        //private void StartFocusing(object sender, EventArgs arg)
-        //{
-        //    TextEditor focused = this.FindControl<TextEditor>("editor");
-        //    focused.FontSize = 13;
-        //    if (focused != null)
-        //    {
-        //        focused.Loaded += (s, e) => focused.Focus();
-        //    }
-        //}
-        public async void MacrosOpenWindow_Clicked(object sender, RoutedEventArgs args) {
+        private void StartFocusing(object sender, EventArgs arg)
+        {
+            //TextEditor focused = this.FindControl<TextEditor>("editor");
+            TabItem tab = GetActiveTab();
+            //focused.FontSize = 13;
+            //if (focused != null)
+            //{
+            //    focused.Loaded += (s, e) => focused.Focus();
+            //}
+        }
+        public async void MacrosOpenWindow_Clicked(object sender, RoutedEventArgs args)
+        {
             MacrosCodeWindow w1 = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Normal };
             w1.Show();
         }
-        public async void ImportJsonFile_Clicked(object sender, RoutedEventArgs args)
+        public async void OpenFile_Clicked(object sender, RoutedEventArgs args)
         {
             var topLevel = GetTopLevel(this);
             var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -93,24 +116,38 @@ namespace TableJson.Views
             });
             if (files.Count == 1)
             {
-                Dispatcher.UIThread.InvokeAsync(() =>
+                await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     TabWindow fromFileTab = new TabWindow() { };
                     //fromFileTab.DataContext = new TabWindowViewModel(files[0]);
                     fromFileTab.DataContext = new TabWindowViewModel(files[0]);
-                    AddTab(files[0].Name, fromFileTab);
+                    AddTab(files[0], fromFileTab);
                 });
             }
         }
-        //public async void CopyText(object sender, RoutedEventArgs args)
-        //{
-        //    if (!string.IsNullOrEmpty(selectedText))
-        //    {
-        //        var clipboard = GetTopLevel(sender).Clipboard;
-        //        var dataObject = new DataObject();
-        //        dataObject.Set(DataFormats.Text, selectedText);
-        //        _mainWindow.Clipboard.SetDataObjectAsync(dataObject);
-        //    }
-        //}
+        public async void SaveFile_Clicked(object sender, RoutedEventArgs args)
+        {
+            TabItem tab = GetActiveTab();
+            TabWindow? tabWindow = tab.Content as TabWindow; //getting child TabWindow
+            TabWindowViewModel? tabWindowViewModel = tabWindow.DataContext as TabWindowViewModel;
+            if (tabWindowViewModel.FileFullPath == "")
+            {
+                
+            } else
+            {
+                File.WriteAllText(tabWindowViewModel.FileFullPath, tabWindowViewModel.RawText.Text);
+            }
+            tabWindowViewModel.StatusText = "File saved " + tabWindowViewModel.FileFullPath;
+        }
+        public async void CopyText(object sender, RoutedEventArgs args)
+        {
+            //if (!string.IsNullOrEmpty(selectedText))
+            //{
+            //    var clipboard = GetTopLevel(sender).Clipboard;
+            //    var dataObject = new DataObject();
+            //    dataObject.Set(DataFormats.Text, selectedText);
+            //    _mainWindow.Clipboard.SetDataObjectAsync(dataObject);
+            //}
+        }
     }
 }
