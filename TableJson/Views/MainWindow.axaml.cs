@@ -119,7 +119,6 @@ namespace TableJson.Views
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     TabWindow fromFileTab = new TabWindow() { };
-                    //fromFileTab.DataContext = new TabWindowViewModel(files[0]);
                     fromFileTab.DataContext = new TabWindowViewModel(files[0]);
                     AddTab(files[0], fromFileTab);
                 });
@@ -146,15 +145,17 @@ namespace TableJson.Views
                                 await writer.WriteAsync(tabWindowViewModel.RawText.Text);
                             }
                         }
+                        tab.Header = file.Name;
                         file.Dispose();
-                        tabWindowViewModel.StatusText = "New file saved " + file.TryGetLocalPath();
+                        string createdFilePath = file.TryGetLocalPath();
+                        tabWindowViewModel.StatusText = "New file saved " + createdFilePath;
+                        tabWindowViewModel.FileFullPath = createdFilePath;
                     }
                     catch (Exception e)
                     {
                         tabWindowViewModel.StatusText = "Exception: New file saving error " + e.ToString();
                     }
                 }
-
             }
             else
             {
