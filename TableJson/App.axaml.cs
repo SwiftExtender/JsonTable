@@ -22,7 +22,10 @@ namespace TableJson
             //AppContext.SetData("GCHeapHardLimit", 0x1600000000);
             AppContext.SetData("GCAllowVeryLargeObjects", true);
             var tempdb = new HelpContext();
+
             tempdb.Database.EnsureCreated();
+
+            this.AttachDevTools();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow
