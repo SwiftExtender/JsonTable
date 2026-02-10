@@ -1,5 +1,4 @@
-﻿using System;
-using ReactiveUI;
+﻿using ReactiveUI;
 using System.Reactive;
 using TableJson.Models;
 

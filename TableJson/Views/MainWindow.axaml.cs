@@ -91,16 +91,19 @@ namespace TableJson.Views
             };
             multiTab.Items.Add(addTabItem);
         }
-        private void StartFocusing(object sender, EventArgs arg)
-        {
-            //TextEditor focused = this.FindControl<TextEditor>("editor");
-            TabItem tab = GetActiveTab();
-            //focused.FontSize = 13;
-            //if (focused != null)
-            //{
-            //    focused.Loaded += (s, e) => focused.Focus();
-            //}
-        }
+        //private void StartFocusing(object sender, EventArgs arg)
+        //{
+        //    //TextEditor focused = this.FindControl<TextEditor>("editor");
+        //    TabItem tab = GetActiveTab();
+        //    TabWindow? tabWindow = tab.Content as TabWindow; //getting child TabWindow
+        //    TabWindowViewModel? tabWindowViewModel = tabWindow.DataContext as TabWindowViewModel;
+        //    tab.FontSize = tabWindowViewModel.EditorFontSizes;
+        //    TabWindowViewModel vm = tab.DataContext;
+        //    if (tab != null)
+        //    {
+        //        tab.Loaded += (s, e) => tab.Focus();
+        //    }
+        //}
         public async void MacrosOpenWindow_Clicked(object sender, RoutedEventArgs args)
         {
             MacrosCodeWindow w1 = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Normal };

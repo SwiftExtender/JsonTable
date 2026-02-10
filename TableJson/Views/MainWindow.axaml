@@ -127,20 +127,15 @@
 			<Button Content="Save" Background="Green" Click="SaveFile_Clicked" HotKey="Ctrl+S"/>
 			<Button Content="Macros" Background="DarkSalmon" Click="MacrosOpenWindow_Clicked" HotKey="Ctrl+Q"/>
 			<!--<Button Background="DarkCyan" Margin="15,0,15,0" Content="Parse" Command="{Binding ParseCommand}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}"/>-->
-			<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>
-			<ComboBox ItemsSource="{Binding EditorFontSizes}"  Height="30" Width="70" Margin="0,10,0,0"></ComboBox>
+			<!--<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>-->
+			<!--<ComboBox ItemsSource="{Binding EditorFontSizes}"  Height="30" Width="70" Margin="0,10,0,0"></ComboBox>-->
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin"/>
 		</StackPanel>
-		<!--<StackPanel Grid.Row="2" >-->
 		<TabControl Grid.Row="2" x:Name="HighestMultiTab">
 			<!--ItemsSource="{Binding Tabs}"-->
 			<TabControl.Template>
 				<ControlTemplate>
-					<Grid RowDefinitions="50,*">
-						
-						<!--<ScrollViewer HorizontalScrollBarVisibility="Auto">
-        --><!-- Your content --><!--
-							</ScrollViewer>	-->				
+					<Grid RowDefinitions="50,*">			
 							<ScrollViewer Grid.Row="0"
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Hidden">
@@ -171,7 +166,6 @@
 				</ControlTheme>
 			</TabControl.ItemContainerTheme>
 		</TabControl>
-		<!--</StackPanel>-->
 	</Grid>
 	</Border>
 </Window>

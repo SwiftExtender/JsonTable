@@ -1,8 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using ReactiveUI;
-using System.Collections.Generic;
-using System.Linq;
-//using TableJson.Views;
+﻿using ReactiveUI;
 
 namespace TableJson.ViewModels
 {
@@ -30,7 +26,7 @@ namespace TableJson.ViewModels
         //    get => _Tabs;
         //    set => this.RaiseAndSetIfChanged(ref _Tabs, value);
         //}
-        public List<double> EditorFontSizes { get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
+
         private bool _IsPinnedWindow = false;
         public bool IsPinnedWindow
         {

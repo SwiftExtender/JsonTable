@@ -11,6 +11,13 @@ namespace TableJson.Views
         public TabWindow()
         {
             InitializeComponent();
+            AddHandler(PointerWheelChangedEvent, (o, i) =>
+            {
+                if (i.KeyModifiers != KeyModifiers.Control) return;
+                //if (i.Delta.Y > 0) FontSize++;
+                if (i.Delta.Y > 0) FontSize = FontSize < 74 ? FontSize + 1 : 74;
+                else FontSize = FontSize > 9 ? FontSize - 1 : 9;
+            }, RoutingStrategies.Bubble, true);
         }
         public async void CopyToClipboardFromListbox(object sender, TappedEventArgs e)
         {
@@ -64,20 +71,20 @@ namespace TableJson.Views
             dataObject.Set(DataFormats.Text, values);
             await highestWindow.Clipboard.SetDataObjectAsync(dataObject);
         }
-        public void HotKeyPointerWheelHandler(object sender, PointerWheelEventArgs args)
-        {
-            if ((args.KeyModifiers & KeyModifiers.Control) == KeyModifiers.Control)
-            {
-                TextEditor editor = this.FindControl<TextEditor>("editor");
-                if (args.Delta.Y > 0 && editor.FontSize < 74)
-                {
-                    editor.FontSize += 1; args.Handled = true;
-                }
-                if (args.Delta.Y < 0 && editor.FontSize > 9)
-                {
-                    editor.FontSize -= 1; args.Handled = true;
-                }
-            }
-        }
+        //public void HotKeyPointerWheelHandler(object sender, PointerWheelEventArgs args)
+        //{
+        //    if ((args.KeyModifiers & KeyModifiers.Control) == KeyModifiers.Control)
+        //    {
+        //        TextEditor editor = this.FindControl<TextEditor>("editor");
+        //        if (args.Delta.Y > 0 && editor.FontSize < 74)
+        //        {
+        //            editor.FontSize += 1; args.Handled = true;
+        //        }
+        //        if (args.Delta.Y < 0 && editor.FontSize > 9)
+        //        {
+        //            editor.FontSize -= 1; args.Handled = true;
+        //        }
+        //    }
+        //}
     }
 }

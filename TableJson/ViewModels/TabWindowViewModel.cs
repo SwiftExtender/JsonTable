@@ -38,6 +38,7 @@ namespace TableJson.ViewModels
     }
     public class TabWindowViewModel : ViewModelBase
     {
+        public List<double> EditorFontSizes { get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
         private string _FileFullPath = "";
         public string FileFullPath
         {
