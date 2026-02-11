@@ -18,10 +18,15 @@
 		Topmost="{Binding IsPinnedWindow}"
 		>
 	<Window.Styles>
-		<Style Selector="ScrollBar:horizontal">
+		<!--<Style Selector="ScrollBar:horizontal">
 			<Setter Property="Background" Value="Blue"/>
 			<Setter Property="MinHeight" Value="2"/>
 			<Setter Property="Height" Value="11"/>
+		</Style>-->
+		<Style Selector="ScrollViewer.TabScroll /template/ ScrollBar:horizontal">
+			<Setter Property="Background" Value="Blue"/>
+			<Setter Property="MaxHeight" Value="8"/>
+			<Setter Property="MinHeight" Value="8"/>
 		</Style>
 		<Style Selector="TabItem">
 			<Setter Property="FontSize" Value="16" />
@@ -95,7 +100,8 @@
 							<RowDefinition Height="*"/>
 						</Grid.RowDefinitions>
 
-						--><!-- Tab Headers --><!--
+						-->
+			<!-- Tab Headers --><!--
 						<ScrollViewer HorizontalScrollBarVisibility="Auto"
 									  VerticalScrollBarVisibility="Hidden">
 							<ItemsPresenter Name="PART_ItemsPresenter"
@@ -136,13 +142,19 @@
 			<TabControl.Template>
 				<ControlTemplate>
 					<Grid RowDefinitions="50,*">			
-							<ScrollViewer Grid.Row="0"
+							<ScrollViewer Classes="TabScroll" Name="TabScroller" Grid.Row="0"
                                   HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Hidden">
+                                  VerticalScrollBarVisibility="Hidden" >
+								<!--<ScrollViewer>
+									<ScrollBar MaxHeight="6" MinHeight="5" Orientation="Horizontal"></ScrollBar>
+								</ScrollViewer.>-->
 							<ItemsPresenter Name="PART_ItemsPresenter">
 								<ItemsPresenter.ItemsPanel>
 									<ItemsPanelTemplate>
-										<StackPanel Orientation="Horizontal"/>
+
+										<StackPanel Orientation="Horizontal">
+											
+										</StackPanel>
 									</ItemsPanelTemplate>
 								</ItemsPresenter.ItemsPanel>
 							</ItemsPresenter>
