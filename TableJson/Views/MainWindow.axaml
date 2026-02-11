@@ -18,11 +18,6 @@
 		Topmost="{Binding IsPinnedWindow}"
 		>
 	<Window.Styles>
-		<!--<Style Selector="ScrollBar:horizontal">
-			<Setter Property="Background" Value="Blue"/>
-			<Setter Property="MinHeight" Value="2"/>
-			<Setter Property="Height" Value="11"/>
-		</Style>-->
 		<Style Selector="ScrollViewer.TabScroll /template/ ScrollBar:horizontal">
 			<Setter Property="Background" Value="Blue"/>
 			<Setter Property="MaxHeight" Value="8"/>
