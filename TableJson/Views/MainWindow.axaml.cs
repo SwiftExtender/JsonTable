@@ -4,6 +4,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using System;
 using System.IO;
+using System.Reflection.Metadata;
 using TableJson.ViewModels;
 
 namespace TableJson.Views
@@ -50,11 +51,11 @@ namespace TableJson.Views
         }
         private TabItem AddTab(string header, TabWindow content)
         {
-            var panel = new DockPanel();
+            DockPanel panel = new DockPanel();
             panel.Children.Add(new Label() { Content = header });
             Button btn = AddTabDeleteButton();
             panel.Children.Add(btn);
-            var newItem = new TabItem()
+            TabItem newItem = new TabItem()
             {
                 Header = panel,
                 Content = content,
@@ -65,11 +66,11 @@ namespace TableJson.Views
         }
         private TabItem AddTab(IStorageFile file, Control content)
         {
-            var panel = new DockPanel();
+            DockPanel panel = new DockPanel();
             panel.Children.Add(new Label() { Content = file.Name });
             Button btn = AddTabDeleteButton();
             panel.Children.Add(btn);
-            var newItem = new TabItem()
+            TabItem newItem = new TabItem()
             {
                 Header = panel,
                 Content = content,
@@ -81,12 +82,12 @@ namespace TableJson.Views
         }
         private void AddTabButton(TabControl multiTab)
         {
-            var addButton = new Button { Content = "+" };
+            Button addButton = new Button { Content = "+" };
             addButton.Click += (sender, e) =>
             {
                 AddTab("New " + multiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
             };
-            var addTabItem = new TabItem()
+            TabItem addTabItem = new TabItem()
             {
                 Header = addButton,
                 //Content = addButton,
@@ -113,7 +114,7 @@ namespace TableJson.Views
         }
         public async void OpenFile_Clicked(object sender, RoutedEventArgs args)
         {
-            var topLevel = GetTopLevel(this);
+            TopLevel topLevel = GetTopLevel(this);
             var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 Title = "Open File with JSON",
@@ -136,9 +137,9 @@ namespace TableJson.Views
             TabWindowViewModel? tabWindowViewModel = tabWindow.DataContext as TabWindowViewModel;
             if (tabWindowViewModel.FileFullPath == "")
             {
-                var topLevel = GetTopLevel(this);
-                var saveOptions = new FilePickerSaveOptions { Title = "Save new file" };
-                var file = await topLevel.StorageProvider.SaveFilePickerAsync(saveOptions);
+                TopLevel topLevel = GetTopLevel(this);
+                FilePickerSaveOptions saveOptions = new FilePickerSaveOptions { Title = "Save new file" };
+                IStorageFile file = await topLevel.StorageProvider.SaveFilePickerAsync(saveOptions);
                 if (file != null)
                 {
                     try
@@ -150,7 +151,13 @@ namespace TableJson.Views
                                 await writer.WriteAsync(tabWindowViewModel.RawText.Text);
                             }
                         }
-                        tab.Header = file.Name;
+                        
+                        //tab.Content = file;
+                        DockPanel panel = new DockPanel();
+                        panel.Children.Add(new Label() { Content = file.Name });
+                        Button btn = AddTabDeleteButton();
+                        panel.Children.Add(btn);
+                        tab.Header = panel;
                         file.Dispose();
                         string createdFilePath = file.TryGetLocalPath();
                         tabWindowViewModel.StatusText = "New file saved " + createdFilePath;
