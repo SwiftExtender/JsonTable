@@ -24,10 +24,10 @@ namespace TableJson.Views
         private void KeyboardFontSizer(object sender, KeyEventArgs i)
         {
             if (i.KeyModifiers.HasFlag(KeyModifiers.Control)) { 
-                if (i.Key == Key.OemPlus || i.PhysicalKey == PhysicalKey.NumPadAdd)
+                if (i.PhysicalKey == PhysicalKey.Equal || i.PhysicalKey == PhysicalKey.NumPadAdd)
                 {
                     FontSize = FontSize < 74 ? FontSize + 1 : 74;
-                } else if (i.Key == Key.OemMinus || i.PhysicalKey == PhysicalKey.NumPadSubtract)
+                } else if (i.PhysicalKey == PhysicalKey.Minus || i.PhysicalKey == PhysicalKey.NumPadSubtract)
                 {
                     FontSize = FontSize > 9 ? FontSize - 1 : 9;
                 }
