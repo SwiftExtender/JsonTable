@@ -23,7 +23,16 @@
 			<aedit:TextEditor.Options>
 				<aedit:TextEditorOptions EnableRectangularSelection="False" AllowScrollBelowDocument="False" EnableTextDragDrop="False" EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
 			</aedit:TextEditor.Options>
-			<aedit:TextEditor.ContextMenu>
+			<aedit:TextEditor.ContextFlyout>
+				<MenuFlyout>
+					<MenuItem Header="Copy" InputGesture="ctrl+C" Command="{Binding CopyMouseCommand}" CommandParameter="{Binding #editor.TextArea}"></MenuItem>
+					<MenuItem Header="Cut" InputGesture="ctrl+X" Command="{Binding CutMouseCommand}" CommandParameter="{Binding #editor.TextArea}"></MenuItem>
+					<MenuItem Header="Paste" InputGesture="ctrl+V" Command="{Binding PasteMouseCommand}"  CommandParameter="{Binding #editor.TextArea}"></MenuItem>
+					<MenuItem Header="-"/>
+					<MenuItem Header="Select All" InputGesture="ctrl+A" Command="{Binding SelectAllMouseCommand}" CommandParameter="{Binding #editor.TextArea}"></MenuItem>
+				</MenuFlyout>
+			</aedit:TextEditor.ContextFlyout>
+			<!--<aedit:TextEditor.ContextMenu>
 				<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
 					<ContextMenu.ItemContainerTheme>
 						<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
@@ -39,7 +48,7 @@
 						</DataTemplate>
 					</ContextMenu.ItemTemplate>
 				</ContextMenu>
-			</aedit:TextEditor.ContextMenu>
+			</aedit:TextEditor.ContextMenu>-->
 		</aedit:TextEditor>
 		<SelectableTextBlock Grid.Row="1" Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>
 	</Grid>

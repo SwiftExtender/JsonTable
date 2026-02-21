@@ -1,7 +1,9 @@
 ﻿using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using AvaloniaEdit;
 using AvaloniaEdit.Document;
+using AvaloniaEdit.Editing;
 using Newtonsoft.Json.Linq;
 using ReactiveUI;
 using System;
@@ -38,7 +40,25 @@ namespace TableJson.ViewModels
     }
     public class TabWindowViewModel : ViewModelBase
     {
-        public List<double> EditorFontSizes { get; set; } = Enumerable.Range(9, 66).Select(t => (double)t).ToList();
+        public void CopyMouseCommand(TextArea textArea)
+        {
+            ApplicationCommands.Copy.Execute(null, textArea);
+        }
+
+        public void CutMouseCommand(TextArea textArea)
+        {
+            ApplicationCommands.Cut.Execute(null, textArea);
+        }
+
+        public void PasteMouseCommand(TextArea textArea)
+        {
+            ApplicationCommands.Paste.Execute(null, textArea);
+        }
+
+        public void SelectAllMouseCommand(TextArea textArea)
+        {
+            ApplicationCommands.SelectAll.Execute(null, textArea);
+        }
         private string _FileFullPath = "";
         public string FileFullPath
         {
