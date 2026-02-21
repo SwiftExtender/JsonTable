@@ -61,7 +61,7 @@ namespace TableJson.Views
             multiTab.Items.Add(newItem);
             return newItem;
         }
-        private TabItem AddTab(IStorageFile file, Control content)
+        private TabItem AddTab(IStorageFile file, TabWindow content)
         {
             DockPanel panel = new DockPanel();
             panel.Children.Add(new Label() { Content = file.Name });
@@ -72,7 +72,6 @@ namespace TableJson.Views
                 Header = panel,
                 Content = content,
             };
-
             TabControl multiTab = GetMultiTab();
             multiTab.Items.Add(newItem);
             return newItem;
@@ -165,16 +164,6 @@ namespace TableJson.Views
                     tabWindowViewModel.StatusText = "Exception: file saving error " + e.ToString();
                 }
             }
-        }
-        public async void CopyText(object sender, RoutedEventArgs args)
-        {
-            //if (!string.IsNullOrEmpty(selectedText))
-            //{
-            //    var clipboard = GetTopLevel(sender).Clipboard;
-            //    var dataObject = new DataObject();
-            //    dataObject.Set(DataFormats.Text, selectedText);
-            //    _mainWindow.Clipboard.SetDataObjectAsync(dataObject);
-            //}
         }
     }
 }

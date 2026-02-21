@@ -1,21 +1,16 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
-using Avalonia.Controls.Selection;
-using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 using ReactiveUI;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
 using TableJson.Models;
 
 namespace TableJson.ViewModels
@@ -33,9 +28,8 @@ namespace TableJson.ViewModels
         private DockPanel ButtonsPanelInit()
         {
             var panel = new DockPanel();
-            panel.Children.Add(UpdateButtonInit());
+            panel.Children.Add(SaveButtonInit());
             panel.Children.Add(RemoveButtonInit());
-            //panel.Children.Add(CodeEditButtonInit());
             panel.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch;
             return panel;
         }
@@ -94,13 +88,19 @@ namespace TableJson.ViewModels
             get => _MacrosRows;
             set => this.RaiseAndSetIfChanged(ref _MacrosRows, value);
         }
-        private FlatTreeDataGridSource<Macros>? _MacrosGridData;
-        public FlatTreeDataGridSource<Macros>? MacrosGridData
+        //private FlatTreeDataGridSource<Macros>? _MacrosGridData;
+        //public FlatTreeDataGridSource<Macros>? MacrosGridData
+        //{
+        //    get => _MacrosGridData;
+        //    set => this.RaiseAndSetIfChanged(ref _MacrosGridData, value);
+        //}
+        private ObservableCollection<Macros>? _MacrosGridData;
+        public ObservableCollection<Macros>? MacrosGridData
         {
             get => _MacrosGridData;
             set => this.RaiseAndSetIfChanged(ref _MacrosGridData, value);
         }
-        private Button UpdateButtonInit()
+        private Button SaveButtonInit()
         {
             var b = new Button();
             b.Background = new SolidColorBrush() { Color = new Color(255, 34, 139, 34) };
@@ -108,19 +108,27 @@ namespace TableJson.ViewModels
             b.Click += SaveMacros;
             return b;
         }
+        public void AddMacros()
+        {
+            MacrosRows.Add(new Macros(false));
+        }
         public void CompileSourceCode()
         {
-            var m = new Macros(false);
-            var options = new CSharpCompilationOptions((OutputKind)LanguageVersion.Latest);
+            CSharpCompilationOptions options = new CSharpCompilationOptions((OutputKind)LanguageVersion.Latest);
             var syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
-            var compilation = CSharpCompilation.Create("DynamicAssembly")
-            .AddSyntaxTrees(syntaxTree)
-            .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+            CSharpCompilation compilation = CSharpCompilation.Create("DynamicAssembly")
+                .AddSyntaxTrees(syntaxTree)
+                .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+            SaveSourceCode(compilation);
+        }
 
+        public void SaveSourceCode(CSharpCompilation compilation)
+        {
+            Macros m = new Macros(false);
             using (var ms = new MemoryStream())
             {
-                var result = compilation.Emit(ms);
-                if (result.Success == true) CompileStatusText = "Built without errors";
+                EmitResult result = compilation.Emit(ms);
+                if (result.Success == true) CompileStatusText = "Compiled successfully";
                 m.BinaryExecutable = ms.ToArray();
                 if (m.IsSaved)
                 {
@@ -143,43 +151,44 @@ namespace TableJson.ViewModels
                 }
             }
         }
-        public void TreeDataGridInit()
-        {
-            var TextColumnLength = new GridLength(1, GridUnitType.Star);
-            var TemplateColumnLength = new GridLength(125, GridUnitType.Pixel);
+        //public void TreeDataGridInit()
+        //{
+        //    var TextColumnLength = new GridLength(1, GridUnitType.Star);
+        //    var TemplateColumnLength = new GridLength(125, GridUnitType.Pixel);
 
-            var EditOptions = new TextColumnOptions<Macros>
-            {
-                BeginEditGestures = BeginEditGestures.Tap,
-                MinWidth = new GridLength(80, GridUnitType.Pixel),
-                IsTextSearchEnabled = true,
+        //    var EditOptions = new TextColumnOptions<Macros>
+        //    {
+        //        BeginEditGestures = BeginEditGestures.Tap,
+        //        MinWidth = new GridLength(80, GridUnitType.Pixel),
+        //        IsTextSearchEnabled = true,
 
-            };
-            TextColumn<Macros, string> MacrosNameColumn = new TextColumn<Macros, string>("Name", x => x.Name, options: EditOptions, width: TextColumnLength);
-            MacrosGridData = new FlatTreeDataGridSource<Macros>(MacrosRows)
-            {
-                Columns =
-                    {
-                        MacrosNameColumn,
-                        new TemplateColumn<Macros>("Actions", new FuncDataTemplate<Macros>((a, e) => ButtonsPanelInit(), supportsRecycling: true), width: TemplateColumnLength),
-                    },
-            };
+        //    };
+        //    TextColumn<Macros, string> MacrosNameColumn = new TextColumn<Macros, string>("Name", x => x.Name, options: EditOptions, width: TextColumnLength);
+        //    MacrosGridData = new FlatTreeDataGridSource<Macros>(MacrosRows)
+        //    {
+        //        Columns =
+        //            {
+        //                MacrosNameColumn,
+        //                new TemplateColumn<Macros>("Actions", new FuncDataTemplate<Macros>((a, e) => ButtonsPanelInit(), supportsRecycling: true), width: TemplateColumnLength),
+        //            },
+        //    };
 
-            MacrosGridData.Selection = new TreeDataGridCellSelectionModel<Macros>(MacrosGridData);
-        }
+        //    MacrosGridData.Selection = new TreeDataGridCellSelectionModel<Macros>(MacrosGridData);
+        //}
         public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
-        public MacrosWindowViewModel() {
+        public MacrosWindowViewModel()
+        {
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
-            //AddMacrosCommand = ReactiveCommand.Create(AddMacros);
+            AddMacrosCommand = ReactiveCommand.Create(AddMacros);
             using (var DataSource = new HelpContext())
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
                 MacrosRows = new ObservableCollection<Macros>(selectedMacros);
             }
-            TreeDataGridInit();
+            //TreeDataGridInit();
         }
     }
 }
