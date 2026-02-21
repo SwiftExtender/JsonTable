@@ -32,7 +32,6 @@ namespace TableJson.Views
                     FontSize = FontSize > 9 ? FontSize - 1 : 9;
                 }
             }
-            i.Handled = true;
         }
         public async void CopyToClipboardFromListbox(object sender, TappedEventArgs e)
         {
