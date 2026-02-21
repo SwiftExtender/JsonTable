@@ -12,13 +12,26 @@ namespace TableJson.Views
         {
             InitializeComponent();
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
-            //AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
+            AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
         }
-        private void MouseWheelFontSizer(object sender, PointerWheelEventArgs i)
+        private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs i)
         {
             if (i.KeyModifiers != KeyModifiers.Control) return;
             if (i.Delta.Y > 0) FontSize = FontSize < 74 ? FontSize + 1 : 74;
             else FontSize = FontSize > 9 ? FontSize - 1 : 9;
+            i.Handled = true;
+        }
+        private void KeyboardFontSizer(object sender, KeyEventArgs i)
+        {
+            if (i.KeyModifiers.HasFlag(KeyModifiers.Control)) { 
+                if (i.Key == Key.OemPlus || i.PhysicalKey == PhysicalKey.NumPadAdd)
+                {
+                    FontSize = FontSize < 74 ? FontSize + 1 : 74;
+                } else if (i.Key == Key.OemMinus || i.PhysicalKey == PhysicalKey.NumPadSubtract)
+                {
+                    FontSize = FontSize > 9 ? FontSize - 1 : 9;
+                }
+            }
             i.Handled = true;
         }
         public async void CopyToClipboardFromListbox(object sender, TappedEventArgs e)

@@ -10,8 +10,6 @@ namespace TableJson.Views
 {
     public partial class MainWindow : Window
     {
-        internal double DynamicMaxHeight;
-
         public MainWindow()
         {
             this.Name = "TheHighestWindow";
