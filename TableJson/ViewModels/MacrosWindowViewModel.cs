@@ -18,26 +18,88 @@ namespace TableJson.ViewModels
 {
     public class MacrosWindowViewModel : ViewModelBase
     {
-        private Button RemoveButtonInit()
+        //private Button RemoveButtonInit()
+        //{
+        //    var b = new Button();
+        //    b.Background = new SolidColorBrush() { Color = new Color(255, 80, 00, 20) };
+        //    b.Content = "Remove";
+        //    b.Click += RemoveMacros;
+        //    return b;
+        //}
+        //private Button SaveButtonInit()
+        //{
+        //    var b = new Button();
+        //    b.Background = new SolidColorBrush() { Color = new Color(255, 34, 139, 34) };
+        //    b.Content = "Add";
+        //    b.Click += SaveMacros;
+        //    return b;
+        //}
+        //private DockPanel ButtonsPanelInit()
+        //{
+        //    var panel = new DockPanel();
+        //    panel.Children.Add(SaveButtonInit());
+        //    panel.Children.Add(RemoveButtonInit());
+        //    panel.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch;
+        //    return panel;
+        //}
+        //public void RemoveMacros(object sender, RoutedEventArgs e)
+        //{
+        //    Button remButton = (Button)sender;
+        //    Macros remHint = (Macros)remButton.DataContext;
+        //    MacrosGridData.Remove(remHint);
+        //    if (remHint.IsSaved)
+        //    {
+        //        using (var DataSource = new HelpContext())
+        //        {
+        //            DataSource.MacrosTable.Attach(remHint);
+        //            DataSource.MacrosTable.Remove(remHint);
+        //            DataSource.SaveChanges();
+        //        }
+        //    }
+        //}
+        //public void SaveMacros(object sender, RoutedEventArgs e)
+        //{
+        //    Button updateButton = (Button)sender;
+        //    Macros updateHint = (Macros)updateButton.DataContext;
+        //    if (updateHint.IsSaved)
+        //    {
+        //        using (var DataSource = new HelpContext())
+        //        {
+        //            DataSource.MacrosTable.Attach(updateHint);
+        //            DataSource.MacrosTable.Update(updateHint);
+        //            DataSource.SaveChanges();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        using (var DataSource = new HelpContext())
+        //        {
+        //            DataSource.MacrosTable.Attach(updateHint);
+        //            DataSource.MacrosTable.Add(updateHint);
+        //            DataSource.SaveChanges();
+        //        }
+        //        updateHint.IsSaved = true;
+        //    }
+        //}
+        public void RemoveMacros(Macros remHint)
         {
-            var b = new Button();
-            b.Background = new SolidColorBrush() { Color = new Color(255, 80, 00, 20) };
-            b.Content = "Remove";
-            //b.Click += RemoveMacros;
-            return b;
+            //Button remButton = (Button)sender;
+            //Macros remHint = (Macros)remButton.DataContext;
+            MacrosGridData.Remove(remHint);
+            if (remHint.IsSaved)
+            {
+                using (var DataSource = new HelpContext())
+                {
+                    DataSource.MacrosTable.Attach(remHint);
+                    DataSource.MacrosTable.Remove(remHint);
+                    DataSource.SaveChanges();
+                }
+            }
         }
-        private DockPanel ButtonsPanelInit()
+        public void SaveMacros(Macros updateHint)
         {
-            var panel = new DockPanel();
-            panel.Children.Add(SaveButtonInit());
-            panel.Children.Add(RemoveButtonInit());
-            panel.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch;
-            return panel;
-        }
-        public void SaveMacros(object sender, RoutedEventArgs e)
-        {
-            Button updateButton = (Button)sender;
-            Macros updateHint = (Macros)updateButton.DataContext;
+            //Button updateButton = (Button)sender;
+            //Macros updateHint = (Macros)updateButton.DataContext;
             if (updateHint.IsSaved)
             {
                 using (var DataSource = new HelpContext())
@@ -88,14 +150,7 @@ namespace TableJson.ViewModels
             get => _MacrosGridData;
             set => this.RaiseAndSetIfChanged(ref _MacrosGridData, value);
         }
-        private Button SaveButtonInit()
-        {
-            var b = new Button();
-            b.Background = new SolidColorBrush() { Color = new Color(255, 34, 139, 34) };
-            b.Content = "Add";
-            b.Click += SaveMacros;
-            return b;
-        }
+        
         public void AddMacros()
         {
             try
@@ -146,12 +201,14 @@ namespace TableJson.ViewModels
             }
         }
         public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
-        public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
+        public ReactiveCommand<Macros, Unit> SaveMacrosCommand { get; }
+        public ReactiveCommand<Macros, Unit> RemoveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
         public MacrosWindowViewModel()
         {
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
+            RemoveMacrosCommand = ReactiveCommand.Create<Macros>(RemoveMacros);
+            SaveMacrosCommand = ReactiveCommand.Create<Macros>(SaveMacros);
             AddMacrosCommand = ReactiveCommand.Create(AddMacros);
             using (var DataSource = new HelpContext())
             {

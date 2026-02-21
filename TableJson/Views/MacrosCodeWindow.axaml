@@ -30,7 +30,8 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<DockPanel>
-
+									<Button Content="Save" Command="{Binding $parent[DataGrid].DataContext.SaveMacrosCommand}" CommandParameter="{Binding .}"></Button>
+									<Button Content="Delete" Command="{Binding $parent[DataGrid].DataContext.RemoveMacrosCommand}" CommandParameter="{Binding .}"></Button>
 								</DockPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
