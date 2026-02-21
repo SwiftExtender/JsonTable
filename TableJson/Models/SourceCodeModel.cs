@@ -46,7 +46,7 @@ namespace TableJson.Models
         public HelpContext()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
-            DbPath = System.IO.Path.Join(path, "jsonscript.db");
+            DbPath = System.IO.Path.Join(path, "scripts.db");
         }
     }
 }

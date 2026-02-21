@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -75,25 +76,12 @@ namespace TableJson.ViewModels
             get => _CompileStatusText;
             set => this.RaiseAndSetIfChanged(ref _CompileStatusText, value);
         }
-
         private TextDocument _SourceCode = new TextDocument("");
         public TextDocument SourceCode
         {
             get => _SourceCode;
             set => this.RaiseAndSetIfChanged(ref _SourceCode, value);
         }
-        private ObservableCollection<Macros> _MacrosRows;
-        public ObservableCollection<Macros> MacrosRows
-        {
-            get => _MacrosRows;
-            set => this.RaiseAndSetIfChanged(ref _MacrosRows, value);
-        }
-        //private FlatTreeDataGridSource<Macros>? _MacrosGridData;
-        //public FlatTreeDataGridSource<Macros>? MacrosGridData
-        //{
-        //    get => _MacrosGridData;
-        //    set => this.RaiseAndSetIfChanged(ref _MacrosGridData, value);
-        //}
         private ObservableCollection<Macros>? _MacrosGridData;
         public ObservableCollection<Macros>? MacrosGridData
         {
@@ -110,7 +98,14 @@ namespace TableJson.ViewModels
         }
         public void AddMacros()
         {
-            MacrosRows.Add(new Macros(false));
+            try
+            {
+                MacrosGridData.Add(new Macros(false));
+            } catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            
         }
         public void CompileSourceCode()
         {
@@ -121,7 +116,6 @@ namespace TableJson.ViewModels
                 .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
             SaveSourceCode(compilation);
         }
-
         public void SaveSourceCode(CSharpCompilation compilation)
         {
             Macros m = new Macros(false);
@@ -151,30 +145,6 @@ namespace TableJson.ViewModels
                 }
             }
         }
-        //public void TreeDataGridInit()
-        //{
-        //    var TextColumnLength = new GridLength(1, GridUnitType.Star);
-        //    var TemplateColumnLength = new GridLength(125, GridUnitType.Pixel);
-
-        //    var EditOptions = new TextColumnOptions<Macros>
-        //    {
-        //        BeginEditGestures = BeginEditGestures.Tap,
-        //        MinWidth = new GridLength(80, GridUnitType.Pixel),
-        //        IsTextSearchEnabled = true,
-
-        //    };
-        //    TextColumn<Macros, string> MacrosNameColumn = new TextColumn<Macros, string>("Name", x => x.Name, options: EditOptions, width: TextColumnLength);
-        //    MacrosGridData = new FlatTreeDataGridSource<Macros>(MacrosRows)
-        //    {
-        //        Columns =
-        //            {
-        //                MacrosNameColumn,
-        //                new TemplateColumn<Macros>("Actions", new FuncDataTemplate<Macros>((a, e) => ButtonsPanelInit(), supportsRecycling: true), width: TemplateColumnLength),
-        //            },
-        //    };
-
-        //    MacrosGridData.Selection = new TreeDataGridCellSelectionModel<Macros>(MacrosGridData);
-        //}
         public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> RemoveMacrosCommand { get; }
@@ -186,7 +156,7 @@ namespace TableJson.ViewModels
             using (var DataSource = new HelpContext())
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
-                MacrosRows = new ObservableCollection<Macros>(selectedMacros);
+                MacrosGridData = new ObservableCollection<Macros>(selectedMacros);
             }
             //TreeDataGridInit();
         }
