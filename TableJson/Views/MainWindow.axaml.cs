@@ -14,27 +14,30 @@ namespace TableJson.Views
 
         public MainWindow()
         {
-            this.Name += "TheHighestWindow";
+            this.Name = "TheHighestWindow";
             InitializeComponent();
-            AddTabButton();
-            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
+            TabControl multiTab = GetMultiTab();
+            AddTabButton(multiTab);
             TabItem initTab = AddTab("New " + multiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
             if (initTab != null)
             {
                 initTab.IsSelected = true;
+                initTab.Focus();
             }
-            //StartFocusing();
+        }
+        private TabControl GetMultiTab()
+        {
+            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
+            return multiTab;
         }
         private TabItem GetActiveTab()
         {
-            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
+            TabControl multiTab = GetMultiTab();
             return (TabItem)multiTab.SelectedItem;
         }
-        private TabItem AddTab(string header, TabWindow content)
+        private Button AddTabDeleteButton()
         {
-            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
-            var panel = new DockPanel();
-            panel.Children.Add(new Label() { Content = header });
+            TabControl multiTab = GetMultiTab();
             Button btn = new Button() { Content = "X" };
             btn.Click += (sender, e) =>
             {
@@ -43,29 +46,28 @@ namespace TableJson.Views
                     multiTab.Items.Remove(titem);
                 }
             };
+            return btn;
+        }
+        private TabItem AddTab(string header, TabWindow content)
+        {
+            var panel = new DockPanel();
+            panel.Children.Add(new Label() { Content = header });
+            Button btn = AddTabDeleteButton();
             panel.Children.Add(btn);
             var newItem = new TabItem()
             {
                 Header = panel,
                 Content = content,
             };
-
+            TabControl multiTab = GetMultiTab();
             multiTab.Items.Add(newItem);
             return newItem;
         }
         private TabItem AddTab(IStorageFile file, Control content)
         {
-            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
             var panel = new DockPanel();
             panel.Children.Add(new Label() { Content = file.Name });
-            Button btn = new Button() { Content = "X" };
-            btn.Click += (sender, e) =>
-            {
-                if (sender is Button btn && btn.Parent is DockPanel dckPanel && dckPanel.Parent is TabItem titem)
-                {
-                    multiTab.Items.Remove(titem);
-                }
-            };
+            Button btn = AddTabDeleteButton();
             panel.Children.Add(btn);
             var newItem = new TabItem()
             {
@@ -73,12 +75,12 @@ namespace TableJson.Views
                 Content = content,
             };
 
+            TabControl multiTab = GetMultiTab();
             multiTab.Items.Add(newItem);
             return newItem;
         }
-        private void AddTabButton()
+        private void AddTabButton(TabControl multiTab)
         {
-            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
             var addButton = new Button { Content = "+" };
             addButton.Click += (sender, e) =>
             {
