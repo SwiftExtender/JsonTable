@@ -11,13 +11,15 @@ namespace TableJson.Views
         public TabWindow()
         {
             InitializeComponent();
-            AddHandler(PointerWheelChangedEvent, (o, i) =>
-            {
-                if (i.KeyModifiers != KeyModifiers.Control) return;
-                //if (i.Delta.Y > 0) FontSize++;
-                if (i.Delta.Y > 0) FontSize = FontSize < 74 ? FontSize + 1 : 74;
-                else FontSize = FontSize > 9 ? FontSize - 1 : 9;
-            }, RoutingStrategies.Bubble, true);
+            AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
+            //AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
+        }
+        private void MouseWheelFontSizer(object sender, PointerWheelEventArgs i)
+        {
+            if (i.KeyModifiers != KeyModifiers.Control) return;
+            if (i.Delta.Y > 0) FontSize = FontSize < 74 ? FontSize + 1 : 74;
+            else FontSize = FontSize > 9 ? FontSize - 1 : 9;
+            i.Handled = true;
         }
         public async void CopyToClipboardFromListbox(object sender, TappedEventArgs e)
         {
