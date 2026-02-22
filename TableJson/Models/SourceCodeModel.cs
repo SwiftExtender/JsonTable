@@ -16,7 +16,7 @@ namespace TableJson.Models
         [Key, Required]
         public int Id { get; set; }
         public bool IsActive { get; set; } = true;
-        public string Name { get; set; }
+        public string? Name { get; set; }
         //public string MacrosType { get; set; }
         public string? SourceCode { get; set; } = "";
         public string? Checksum { get; set; } = "";

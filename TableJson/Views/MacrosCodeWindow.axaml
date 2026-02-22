@@ -16,9 +16,6 @@
 		>
 	<Border BorderThickness="1.5" BorderBrush="DarkSalmon" IsVisible="True">
 	<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-		<!--<DockPanel>
-			<TextBox Watermark="Macros Name" Text="{Binding MacrosNameText}" Margin="10,35,10,10"></TextBox>
-		</DockPanel>-->
 		<Grid RowDefinitions="50,*" Margin="10,5,10,5">
 				<Button Grid.Row="0" Content="Add Macros" Margin="10,10,10,10" Command="{Binding AddMacrosCommand}"/>
 			<DataGrid Grid.Row="1" x:Name="mgrid" ItemsSource="{Binding MacrosGridData}" Margin="10,10,10,30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray">
@@ -30,8 +27,8 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<DockPanel>
-									<Button Content="Save" Command="{Binding $parent[DataGrid].DataContext.SaveMacrosCommand}" CommandParameter="{Binding .}"></Button>
-									<Button Content="Delete" Command="{Binding $parent[DataGrid].DataContext.RemoveMacrosCommand}" CommandParameter="{Binding .}"></Button>
+									<Button Content="Save" Command="{Binding $parent[DataGrid].DataContext.SaveMacrosCommand}" CommandParameter="{Binding .}"/>
+									<Button Content="Delete" Command="{Binding $parent[DataGrid].DataContext.RemoveMacrosCommand}" CommandParameter="{Binding .}"/>
 								</DockPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
