@@ -15,6 +15,11 @@ namespace TableJson.ViewModels
 {
     public class MacrosWindowViewModel : ViewModelBase
     {
+        public void SaveCode()
+        {
+            SelectedRow.SourceCode = SourceCode.Text;
+            SaveMacros(SelectedRow);
+        }
         public void RemoveMacros(Macros remHint)
         {
             MacrosGridData.Remove(remHint);
@@ -133,6 +138,7 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Unit, Unit> CompileSourceCodeCommand { get; }
         public ReactiveCommand<Macros, Unit> SaveMacrosCommand { get; }
         public ReactiveCommand<Macros, Unit> RemoveMacrosCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveCodeCommand { get; }
         public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
         private Macros _SelectedRow;
         public Macros SelectedRow
@@ -144,12 +150,12 @@ namespace TableJson.ViewModels
                 SourceCode.Text = _SelectedRow.SourceCode;
             }
         }
-
         public MacrosWindowViewModel()
         {
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
             RemoveMacrosCommand = ReactiveCommand.Create<Macros>(RemoveMacros);
             SaveMacrosCommand = ReactiveCommand.Create<Macros>(SaveMacros);
+            SaveCodeCommand = ReactiveCommand.Create(SaveCode);
             AddMacrosCommand = ReactiveCommand.Create(AddMacros);
             using (var DataSource = new HelpContext())
             {

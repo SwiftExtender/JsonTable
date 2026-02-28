@@ -42,7 +42,8 @@
 				<ae:TextEditorOptions EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
 			</ae:TextEditor.Options>
 		</ae:TextEditor>
-			<SelectableTextBlock Text="{Binding CompileStatusText}"></SelectableTextBlock>
+			<SelectableTextBlock Margin="15,5,10,5" Text="{Binding CompileStatusText}"></SelectableTextBlock>
+			<Button Background="Green" Content="Save Code" Margin="10,5,10,5" Command="{Binding SaveCodeCommand}"/>
 			<Button Background="LightSeaGreen" Content="Compile" Margin="10,5,10,5" Command="{Binding CompileSourceCodeCommand}" HotKey="Ctrl+Shift+B"/>
 	</StackPanel>
 	</Border>
