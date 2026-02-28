@@ -14,20 +14,20 @@ namespace TableJson.Views
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
         }
-        private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs i)
+        private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs e)
         {
-            if (i.KeyModifiers != KeyModifiers.Control) return;
-            if (i.Delta.Y > 0) FontSize = FontSize < 74 ? FontSize + 1 : 74;
+            if (e.KeyModifiers != KeyModifiers.Control) return;
+            if (e.Delta.Y > 0) FontSize = FontSize < 74 ? FontSize + 1 : 74;
             else FontSize = FontSize > 9 ? FontSize - 1 : 9;
-            i.Handled = true;
+            e.Handled = true;
         }
-        private void KeyboardFontSizer(object sender, KeyEventArgs i)
+        private void KeyboardFontSizer(object sender, KeyEventArgs e)
         {
-            if (i.KeyModifiers.HasFlag(KeyModifiers.Control)) { 
-                if (i.PhysicalKey == PhysicalKey.Equal || i.PhysicalKey == PhysicalKey.NumPadAdd)
+            if (e.KeyModifiers.HasFlag(KeyModifiers.Control)) { 
+                if (e.PhysicalKey == PhysicalKey.Equal || e.PhysicalKey == PhysicalKey.NumPadAdd)
                 {
                     FontSize = FontSize < 74 ? FontSize + 1 : 74;
-                } else if (i.PhysicalKey == PhysicalKey.Minus || i.PhysicalKey == PhysicalKey.NumPadSubtract)
+                } else if (e.PhysicalKey == PhysicalKey.Minus || e.PhysicalKey == PhysicalKey.NumPadSubtract)
                 {
                     FontSize = FontSize > 9 ? FontSize - 1 : 9;
                 }

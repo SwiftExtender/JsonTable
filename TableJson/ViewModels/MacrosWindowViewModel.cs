@@ -134,6 +134,17 @@ namespace TableJson.ViewModels
         public ReactiveCommand<Macros, Unit> SaveMacrosCommand { get; }
         public ReactiveCommand<Macros, Unit> RemoveMacrosCommand { get; }
         public ReactiveCommand<Unit, Unit> AddMacrosCommand { get; }
+        private Macros _SelectedRow;
+        public Macros SelectedRow
+        {
+            get => _SelectedRow;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _SelectedRow, value);
+                SourceCode.Text = _SelectedRow.SourceCode;
+            }
+        }
+
         public MacrosWindowViewModel()
         {
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
