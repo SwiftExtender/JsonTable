@@ -1,4 +1,5 @@
 ﻿using AvaloniaEdit.Document;
+using DynamicData;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -6,11 +7,11 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using TableJson.Models;
+using TextMateSharp.Internal.Parser;
 
 namespace TableJson.ViewModels
 {
@@ -20,9 +21,11 @@ namespace TableJson.ViewModels
         {
             SelectedRow.SourceCode = SourceCode.Text;
             SaveMacros(SelectedRow);
-            if (SelectedRow.Name != "") {
+            if (SelectedRow.Name != "")
+            {
                 CompileStatusText = "Macros " + SelectedRow.Name + " saved";
-            } else
+            }
+            else
             {
                 CompileStatusText = "Macros saved";
             }
@@ -92,6 +95,12 @@ namespace TableJson.ViewModels
             get => _MacrosGridData;
             set => this.RaiseAndSetIfChanged(ref _MacrosGridData, value);
         }
+        private ObservableCollection<PortableExecutableReference>? _RefsGridData;
+        public ObservableCollection<PortableExecutableReference>? RefsGridData
+        {
+            get => _RefsGridData;
+            set => this.RaiseAndSetIfChanged(ref _RefsGridData, value);
+        }
         public void AddMacros()
         {
             try
@@ -103,34 +112,43 @@ namespace TableJson.ViewModels
                 Console.WriteLine(e.ToString());
             }
         }
-        public static int RandomNumber()
+        public static long RandomNumber()
         {
-            Random random = new Random();
-            return random.Next();
+            return DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         }
         public static string GenerateChecksum(MemoryStream ms)
         {
             ms.Position = 0;
             using var sha256 = System.Security.Cryptography.SHA256.Create();
             byte[] hash = sha256.ComputeHash(ms);
-            return BitConverter.ToString(hash).Replace("-","");
+            return BitConverter.ToString(hash).Replace("-", "");
         }
-
-        public PortableExecutableReference[] GetRefs()
+        public List<PortableExecutableReference> GetRefs()
         {
-            string dir = AppDomain.CurrentDomain.BaseDirectory;
-            var refs = new[] {
-                MetadataReference.CreateFromFile(System.IO.Path.Join(dir,"System.dll"))
-            };
+            string dir = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "imports");
+            List<PortableExecutableReference> refs = new List<PortableExecutableReference>();
+            refs.Add(AssemblyMetadata.CreateFromFile(typeof(object).Assembly.Location).GetReference());
+            foreach (string file in Directory.GetFiles(dir))
+            {
+                try
+                {
+                    PortableExecutableReference t = MetadataReference.CreateFromFile(file);
+                    refs.Add(t);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
             return refs;
         }
         public void CompileSourceCode()
         {
-            CSharpCompilationOptions options = new CSharpCompilationOptions((OutputKind)LanguageVersion.Latest, deterministic: true, platform: Platform.AnyCpu, optimizationLevel: OptimizationLevel.Release);
+            CSharpCompilationOptions options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true); //deterministic: true, platform: Platform.AnyCpu, optimizationLevel: OptimizationLevel.Release, 
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
-            CSharpCompilation compilation = CSharpCompilation.Create(SelectedRow.Name+"_"+ RandomNumber().ToString(), references: GetRefs())
-                .AddSyntaxTrees(syntaxTree)
-                .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+            CSharpCompilation compilation = CSharpCompilation.Create(null, references: RefsGridData.ToArray(), options: options)
+                .AddSyntaxTrees(syntaxTree);
+                //.WithOptions(options);
             SaveSourceCode(compilation);
         }
         public void SaveSourceCode(CSharpCompilation compilation)
@@ -138,10 +156,13 @@ namespace TableJson.ViewModels
             using (var ms = new MemoryStream())
             {
                 EmitResult result = compilation.Emit(ms);
-                if (!result.Success) {
+                if (!result.Success)
+                {
+                    //result.Diagnostics.
                     CompileStatusText = "Error of compilation";
                     var fails = result.Diagnostics.Where(e => e.Severity == DiagnosticSeverity.Error);
-                    foreach (var error in fails) {
+                    foreach (var error in fails)
+                    {
                         CompileStatusText += error.Id + ":" + error.GetMessage();
                     }
                     return;
@@ -185,6 +206,10 @@ namespace TableJson.ViewModels
                 SourceCode.Text = _SelectedRow.SourceCode;
             }
         }
+        public void SetRefsGrid()
+        {
+            RefsGridData = new ObservableCollection<PortableExecutableReference>(GetRefs());
+        }
         public MacrosWindowViewModel()
         {
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
@@ -196,6 +221,7 @@ namespace TableJson.ViewModels
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.ToList();
                 MacrosGridData = new ObservableCollection<Macros>(selectedMacros);
+                SetRefsGrid();
             }
         }
     }
