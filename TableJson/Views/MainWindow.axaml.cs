@@ -90,12 +90,12 @@ namespace TableJson.Views
             };
             multiTab.Items.Add(addTabItem);
         }
-        public async void MacrosOpenWindow_Clicked(object sender, RoutedEventArgs args)
+        private void MacrosOpenWindow_Clicked(object sender, RoutedEventArgs args)
         {
             MacrosCodeWindow w1 = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Normal };
             w1.Show();
         }
-        public async void OpenFile_Clicked(object sender, RoutedEventArgs args)
+        private async void OpenFile_Clicked(object sender, RoutedEventArgs args)
         {
             TopLevel topLevel = GetTopLevel(this);
             var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -113,7 +113,7 @@ namespace TableJson.Views
                 });
             }
         }
-        public async void SaveFile_Clicked(object sender, RoutedEventArgs args)
+        private async void SaveFile_Clicked(object sender, RoutedEventArgs args)
         {
             TabItem tab = GetActiveTab();
             TabWindow? tabWindow = tab.Content as TabWindow; //getting child TabWindow

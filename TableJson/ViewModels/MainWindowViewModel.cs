@@ -41,8 +41,6 @@ namespace TableJson.ViewModels
         }
         public MainWindowViewModel()
         {
-            //startup opening of 1 tab
-            //AddTabCommand = ReactiveCommand.Create(AddTab);
 
         }
     }

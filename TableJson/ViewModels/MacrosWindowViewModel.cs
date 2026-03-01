@@ -117,19 +117,26 @@ namespace TableJson.ViewModels
         public void CompileSourceCode()
         {
             CSharpCompilationOptions options = new CSharpCompilationOptions((OutputKind)LanguageVersion.Latest, deterministic: true, platform: Platform.AnyCpu, optimizationLevel: OptimizationLevel.Release);
-            var syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
-            CSharpCompilation compilation = CSharpCompilation.Create(SelectedRow.Name+"__"+ RandomNumber().ToString())
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
+            CSharpCompilation compilation = CSharpCompilation.Create(SelectedRow.Name+"_"+ RandomNumber().ToString())
                 .AddSyntaxTrees(syntaxTree)
                 .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
             SaveSourceCode(compilation);
         }
         public void SaveSourceCode(CSharpCompilation compilation)
         {
-            //SelectedRow;
             using (var ms = new MemoryStream())
             {
                 EmitResult result = compilation.Emit(ms);
-                if (result.Success == true) CompileStatusText = "Compiled successfully";
+                if (!result.Success) {
+                    CompileStatusText = "Error of compilation";
+                    var fails = result.Diagnostics.Where(e => e.Severity == DiagnosticSeverity.Error);
+                    foreach (var error in fails) {
+                        CompileStatusText += error.Id + ":" + error.GetMessage();
+                    }
+                    return;
+                }
+                CompileStatusText = "Compiled successfully";
                 SelectedRow.Checksum = GenerateChecksum(ms);
                 SelectedRow.BinaryExecutable = ms.ToArray();
                 if (SelectedRow.IsSaved)
