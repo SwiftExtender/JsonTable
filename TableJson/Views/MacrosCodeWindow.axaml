@@ -14,7 +14,6 @@
 		WindowState="Maximized"
 		Title="Macros editor"
 		>
-	<!--<ScrollViewer ScrollViewer.AllowAutoHide="False">-->
 	<Border BorderThickness="1.5" BorderBrush="DarkSalmon" IsVisible="True">
 		
 		<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -56,8 +55,6 @@
 				<Button Background="Green" Content="Save Code" Margin="10,5,10,5" Command="{Binding SaveCodeCommand}"/>
 				<Button Background="LightSeaGreen" Content="Compile" Margin="10,5,10,5" Command="{Binding CompileSourceCodeCommand}" HotKey="Ctrl+Shift+B"/>
 			</DockPanel>
-	</StackPanel>
-		
+	</StackPanel>		
 	</Border>
-	<!--</ScrollViewer>-->
 </Window>
