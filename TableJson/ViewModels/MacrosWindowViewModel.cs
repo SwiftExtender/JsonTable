@@ -6,6 +6,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -114,11 +115,20 @@ namespace TableJson.ViewModels
             byte[] hash = sha256.ComputeHash(ms);
             return BitConverter.ToString(hash).Replace("-","");
         }
+
+        public PortableExecutableReference[] GetRefs()
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory;
+            var refs = new[] {
+                MetadataReference.CreateFromFile(System.IO.Path.Join(dir,"System.dll"))
+            };
+            return refs;
+        }
         public void CompileSourceCode()
         {
             CSharpCompilationOptions options = new CSharpCompilationOptions((OutputKind)LanguageVersion.Latest, deterministic: true, platform: Platform.AnyCpu, optimizationLevel: OptimizationLevel.Release);
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
-            CSharpCompilation compilation = CSharpCompilation.Create(SelectedRow.Name+"_"+ RandomNumber().ToString())
+            CSharpCompilation compilation = CSharpCompilation.Create(SelectedRow.Name+"_"+ RandomNumber().ToString(), references: GetRefs())
                 .AddSyntaxTrees(syntaxTree)
                 .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
             SaveSourceCode(compilation);
