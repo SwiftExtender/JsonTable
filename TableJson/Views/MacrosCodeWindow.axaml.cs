@@ -11,7 +11,6 @@ namespace TableJson.Views
         }
         private DataGrid GetGrid()
         {
-
             DataGrid grid = this.FindControl<DataGrid>("mgrid");
             grid.SelectionMode = DataGridSelectionMode.Single;
             return grid;

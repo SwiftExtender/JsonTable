@@ -19,6 +19,12 @@ namespace TableJson.ViewModels
         {
             SelectedRow.SourceCode = SourceCode.Text;
             SaveMacros(SelectedRow);
+            if (SelectedRow.Name != "") {
+                CompileStatusText = "Macros " + SelectedRow.Name + " saved";
+            } else
+            {
+                CompileStatusText = "Macros saved";
+            }
         }
         public void RemoveMacros(Macros remHint)
         {
@@ -85,7 +91,6 @@ namespace TableJson.ViewModels
             get => _MacrosGridData;
             set => this.RaiseAndSetIfChanged(ref _MacrosGridData, value);
         }
-
         public void AddMacros()
         {
             try
@@ -97,29 +102,42 @@ namespace TableJson.ViewModels
                 Console.WriteLine(e.ToString());
             }
         }
+        public static int RandomNumber()
+        {
+            Random random = new Random();
+            return random.Next();
+        }
+        public static string GenerateChecksum(MemoryStream ms)
+        {
+            ms.Position = 0;
+            using var sha256 = System.Security.Cryptography.SHA256.Create();
+            byte[] hash = sha256.ComputeHash(ms);
+            return BitConverter.ToString(hash).Replace("-","");
+        }
         public void CompileSourceCode()
         {
-            CSharpCompilationOptions options = new CSharpCompilationOptions((OutputKind)LanguageVersion.Latest);
+            CSharpCompilationOptions options = new CSharpCompilationOptions((OutputKind)LanguageVersion.Latest, deterministic: true, platform: Platform.AnyCpu, optimizationLevel: OptimizationLevel.Release);
             var syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
-            CSharpCompilation compilation = CSharpCompilation.Create("DynamicAssembly")
+            CSharpCompilation compilation = CSharpCompilation.Create(SelectedRow.Name+"__"+ RandomNumber().ToString())
                 .AddSyntaxTrees(syntaxTree)
                 .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
             SaveSourceCode(compilation);
         }
         public void SaveSourceCode(CSharpCompilation compilation)
         {
-            Macros m = new Macros(false);
+            //SelectedRow;
             using (var ms = new MemoryStream())
             {
                 EmitResult result = compilation.Emit(ms);
                 if (result.Success == true) CompileStatusText = "Compiled successfully";
-                m.BinaryExecutable = ms.ToArray();
-                if (m.IsSaved)
+                SelectedRow.Checksum = GenerateChecksum(ms);
+                SelectedRow.BinaryExecutable = ms.ToArray();
+                if (SelectedRow.IsSaved)
                 {
                     using (var DataSource = new HelpContext())
                     {
-                        DataSource.MacrosTable.Attach(m);
-                        DataSource.MacrosTable.Update(m);
+                        DataSource.MacrosTable.Attach(SelectedRow);
+                        DataSource.MacrosTable.Update(SelectedRow);
                         DataSource.SaveChanges();
                     }
                 }
@@ -127,9 +145,9 @@ namespace TableJson.ViewModels
                 {
                     using (var DataSource = new HelpContext())
                     {
-                        m.IsSaved = true;
-                        DataSource.MacrosTable.Attach(m);
-                        DataSource.MacrosTable.Add(m);
+                        SelectedRow.IsSaved = true;
+                        DataSource.MacrosTable.Attach(SelectedRow);
+                        DataSource.MacrosTable.Add(SelectedRow);
                         DataSource.SaveChanges();
                     }
                 }
