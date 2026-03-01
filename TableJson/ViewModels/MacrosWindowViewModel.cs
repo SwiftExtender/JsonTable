@@ -1,5 +1,4 @@
 ﻿using AvaloniaEdit.Document;
-using DynamicData;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -11,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using TableJson.Models;
-using TextMateSharp.Internal.Parser;
 
 namespace TableJson.ViewModels
 {
@@ -112,7 +110,7 @@ namespace TableJson.ViewModels
                 Console.WriteLine(e.ToString());
             }
         }
-        public static long RandomNumber()
+        public static long TimeStamp()
         {
             return DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         }
@@ -146,9 +144,8 @@ namespace TableJson.ViewModels
         {
             CSharpCompilationOptions options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true); //deterministic: true, platform: Platform.AnyCpu, optimizationLevel: OptimizationLevel.Release, 
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
-            CSharpCompilation compilation = CSharpCompilation.Create(null, references: RefsGridData.ToArray(), options: options)
+            CSharpCompilation compilation = CSharpCompilation.Create(SelectedRow.Name + "_" + TimeStamp().ToString(), references: RefsGridData.ToArray(), options: options)
                 .AddSyntaxTrees(syntaxTree);
-                //.WithOptions(options);
             SaveSourceCode(compilation);
         }
         public void SaveSourceCode(CSharpCompilation compilation)

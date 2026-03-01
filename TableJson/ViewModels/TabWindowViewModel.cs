@@ -20,14 +20,14 @@ using TableJson.Views;
 
 namespace TableJson.ViewModels
 {
-    //public class MacrosMenuItem()
-    //{
-    //    public string Header { get; set; }
-    //    public ReactiveCommand<string, Unit> Macros { get; set; }
-    //    //public object? MacrosParameter { get; set; }
-    //    public IBrush? BackgroundColor { get; set; }
-    //    public IBrush? HeaderTextColor { get; set; }
-    //}
+    public class MacrosMenuItem()
+    {
+        public string Header { get; set; }
+        public ReactiveCommand<string, Unit> Macros { get; set; }
+        //public object? MacrosParameter { get; set; }
+        //public IBrush? BackgroundColor { get; set; }
+        //public IBrush? HeaderTextColor { get; set; }
+    }
     public class JsonQueryMenuItem
     {
         public string? Query { get; set; }
@@ -144,12 +144,12 @@ namespace TableJson.ViewModels
             get => _JSONQueryContextMenu;
             set => this.RaiseAndSetIfChanged(ref _JSONQueryContextMenu, value);
         }
-        //private ObservableCollection<MacrosMenuItem> _MacrosContextMenu = new ObservableCollection<MacrosMenuItem>();
-        //public ObservableCollection<MacrosMenuItem> MacrosContextMenu
-        //{
-        //    get => _MacrosContextMenu;
-        //    set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value);
-        //}
+        private ObservableCollection<MacrosMenuItem> _MacrosContextMenu = new ObservableCollection<MacrosMenuItem>();
+        public ObservableCollection<MacrosMenuItem> MacrosContextMenu
+        {
+            get => _MacrosContextMenu;
+            set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value);
+        }
         private ObservableCollection<string>? _JsonQuerys;
         public ObservableCollection<string>? JsonQuerys
         {
