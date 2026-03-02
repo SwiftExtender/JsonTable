@@ -14,34 +14,26 @@ namespace TableJson.Views
         {
             this.Name = "TheHighestWindow";
             InitializeComponent();
-            TabControl multiTab = GetMultiTab();
-            AddTabButton(multiTab);
-            TabItem initTab = AddTab("New " + multiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
+            AddTabButton(HighestMultiTab);
+            TabItem initTab = AddTab("New " + HighestMultiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
             if (initTab != null)
             {
                 initTab.IsSelected = true;
                 initTab.Focus();
             }
         }
-        private TabControl GetMultiTab()
-        {
-            TabControl multiTab = this.FindControl<TabControl>("HighestMultiTab");
-            return multiTab;
-        }
         private TabItem GetActiveTab()
         {
-            TabControl multiTab = GetMultiTab();
-            return (TabItem)multiTab.SelectedItem;
+            return (TabItem)HighestMultiTab.SelectedItem;
         }
         private Button AddTabDeleteButton()
         {
-            TabControl multiTab = GetMultiTab();
             Button btn = new Button() { Content = "X" };
             btn.Click += (sender, e) =>
             {
                 if (sender is Button btn && btn.Parent is DockPanel dckPanel && dckPanel.Parent is TabItem titem)
                 {
-                    multiTab.Items.Remove(titem);
+                    HighestMultiTab.Items.Remove(titem);
                 }
             };
             return btn;
@@ -57,8 +49,7 @@ namespace TableJson.Views
                 Header = panel,
                 Content = content,
             };
-            TabControl multiTab = GetMultiTab();
-            multiTab.Items.Add(newItem);
+            HighestMultiTab.Items.Add(newItem);
             return newItem;
         }
         private TabItem AddTab(IStorageFile file, TabWindow content)
@@ -72,8 +63,7 @@ namespace TableJson.Views
                 Header = panel,
                 Content = content,
             };
-            TabControl multiTab = GetMultiTab();
-            multiTab.Items.Add(newItem);
+            HighestMultiTab.Items.Add(newItem);
             return newItem;
         }
         private void AddTabButton(TabControl multiTab)
