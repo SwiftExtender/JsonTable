@@ -11,8 +11,10 @@ namespace TableJson.Views
         public TabWindow()
         {
             InitializeComponent();
+            RowTip.Text = "-";
+            ColumnTip.Text = "-";
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
-            AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
+            AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true); 
             TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
         }
         private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs e)
