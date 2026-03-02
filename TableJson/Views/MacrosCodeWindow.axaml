@@ -12,6 +12,7 @@
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaTitleBarHeightHint="-1"
 		WindowState="Maximized"
+		Background="#1A1A1A"
 		Title="Macros editor"
 		>
 	<Border BorderThickness="1.5" BorderBrush="DarkSalmon" IsVisible="True">

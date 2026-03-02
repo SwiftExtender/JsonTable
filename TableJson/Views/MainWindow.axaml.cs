@@ -88,6 +88,7 @@ namespace TableJson.Views
                 Header = addButton,
                 //Content = addButton,
             };
+            addButton.Focusable = false;
             multiTab.Items.Add(addTabItem);
         }
         private void MacrosOpenWindow_Clicked(object sender, RoutedEventArgs args)

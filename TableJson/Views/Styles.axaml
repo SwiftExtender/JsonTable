@@ -1,11 +1,5 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <!--<Design.PreviewWith>
-    <Border Padding="20">-->
-      <!-- Add Controls for Previewer Here -->
-    <!--</Border>
-  </Design.PreviewWith>-->
-
 	<Style Selector="ScrollViewer.TabScroll /template/ ScrollBar:horizontal">
 		<Setter Property="Background" Value="Blue"/>
 		<Setter Property="MaxHeight" Value="8"/>
@@ -34,13 +28,25 @@
 		<Setter Property="FontSize" Value="13" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="Foreground" Value="#FFFFFBD6" />
+		<Setter Property="CornerRadius" Value="0,0,0,0" />
 	</Style>
 	<Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{Binding $parent[Button].Background}"></Setter>
+		<Setter Property="Foreground" Value="{Binding $parent[Button].Foreground}"></Setter>
+		<Setter Property="BorderBrush" Value="Wheat"></Setter>
+	</Style>
+	<Style Selector="Button.Ribbon">
+		<Setter Property="Margin" Value="0,0,10,0" />
+	</Style>
+	<Style Selector="Button.Ribbon:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{Binding $parent[Button].Background}"></Setter>
+		<Setter Property="Foreground" Value="{Binding $parent[Button].Foreground}"></Setter>
 		<Setter Property="BorderBrush" Value="Wheat"></Setter>
 	</Style>
 	<Style Selector="ToggleButton">
-		<Setter Property="HorizontalContentAlignment" Value="Center" />
+		<Setter Property="Foreground" Value="#FFFFFBD6" />
+		<Setter Property="CornerRadius" Value="4,4,4,4" />
 	</Style>
 	<Style Selector="ComboBox">
 		<Setter Property="FontSize" Value="12" />
@@ -58,9 +64,19 @@
 			<Setter Property="Background" Value="Green"/>
 		</Style>
 	</Style>
+	<Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<!--<Setter Property="Background" Value="{Binding $parent[ToggleButton].Background}"></Setter>-->
+		<Setter Property="Foreground" Value="{Binding $parent[ToggleButton].Foreground}"></Setter>
+		<Setter Property="BorderBrush" Value="Wheat"></Setter>
+	</Style>
 	<Style Selector="Button.UniqueKeys">
 		<Setter Property="Background" Value="#C37B24D4" />
 		<Setter Property="Content" Value="Unique Keys" />
+	</Style>
+	<Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{Binding $parent[Button].Background}"></Setter>
+		<Setter Property="Foreground" Value="{Binding $parent[Button].Foreground}"></Setter>
+		<Setter Property="BorderBrush" Value="Wheat"></Setter>
 	</Style>
 	<Style Selector="Button.RawKeys">
 		<Setter Property="Background" Value="OrangeRed" />
@@ -74,4 +90,27 @@
 		<Setter Property="Background" Value="OrangeRed" />
 		<Setter Property="Content" Value="Duplicate Values" />
 	</Style>
+	<Style Selector="TabItem:selected">
+		<Setter Property="Foreground" Value="#F3F5AE2A" />
+	</Style>
+	<!--  PointerOver state  -->
+	<Style Selector="TabItem:pointerover /template/ Border#PART_LayoutRoot">
+		<Setter Property="TextElement.Foreground" Value="#F3D2F52A" />
+	</Style>
+
+	<!--  Selected PointerOver state  -->
+	<Style Selector="TabItem:selected:pointerover /template/ Border#PART_LayoutRoot">
+		<Setter Property="TextElement.Foreground" Value="#F3F5AE2A" />
+	</Style>
+
+	<!--  Pressed state  -->
+	<!--<Style Selector="^:pressed /template/ Border#PART_LayoutRoot">
+		<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPressed}" />
+	</Style>-->
+
+	<!--  Selected Pressed state  -->
+	<!--<Style Selector="^:selected:pressed /template/ Border#PART_LayoutRoot">
+		<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelectedPressed}" />
+		<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPressed}" />
+	</Style>-->
 </Styles>
