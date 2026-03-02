@@ -15,7 +15,7 @@
     VerticalAlignment="Stretch">
 		<aedit:TextEditor
 			HorizontalAlignment="Stretch" Background="#FF0A0C01" Foreground="#FFFFE0"
-			VerticalAlignment="Stretch" MaxHeight="670" SyntaxHighlighting="None" Grid.Row="0" x:Name="editor" 
+			VerticalAlignment="Stretch" MaxHeight="670" SyntaxHighlighting="None" Grid.Row="0" x:Name="TextEditingControl" 
 						   BorderBrush="DarkGoldenrod" BorderThickness="2" Margin="5,0,5,0" 
 						   ShowLineNumbers="True" Document="{Binding RawText, Mode=TwoWay}" 
 						   ScrollViewer.AllowAutoHide="False" ScrollViewer.HorizontalScrollBarVisibility="Visible" WordWrap="False"
@@ -25,11 +25,11 @@
 			</aedit:TextEditor.Options>
 			<aedit:TextEditor.ContextFlyout>
 				<MenuFlyout>
-					<MenuItem Header="Copy" InputGesture="ctrl+C" Command="{Binding CopyMouseCommand}" CommandParameter="{Binding #editor.TextArea}"></MenuItem>
-					<MenuItem Header="Cut" InputGesture="ctrl+X" Command="{Binding CutMouseCommand}" CommandParameter="{Binding #editor.TextArea}"></MenuItem>
-					<MenuItem Header="Paste" InputGesture="ctrl+V" Command="{Binding PasteMouseCommand}"  CommandParameter="{Binding #editor.TextArea}"></MenuItem>
+					<MenuItem Header="Copy" InputGesture="ctrl+C" Command="{Binding CopyMouseCommand}" CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
+					<MenuItem Header="Cut" InputGesture="ctrl+X" Command="{Binding CutMouseCommand}" CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
+					<MenuItem Header="Paste" InputGesture="ctrl+V" Command="{Binding PasteMouseCommand}"  CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
 					<MenuItem Header="-"/>
-					<MenuItem Header="Select All" InputGesture="ctrl+A" Command="{Binding SelectAllMouseCommand}" CommandParameter="{Binding #editor.TextArea}"></MenuItem>
+					<MenuItem Header="Select All" InputGesture="ctrl+A" Command="{Binding SelectAllMouseCommand}" CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
 				</MenuFlyout>
 			</aedit:TextEditor.ContextFlyout>
 			<!--<aedit:TextEditor.ContextMenu>
@@ -48,9 +48,13 @@
 						</DataTemplate>
 					</ContextMenu.ItemTemplate>
 				</ContextMenu>
-			</aedit:TextEditor.ContextMenu>-->
+			</aedit:TextEditor.ContextMenu>Text="{Binding TableJson.Views.TabWindow.Line}"-->
 		</aedit:TextEditor>
-		<SelectableTextBlock Grid.Row="1" Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>
+		<DockPanel Grid.Row="1" >
+			<SelectableTextBlock Margin="10,7,10,0" Text="{Binding StatusText}"></SelectableTextBlock>
+			<SelectableTextBlock Margin="10,7,10,0" x:Name="RowTip"></SelectableTextBlock>
+			<SelectableTextBlock Margin="10,7,10,0" x:Name="ColumnTip"></SelectableTextBlock>
+		</DockPanel>
 	</Grid>
 	<!--<GridSplitter Background="DarkCyan" ShowsPreview="True" Grid.Row="3" x:Name="splitter" Margin="10,5,10,0" Height="5" ResizeDirection="Rows" ResizeBehavior="BasedOnAlignment"/>
 	<DockPanel DockPanel.Dock="Bottom" Grid.Row="4" >

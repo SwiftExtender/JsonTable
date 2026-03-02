@@ -13,6 +13,7 @@ namespace TableJson.Views
             InitializeComponent();
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
+            TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
         }
         private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs e)
         {
@@ -33,58 +34,63 @@ namespace TableJson.Views
                 }
             }
         }
-        public async void CopyToClipboardFromListbox(object sender, TappedEventArgs e)
+        private void CaretPositionChanged(object sender, EventArgs e)
         {
-            Window highestWindow = this.FindControl<Window>("TheHighestWindow");
-            if (highestWindow.Clipboard == null) return;
-            if (e.Source.GetType() == typeof(ListBox))
-            {
-                TextBox c = (TextBox)sender;
-                var dataObject = new DataObject();
+            RowTip.Text = TextEditingControl.TextArea.Caret.Line.ToString();
+            ColumnTip.Text = TextEditingControl.TextArea.Caret.Column.ToString();
+        }
+        //public async void CopyToClipboardFromListbox(object sender, TappedEventArgs e)
+        //{
+        //    Window highestWindow = this.FindControl<Window>("TheHighestWindow");
+        //    if (highestWindow.Clipboard == null) return;
+        //    if (e.Source.GetType() == typeof(ListBox))
+        //    {
+        //        TextBox c = (TextBox)sender;
+        //        var dataObject = new DataObject();
 
-                dataObject.Set(DataFormats.Text, ((TextBlock)e.Source).Text);
-                await highestWindow.Clipboard.SetDataObjectAsync(dataObject);
-            }
-        }
-        public async void CopyToClipboardFromJSONPathResult(object sender, RoutedEventArgs e)
-        {
-            Window highestWindow = this.FindControl<Window>("TheHighestWindow");
-            if (highestWindow.Clipboard == null) return;
-            TextEditor JSONPathResult = this.FindControl<TextEditor>("JSONPathResultEditor");
+        //        dataObject.Set(DataFormats.Text, ((TextBlock)e.Source).Text);
+        //        await highestWindow.Clipboard.SetDataObjectAsync(dataObject);
+        //    }
+        //}
+        //public async void CopyToClipboardFromJSONPathResult(object sender, RoutedEventArgs e)
+        //{
+        //    Window highestWindow = this.FindControl<Window>("TheHighestWindow");
+        //    if (highestWindow.Clipboard == null) return;
+        //    TextEditor JSONPathResult = this.FindControl<TextEditor>("JSONPathResultEditor");
 
-            var dataObject = new DataObject();
-            dataObject.Set(DataFormats.Text, JSONPathResult.Document.Text);
-            await highestWindow.Clipboard.SetDataObjectAsync(dataObject);
-        }
-        public async void CopyToClipboardFromJSONKeys(object sender, RoutedEventArgs e)
-        {
-            Window highestWindow = this.FindControl<Window>("TheHighestWindow");
-            if (highestWindow.Clipboard == null) return;
-            ListBox JSONKeysList = this.FindControl<ListBox>("JSONKeysList");
+        //    var dataObject = new DataObject();
+        //    dataObject.Set(DataFormats.Text, JSONPathResult.Document.Text);
+        //    await highestWindow.Clipboard.SetDataObjectAsync(dataObject);
+        //}
+        //public async void CopyToClipboardFromJSONKeys(object sender, RoutedEventArgs e)
+        //{
+        //    Window highestWindow = this.FindControl<Window>("TheHighestWindow");
+        //    if (highestWindow.Clipboard == null) return;
+        //    ListBox JSONKeysList = this.FindControl<ListBox>("JSONKeysList");
 
-            var dataObject = new DataObject();
-            string keys = "";
-            foreach (var item in JSONKeysList.ItemsSource)
-            {
-                keys += item + Environment.NewLine;
-            }
-            dataObject.Set(DataFormats.Text, keys);
-            await highestWindow.Clipboard.SetDataObjectAsync(dataObject);
-        }
-        public async void CopyToClipboardFromJSONValues(object sender, RoutedEventArgs e)
-        {
-            Window highestWindow = this.FindControl<Window>("TheHighestWindow");
-            if (highestWindow.Clipboard == null) return;
-            ListBox JSONValuesList = this.FindControl<ListBox>("JSONValuesList");
-            var dataObject = new DataObject();
-            string values = "";
-            foreach (var item in JSONValuesList.ItemsSource)
-            {
-                values += item + Environment.NewLine;
-            }
-            dataObject.Set(DataFormats.Text, values);
-            await highestWindow.Clipboard.SetDataObjectAsync(dataObject);
-        }
+        //    var dataObject = new DataObject();
+        //    string keys = "";
+        //    foreach (var item in JSONKeysList.ItemsSource)
+        //    {
+        //        keys += item + Environment.NewLine;
+        //    }
+        //    dataObject.Set(DataFormats.Text, keys);
+        //    await highestWindow.Clipboard.SetDataObjectAsync(dataObject);
+        //}
+        //public async void CopyToClipboardFromJSONValues(object sender, RoutedEventArgs e)
+        //{
+        //    Window highestWindow = this.FindControl<Window>("TheHighestWindow");
+        //    if (highestWindow.Clipboard == null) return;
+        //    ListBox JSONValuesList = this.FindControl<ListBox>("JSONValuesList");
+        //    var dataObject = new DataObject();
+        //    string values = "";
+        //    foreach (var item in JSONValuesList.ItemsSource)
+        //    {
+        //        values += item + Environment.NewLine;
+        //    }
+        //    dataObject.Set(DataFormats.Text, values);
+        //    await highestWindow.Clipboard.SetDataObjectAsync(dataObject);
+        //}
         //public void HotKeyPointerWheelHandler(object sender, PointerWheelEventArgs args)
         //{
         //    if ((args.KeyModifiers & KeyModifiers.Control) == KeyModifiers.Control)
