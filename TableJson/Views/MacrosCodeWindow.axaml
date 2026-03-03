@@ -21,7 +21,7 @@
 			
 		<Grid RowDefinitions="50,*,*" Margin="10,5,10,5">
 				<Button Grid.Row="0" Content="Add Macros" Margin="10,5,10,5" Command="{Binding AddMacrosCommand}"/>
-			<DataGrid Grid.Row="1" x:Name="mgrid" ScrollViewer.AllowAutoHide="False" MaxHeight="195" ItemsSource="{Binding MacrosGridData}" SelectedItem="{Binding SelectedRow}" Margin="10,5,10,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray">
+			<DataGrid Grid.Row="1" x:Name="mgrid" ScrollViewer.AllowAutoHide="False" MinHeight="195" MaxHeight="195" ItemsSource="{Binding MacrosGridData}" SelectedItem="{Binding SelectedRow}" Margin="10,5,10,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray">
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Name"  Binding="{Binding Name}"/>
 					<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}"/>

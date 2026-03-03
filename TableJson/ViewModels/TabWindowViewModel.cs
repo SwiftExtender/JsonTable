@@ -1,4 +1,5 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using AvaloniaEdit;
@@ -44,21 +45,23 @@ namespace TableJson.ViewModels
         {
             ApplicationCommands.Copy.Execute(null, textArea);
         }
-
         public void CutMouseCommand(TextArea textArea)
         {
             ApplicationCommands.Cut.Execute(null, textArea);
         }
-
         public void PasteMouseCommand(TextArea textArea)
         {
             ApplicationCommands.Paste.Execute(null, textArea);
         }
-
         public void SelectAllMouseCommand(TextArea textArea)
         {
             ApplicationCommands.SelectAll.Execute(null, textArea);
         }
+        public static void EmptyCommand()
+        {
+
+        }
+
         private string _FileFullPath = "";
         public string FileFullPath
         {
@@ -144,8 +147,9 @@ namespace TableJson.ViewModels
             get => _JSONQueryContextMenu;
             set => this.RaiseAndSetIfChanged(ref _JSONQueryContextMenu, value);
         }
-        private ObservableCollection<MacrosMenuItem> _MacrosContextMenu = new ObservableCollection<MacrosMenuItem>();
-        public ObservableCollection<MacrosMenuItem> MacrosContextMenu
+        private ObservableCollection<MenuItem> _MacrosContextMenu = PopulateMacroMenu();
+
+        public ObservableCollection<MenuItem> MacrosContextMenu
         {
             get => _MacrosContextMenu;
             set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value);
@@ -442,12 +446,29 @@ namespace TableJson.ViewModels
             UpdateQueries();
 
         }
+        private static void ExecuteFind(object sender, ExecutedRoutedEventArgs e)
+        {
+        }
+        public static ObservableCollection<MenuItem> PopulateMacroMenu()
+        {
+            List<MenuItem> m = new();
+            using (var DataSource = new HelpContext())
+            {
+                List<Macros> selectedMacros = DataSource.MacrosTable.Where(i => i.IsActive == true).ToList();
+                foreach (Macros macro in selectedMacros)
+                {
+                    //m.Add(item: new MenuItem { Header = macro.Name, Command = new RoutedCommandBinding(ApplicationCommands.Find, ExecuteFind) });
+                    m.Add(item: new MenuItem { Header = macro.Name, Command = new RoutedCommand("Custom", new KeyGesture(Key.AbntC2)) });
+                }
+            }
+            ObservableCollection<MenuItem> z = new ObservableCollection<MenuItem>(m);
+            return z;
+        }
         public TabWindowViewModel()
         {
             //MainWindowViewModel.DataRequested += OnDataRequested;
 
-            //MacrosContextMenu = new ObservableCollection<MacrosMenuItem> { new MacrosMenuItem()
-            //{ Header = "Copy", HeaderTextColor = Brushes.Green, BackgroundColor = Brushes.Honeydew } };
+
             //Macros = ReactiveCommand.Create<string>(CopyText)}
 
 
@@ -459,7 +480,7 @@ namespace TableJson.ViewModels
             RecursiveJsonTablifyCommand = ReactiveCommand.Create(RecursiveJsonTablify);
             SaveQueryFastWindowCommand = ReactiveCommand.Create(SaveQueryFastWindow);
 
-            UpdateQueries();
+            //UpdateQueries();
 
         }
     }
