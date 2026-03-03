@@ -46,7 +46,7 @@
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Grid.Row="1" Margin="10,22,10,0" Orientation="Horizontal">
 			
-			<Button Content="Load from file" Classes="Ribbon" Background="#EE4C41E2" Click="OpenFile_Clicked" HotKey="Ctrl+O"/>
+			<Button Content="Load file" Classes="Ribbon" Background="#EE4C41E2" Click="OpenFile_Clicked" HotKey="Ctrl+O"/>
 			<Button Content="Save" Classes="Ribbon" Background="#F1158018" Click="SaveFile_Clicked" HotKey="Ctrl+S"/>
 			<Button Content="Macros" Classes="Ribbon" Background="#D1CB1DD9" Click="MacrosOpenWindow_Clicked" HotKey="Ctrl+Q"/>
 			<!--<Button Background="DarkCyan" Margin="15,0,15,0" Content="Parse" Command="{Binding ParseCommand}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}"/>-->
