@@ -15,7 +15,7 @@ namespace TableJson.Views
             this.Name = "TheHighestWindow";
             InitializeComponent();
             AddTabButton(HighestMultiTab);
-            TabItem initTab = AddTab("New " + HighestMultiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
+            TabItem initTab = AddTab("New " + HighestMultiTab.Items.Count, new TabWindow());
             if (initTab != null)
             {
                 initTab.IsSelected = true;
@@ -71,7 +71,7 @@ namespace TableJson.Views
             Button addButton = new Button { Content = "+" };
             addButton.Click += (sender, e) =>
             {
-                AddTab("New " + multiTab.Items.Count, new TabWindow() { DataContext = new TabWindowViewModel() });
+                AddTab("New " + multiTab.Items.Count, new TabWindow());
             };
             TabItem addTabItem = new TabItem()
             {
@@ -98,8 +98,7 @@ namespace TableJson.Views
             {
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    TabWindow fromFileTab = new TabWindow() { };
-                    fromFileTab.DataContext = new TabWindowViewModel(files[0]);
+                    TabWindow fromFileTab = new TabWindow(files[0]);
                     AddTab(files[0], fromFileTab);
                 });
             }

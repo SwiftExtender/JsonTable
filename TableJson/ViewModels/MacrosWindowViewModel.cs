@@ -81,7 +81,7 @@ namespace TableJson.ViewModels
             get => _CompileStatusText;
             set => this.RaiseAndSetIfChanged(ref _CompileStatusText, value);
         }
-        private TextDocument _SourceCode = new TextDocument("");
+        private TextDocument _SourceCode = new("");
         public TextDocument SourceCode
         {
             get => _SourceCode;
