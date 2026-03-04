@@ -1,8 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using AvaloniaEdit;
+using Avalonia.Platform.Storage;
 using System;
+using TableJson.ViewModels;
 
 namespace TableJson.Views
 {
@@ -11,10 +12,21 @@ namespace TableJson.Views
         public TabWindow()
         {
             InitializeComponent();
+            DataContext = new TabWindowViewModel();
             RowTip.Text = "-";
             ColumnTip.Text = "-";
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
-            AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true); 
+            AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
+            TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
+        }
+        public TabWindow(IStorageFile file)
+        {
+            InitializeComponent();
+            DataContext = new TabWindowViewModel(file);
+            RowTip.Text = "-";
+            ColumnTip.Text = "-";
+            AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
+            AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
             TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
         }
         private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs e)
@@ -26,11 +38,13 @@ namespace TableJson.Views
         }
         private void KeyboardFontSizer(object sender, KeyEventArgs e)
         {
-            if (e.KeyModifiers.HasFlag(KeyModifiers.Control)) { 
+            if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
+            {
                 if (e.PhysicalKey == PhysicalKey.Equal || e.PhysicalKey == PhysicalKey.NumPadAdd)
                 {
                     FontSize = FontSize < 74 ? FontSize + 1 : 74;
-                } else if (e.PhysicalKey == PhysicalKey.Minus || e.PhysicalKey == PhysicalKey.NumPadSubtract)
+                }
+                else if (e.PhysicalKey == PhysicalKey.Minus || e.PhysicalKey == PhysicalKey.NumPadSubtract)
                 {
                     FontSize = FontSize > 9 ? FontSize - 1 : 9;
                 }
@@ -41,6 +55,16 @@ namespace TableJson.Views
             RowTip.Text = TextEditingControl.TextArea.Caret.Line.ToString();
             ColumnTip.Text = TextEditingControl.TextArea.Caret.Column.ToString();
         }
+        //private void BuildContextmenu()
+        //{
+        //    TabWindow t = this;
+        //    TabWindowViewModel vm = (TabWindowViewModel)DataContext;
+        //    vm.MacrosContextMenu.Add(new MenuItem { Header = "Copy", Command = ApplicationCommands.Copy, CommandParameter = TextEditingControl.TextArea });
+        //    vm.MacrosContextMenu.Add(new MenuItem { Header = "Cut", Command = ApplicationCommands.Cut, CommandParameter = TextEditingControl.TextArea });
+        //    vm.MacrosContextMenu.Add(new MenuItem { Header = "Paste", Command = ApplicationCommands.Paste, CommandParameter = TextEditingControl.TextArea });
+        //    vm.MacrosContextMenu.Add(new MenuItem { Header = "--" });
+        //    vm.MacrosContextMenu.Add(new MenuItem { Header = "Select All", Command = ApplicationCommands.SelectAll, CommandParameter = TextEditingControl.TextArea });
+        //}
         //public async void CopyToClipboardFromListbox(object sender, TappedEventArgs e)
         //{
         //    Window highestWindow = this.FindControl<Window>("TheHighestWindow");

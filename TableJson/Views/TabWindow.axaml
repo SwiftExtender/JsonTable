@@ -24,7 +24,12 @@
 				<aedit:TextEditorOptions EnableRectangularSelection="False" AllowScrollBelowDocument="False" EnableTextDragDrop="False" EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
 			</aedit:TextEditor.Options>
 			<aedit:TextEditor.ContextFlyout>
-				<MenuFlyout ItemsSource="{Binding MacrosContextMenu}">
+					<MenuFlyout ItemsSource="{Binding MacrosContextMenu}">
+						<MenuFlyout.ItemTemplate>
+							<DataTemplate>
+								
+							</DataTemplate>
+						</MenuFlyout.ItemTemplate>
 					<!--<MenuItem Header="Copy" InputGesture="ctrl+C" Command="{Binding CopyMouseCommand}" CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
 					<MenuItem Header="Cut" InputGesture="ctrl+X" Command="{Binding CutMouseCommand}" CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
 					<MenuItem Header="Paste" InputGesture="ctrl+V" Command="{Binding PasteMouseCommand}"  CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
