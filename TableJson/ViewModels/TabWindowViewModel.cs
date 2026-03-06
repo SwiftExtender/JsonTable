@@ -1,6 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Platform.Storage;
+﻿using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
@@ -11,20 +9,46 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using TableJson.Models;
 
 namespace TableJson.ViewModels
 {
+    //public class ContextCommand<T> : ICommand
+    //{
+    //    private readonly Action<T> _execute;
+    //    private readonly Predicate<T> _canExecute;
+    //    private event EventHandler? _canExecuteChanged;
+
+    //    public ContextCommand(Action<T> execute, Predicate<T> canExecute)
+    //    {
+    //        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+    //        _canExecute = canExecute;
+    //    }
+    //    public event EventHandler? CanExecuteChanged
+    //    {
+    //        add => _canExecuteChanged += value;
+    //        remove => _canExecuteChanged -= value;
+    //    }
+    //    public bool CanExecute(object? parameter)
+    //    {
+    //        if (parameter == null)
+    //        {
+    //            return true;
+    //        }
+    //        return _canExecute((T)parameter);
+    //    }
+    //    public void Execute(object? parameter)
+    //    {
+    //        _execute((T)parameter);
+    //    }
+    //}
     public class MacrosMenuItem()
     {
         public string Header { get; set; }
-        public ReactiveCommand<string, Unit> Macros { get; set; }
-        //public object? MacrosParameter { get; set; }
-        //public IBrush? BackgroundColor { get; set; }
-        //public IBrush? HeaderTextColor { get; set; }
+        public ICommand Command { get; set; }
     }
     public class JsonQueryMenuItem
     {
@@ -54,10 +78,10 @@ namespace TableJson.ViewModels
         {
             ApplicationCommands.SelectAll.Execute(null, textArea);
         }
-        public void EmptyCommand(TextArea textArea)
-        {
-            ApplicationCommands.SelectAll.Execute(null, textArea);
-        }
+        //public void EmptyCommand(TextArea textArea)
+        //{
+        //    ApplicationCommands.SelectAll.Execute(null, textArea);
+        //}
         private string _FileFullPath = "";
         public string FileFullPath
         {
@@ -91,6 +115,8 @@ namespace TableJson.ViewModels
             get => _MacrosContextMenu;
             set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value);
         }
+        private List<ICommand> _CommandsList;
+        public List<ICommand> CommandsList { get; set; }
         //public async Task LoadFileAs(IStorageFile file) {
         //    await using var stream = await file.OpenReadAsync();
         //    using var streamReader = new StreamReader(stream);
@@ -156,27 +182,23 @@ namespace TableJson.ViewModels
 
         public ObservableCollection<MacrosMenuItem> PopulateMacroMenu()
         {
-            //, Command = ApplicationCommands.Copy
-            //, Command = ApplicationCommands.Cut
-            //, Command = ApplicationCommands.Paste 
-            //, Command = ApplicationCommands.SelectAll
-            List<MacrosMenuItem> m = new();
-            m.Add(new MacrosMenuItem { Header = "Copy" });
-            m.Add(new MacrosMenuItem { Header = "Cut" });
-            m.Add(new MacrosMenuItem { Header = "Paste"});
-            //m.Add(new MenuItem { Header = "-" });
-            m.Add(new MacrosMenuItem { Header = "Select All" });
+            List<MacrosMenuItem> menuItems = new();
+            menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand) });
+            menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand) });
+            menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand) });
+            menuItems.Add(new MacrosMenuItem { Header = "Select All", Command = ReactiveCommand.Create<TextArea>(SelectAllMouseCommand) });
             using (var DataSource = new HelpContext())
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.Where(i => i.IsActive == true).ToList();
                 foreach (Macros macro in selectedMacros)
                 {
                     //m.Add(item: new MenuItem { Header = macro.Name, Command = new RoutedCommandBinding(ApplicationCommands.Find, ExecuteFind) });
-                    m.Add(item: new MacrosMenuItem { Header = macro.Name });
+                    menuItems.Add(item: new MacrosMenuItem { Header = macro.Name });
                 }
             }
-            return new ObservableCollection<MacrosMenuItem>(m);
+            return new ObservableCollection<MacrosMenuItem>(menuItems);
         }
+
         public TabWindowViewModel()
         {
             //ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);

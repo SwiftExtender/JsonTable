@@ -28,7 +28,7 @@
 							<MenuFlyout.ItemContainerTheme>
 								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" x:DataType="vm:MacrosMenuItem">
 									<Setter Property="CommandParameter" Value="{Binding #TextEditingControl.TextArea}"/>
-									<Setter Property="Command" Value="{Binding Macros}"/>
+									<Setter Property="Command" Value="{Binding Command}"/>
 									<Setter Property="Header" Value="{Binding Header}"/>
 								</ControlTheme>
 							</MenuFlyout.ItemContainerTheme>
