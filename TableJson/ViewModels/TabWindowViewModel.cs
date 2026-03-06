@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using AvaloniaEdit;
@@ -53,9 +54,9 @@ namespace TableJson.ViewModels
         {
             ApplicationCommands.SelectAll.Execute(null, textArea);
         }
-        public static void EmptyCommand()
+        public void EmptyCommand(TextArea textArea)
         {
-
+            ApplicationCommands.SelectAll.Execute(null, textArea);
         }
         private string _FileFullPath = "";
         public string FileFullPath
@@ -84,8 +85,8 @@ namespace TableJson.ViewModels
             get => _StatusText;
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
         }
-        private ObservableCollection<MenuItem> _MacrosContextMenu;
-        public ObservableCollection<MenuItem> MacrosContextMenu
+        private ObservableCollection<MacrosMenuItem> _MacrosContextMenu;
+        public ObservableCollection<MacrosMenuItem> MacrosContextMenu
         {
             get => _MacrosContextMenu;
             set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value);
@@ -153,25 +154,28 @@ namespace TableJson.ViewModels
             }, DispatcherPriority.Background);
         }
 
-        public ObservableCollection<MenuItem> PopulateMacroMenu()
+        public ObservableCollection<MacrosMenuItem> PopulateMacroMenu()
         {
-
-            List<MenuItem> m = new();
-            m.Add(new MenuItem { Header = "Copy", Command = ApplicationCommands.Copy });
-            m.Add(new MenuItem { Header = "Cut", Command = ApplicationCommands.Cut });
-            m.Add(new MenuItem { Header = "Paste", Command = ApplicationCommands.Paste });
+            //, Command = ApplicationCommands.Copy
+            //, Command = ApplicationCommands.Cut
+            //, Command = ApplicationCommands.Paste 
+            //, Command = ApplicationCommands.SelectAll
+            List<MacrosMenuItem> m = new();
+            m.Add(new MacrosMenuItem { Header = "Copy" });
+            m.Add(new MacrosMenuItem { Header = "Cut" });
+            m.Add(new MacrosMenuItem { Header = "Paste"});
             //m.Add(new MenuItem { Header = "-" });
-            m.Add(new MenuItem { Header = "Select All", Command = ApplicationCommands.SelectAll });
+            m.Add(new MacrosMenuItem { Header = "Select All" });
             using (var DataSource = new HelpContext())
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.Where(i => i.IsActive == true).ToList();
                 foreach (Macros macro in selectedMacros)
                 {
                     //m.Add(item: new MenuItem { Header = macro.Name, Command = new RoutedCommandBinding(ApplicationCommands.Find, ExecuteFind) });
-                    //m.Add(item: new MenuItem { Header = macro.Name, Command = c1, CommandParameter= "test" });
+                    m.Add(item: new MacrosMenuItem { Header = macro.Name });
                 }
             }
-            return new ObservableCollection<MenuItem>(m);
+            return new ObservableCollection<MacrosMenuItem>(m);
         }
         public TabWindowViewModel()
         {

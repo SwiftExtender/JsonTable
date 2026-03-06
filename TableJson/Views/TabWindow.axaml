@@ -24,19 +24,15 @@
 				<aedit:TextEditorOptions EnableRectangularSelection="False" AllowScrollBelowDocument="False" EnableTextDragDrop="False" EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
 			</aedit:TextEditor.Options>
 			<aedit:TextEditor.ContextFlyout>
-					<MenuFlyout ItemsSource="{Binding MacrosContextMenu}">
-						<MenuFlyout.ItemTemplate>
-							<DataTemplate>
-								
-							</DataTemplate>
-						</MenuFlyout.ItemTemplate>
-					<!--<MenuItem Header="Copy" InputGesture="ctrl+C" Command="{Binding CopyMouseCommand}" CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
-					<MenuItem Header="Cut" InputGesture="ctrl+X" Command="{Binding CutMouseCommand}" CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
-					<MenuItem Header="Paste" InputGesture="ctrl+V" Command="{Binding PasteMouseCommand}"  CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
-					<MenuItem Header="-"/>
-					<MenuItem Header="Select All" InputGesture="ctrl+A" Command="{Binding SelectAllMouseCommand}" CommandParameter="{Binding #TextEditingControl.TextArea}"></MenuItem>
-					<MenuItem Header="-"/>-->
-				</MenuFlyout>
+						<MenuFlyout ItemsSource="{Binding MacrosContextMenu}">
+							<MenuFlyout.ItemContainerTheme>
+								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" x:DataType="vm:MacrosMenuItem">
+									<Setter Property="CommandParameter" Value="{Binding #TextEditingControl.TextArea}"/>
+									<Setter Property="Command" Value="{Binding Macros}"/>
+									<Setter Property="Header" Value="{Binding Header}"/>
+								</ControlTheme>
+							</MenuFlyout.ItemContainerTheme>
+					</MenuFlyout>
 			</aedit:TextEditor.ContextFlyout>
 			<!--<aedit:TextEditor.ContextMenu>
 				<ContextMenu ItemsSource="{Binding MacrosContextMenu}">
