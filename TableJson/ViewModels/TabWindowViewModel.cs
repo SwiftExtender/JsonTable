@@ -100,14 +100,19 @@ namespace TableJson.ViewModels
             }
             else
             {
-                return;
+                StatusText = "Invalid Folder";
             }
 
         }
         public void OpenUrlCommand(TextArea textArea)
         {
             string url = textArea.Selection.GetText();
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true});
+            if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            } else
+            {
+                StatusText = "Invalid URL";
+            }
         }
         private string _FileFullPath = "";
         public string FileFullPath
