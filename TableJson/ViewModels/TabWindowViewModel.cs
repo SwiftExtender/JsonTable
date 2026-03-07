@@ -7,8 +7,10 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -78,10 +80,35 @@ namespace TableJson.ViewModels
         {
             ApplicationCommands.SelectAll.Execute(null, textArea);
         }
-        //public void EmptyCommand(TextArea textArea)
-        //{
-        //    ApplicationCommands.SelectAll.Execute(null, textArea);
-        //}
+        public void OpenFolderPathCommand(TextArea textArea)
+        {
+            string path = textArea.Selection.GetText();
+            if (Directory.Exists(path))
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    Process.Start("explorer", path);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", path);
+                }
+                else
+                {
+                    Process.Start("xdg-open", path);
+                }
+            }
+            else
+            {
+                return;
+            }
+
+        }
+        public void OpenUrlCommand(TextArea textArea)
+        {
+            string url = textArea.Selection.GetText();
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true});
+        }
         private string _FileFullPath = "";
         public string FileFullPath
         {
@@ -187,13 +214,17 @@ namespace TableJson.ViewModels
             menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand) });
             menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand) });
             menuItems.Add(new MacrosMenuItem { Header = "Select All", Command = ReactiveCommand.Create<TextArea>(SelectAllMouseCommand) });
+            menuItems.Add(new MacrosMenuItem { Header = "Open as Folder", Command = ReactiveCommand.Create<TextArea>(OpenFolderPathCommand) });
+            menuItems.Add(new MacrosMenuItem { Header = "Open as URL", Command = ReactiveCommand.Create<TextArea>(OpenUrlCommand) });
+
             using (var DataSource = new HelpContext())
             {
                 List<Macros> selectedMacros = DataSource.MacrosTable.Where(i => i.IsActive == true).ToList();
                 foreach (Macros macro in selectedMacros)
                 {
                     //m.Add(item: new MenuItem { Header = macro.Name, Command = new RoutedCommandBinding(ApplicationCommands.Find, ExecuteFind) });
-                    menuItems.Add(item: new MacrosMenuItem { Header = macro.Name });
+
+                    //menuItems.Add(item: new MacrosMenuItem { Header = macro.Name, Command = ReactiveCommand.Create<TextArea>() });
                 }
             }
             return new ObservableCollection<MacrosMenuItem>(menuItems);
