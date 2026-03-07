@@ -18,7 +18,8 @@ namespace TableJson
 
         public override void OnFrameworkInitializationCompleted()
         {
-            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.Default;
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             //AppContext.SetData("GCHeapHardLimit", 0x1600000000);
             AppContext.SetData("GCAllowVeryLargeObjects", true);
             var tempdb = new HelpContext();
