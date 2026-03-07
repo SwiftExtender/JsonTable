@@ -17,16 +17,18 @@ namespace TableJson.ViewModels
     {
         public void SaveCode()
         {
-            SelectedRow.SourceCode = SourceCode.Text;
-            SaveMacros(SelectedRow);
-            if (SelectedRow.Name != "")
-            {
-                CompileStatusText = "Macros " + SelectedRow.Name + " saved";
-            }
-            else
-            {
-                CompileStatusText = "Macros saved";
-            }
+            if (SelectedRow != null) {
+                SelectedRow.SourceCode = SourceCode.Text;
+                SaveMacros(SelectedRow);
+                if (SelectedRow.Name != "")
+                {
+                    CompileStatusText = "Macros " + SelectedRow.Name + " saved";
+                }
+                else
+                {
+                    CompileStatusText = "Macros saved";
+                }
+            } 
         }
         public void RemoveMacros(Macros remHint)
         {
