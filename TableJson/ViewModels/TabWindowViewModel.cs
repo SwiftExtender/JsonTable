@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -53,6 +54,9 @@ namespace TableJson.ViewModels
         public string Header { get; set; }
         public ICommand Command { get; set; }
         public KeyGesture HotKey { get; set; }
+        public bool IsArgsRequired { get; set; }
+        public string ItemColor { get; set; }
+        public string TextColor { get; set; }
     }
     public class JsonQueryMenuItem
     {
@@ -149,8 +153,6 @@ namespace TableJson.ViewModels
             get => _MacrosContextMenu;
             set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value);
         }
-        private List<ICommand> _CommandsList;
-        public List<ICommand> CommandsList { get; set; }
         //public async Task LoadFileAs(IStorageFile file) {
         //    await using var stream = await file.OpenReadAsync();
         //    using var streamReader = new StreamReader(stream);
@@ -213,7 +215,26 @@ namespace TableJson.ViewModels
                 }
             }, DispatcherPriority.Background);
         }
-
+        public void CustomTextAreaHandler(TextArea textArea, Func<string, string> customMethod) {
+            string text = textArea.Selection.GetText();
+            string result = customMethod(text);
+            Console.WriteLine(result);//stub
+        }
+        public Func<TextArea> ExtractHandler(byte[] dllArray)
+        {
+            Assembly asm = Assembly.Load(dllArray);
+            MethodInfo entrypoint = asm.EntryPoint;
+            if (entrypoint != null)
+            {
+                //Type type = asm.GetType("ContextItemPlugin.Program");
+                //MethodInfo entrypoint1 = type.GetMethod("Main");
+                Func<TextArea> handler = (Func<TextArea>)entrypoint.CreateDelegate(typeof(Func<TextArea>));
+                return handler;
+            } else
+            {
+                return null;
+            }
+        }
         public ObservableCollection<MacrosMenuItem> PopulateMacroMenu()
         {
             List<MacrosMenuItem> menuItems = new();
@@ -226,12 +247,12 @@ namespace TableJson.ViewModels
 
             using (var DataSource = new HelpContext())
             {
-                List<Macros> selectedMacros = DataSource.MacrosTable.Where(i => i.IsActive == true).ToList();
+                List<Macros> selectedMacros = DataSource.MacrosTable.Where(i => i.IsActive == true).Where(i => i.BinaryExecutable != null).ToList();
                 foreach (Macros macro in selectedMacros)
                 {
-                    //m.Add(item: new MenuItem { Header = macro.Name, Command = new RoutedCommandBinding(ApplicationCommands.Find, ExecuteFind) });
-
-                    //menuItems.Add(item: new MacrosMenuItem { Header = macro.Name, Command = ReactiveCommand.Create<TextArea>() });
+                    Func<TextArea> customMethod = ExtractHandler(macro.BinaryExecutable);
+                    MacrosMenuItem t = new MacrosMenuItem { Header = macro.Name, Command = ReactiveCommand.Create<TextArea>(customMethod) };
+                    menuItems.Add(item: t);
                 }
             }
             return new ObservableCollection<MacrosMenuItem>(menuItems);
