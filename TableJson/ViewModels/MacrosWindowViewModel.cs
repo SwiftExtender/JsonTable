@@ -128,6 +128,12 @@ namespace TableJson.ViewModels
             string dir = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "imports");
             List<PortableExecutableReference> refs = new List<PortableExecutableReference>();
             refs.Add(AssemblyMetadata.CreateFromFile(typeof(object).Assembly.Location).GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.dll").GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Desktop.dll").GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Controls.dll").GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Dialogs.dll").GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile("AvaloniaEdit.dll").GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile("AvaloniaEdit.TextMate.dll").GetReference());
             foreach (string file in Directory.GetFiles(dir))
             {
                 try
