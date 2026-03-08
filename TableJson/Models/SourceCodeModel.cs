@@ -16,10 +16,13 @@ namespace TableJson.Models
         [Key, Required]
         public int Id { get; set; }
         public bool IsActive { get; set; } = true;
+        public bool IsArgsRequired { get; set; } = false;
         public string? Name { get; set; }
-        //public string MacrosType { get; set; }
         public string? SourceCode { get; set; } = "";
-        public string? Checksum { get; set; } = "";
+        public string? Checksum { get; set; }
+        public string? HotKey { get; set; }
+        public string? MenuItemColor { get; set; }
+        public string? MenuTextColor { get; set; }
         public byte[]? BinaryExecutable { get; set; }
         [NotMapped]
         public bool IsSaved { get; set; } = true; //false = temp, true = in DB
