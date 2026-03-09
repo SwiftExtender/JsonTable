@@ -215,14 +215,8 @@ namespace TableJson.ViewModels
                 }
             }, DispatcherPriority.Background);
         }
-        public void CustomTextAreaHandler(TextArea textArea, Func<string, string> customMethod) {
-            string text = textArea.Selection.GetText();
-            string result = customMethod(text);
-            Console.WriteLine(result);//stub
-        }
         public Action<TextArea> ExtractHandler(byte[] dllArray)
         {
-
             try
             {
                 Assembly asm = Assembly.Load(dllArray);
@@ -230,16 +224,10 @@ namespace TableJson.ViewModels
                 MethodInfo entrypoint = type.GetMethod("Main");
                 if (entrypoint != null)
                 {
-                    try
-                    {
-                        //instance Func<TextArea> handler = (Func<TextArea>)entrypoint.CreateDelegate(typeof(Func<TextArea>));
-                        //static Func<TextArea> handler = (Func<TextArea>)Delegate.CreateDelegate(typeof(Func<TextArea>),entrypoint);
-                        return (Action<TextArea>)Delegate.CreateDelegate(typeof(Action<TextArea>), entrypoint);
-                    }
-                    catch (Exception e)
-                    {
-                        return null;
-                    }
+                    //instance Func<TextArea> handler = (Func<TextArea>)entrypoint.CreateDelegate(typeof(Func<TextArea>));
+                    //static Func<TextArea> handler = (Func<TextArea>)Delegate.CreateDelegate(typeof(Func<TextArea>),entrypoint);
+                    return (Action<TextArea>)Delegate.CreateDelegate(typeof(Action<TextArea>), entrypoint);
+
                 } else {
                     return null;
                 }
