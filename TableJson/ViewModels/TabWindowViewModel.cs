@@ -220,8 +220,8 @@ namespace TableJson.ViewModels
             try
             {
                 Assembly asm = Assembly.Load(dllArray);
-                Type type = asm.GetType("ContextItemPlugin.Program");
-                MethodInfo entrypoint = type.GetMethod("Main");
+                Type type = asm.GetType("ContextItemPlugin.Plugin");
+                MethodInfo entrypoint = type.GetMethod("Handler");
                 if (entrypoint != null)
                 {
                     //instance Func<TextArea> handler = (Func<TextArea>)entrypoint.CreateDelegate(typeof(Func<TextArea>));

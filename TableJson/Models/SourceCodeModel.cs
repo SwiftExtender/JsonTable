@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Specialized;
 
 namespace TableJson.Models
 {
@@ -29,6 +30,11 @@ namespace TableJson.Models
         public Macros(bool isSaved)
         {
             IsSaved = isSaved;
+        }
+        public Macros(bool isSaved, string code)
+        {
+            IsSaved = isSaved;
+            SourceCode = code;
         }
         public Macros(int id, bool isActive, string name)
         {

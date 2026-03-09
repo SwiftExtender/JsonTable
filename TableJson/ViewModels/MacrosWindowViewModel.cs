@@ -17,6 +17,7 @@ namespace TableJson.ViewModels
 {
     public class MacrosWindowViewModel : ViewModelBase
     {
+        const string templateCode = "using System;\r\nusing AvaloniaEdit.Editing;\r\n\r\nnamespace ContextItemPlugin {\r\nclass Plugin\r\n{\r\n}\r\n}\r\n";
         public void CopyMouseCommand(TextArea textArea)
         {
             ApplicationCommands.Copy.Execute(null, textArea);
@@ -123,7 +124,7 @@ namespace TableJson.ViewModels
         {
             try
             {
-                MacrosGridData.Add(new Macros(false));
+                MacrosGridData.Add(new Macros(false, templateCode));
             }
             catch (Exception e)
             {
