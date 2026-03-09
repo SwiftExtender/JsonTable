@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using System;
+using System.IO;
 using System.Runtime;
 using TableJson.Models;
 using TableJson.ViewModels;
@@ -23,9 +24,8 @@ namespace TableJson
             //AppContext.SetData("GCHeapHardLimit", 0x1600000000);
             AppContext.SetData("GCAllowVeryLargeObjects", true);
             var tempdb = new HelpContext();
-
             tempdb.Database.EnsureCreated();
-
+            Directory.CreateDirectory("imports");
             this.AttachDevTools();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
