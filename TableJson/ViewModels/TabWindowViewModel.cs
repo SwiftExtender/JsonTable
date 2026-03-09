@@ -220,18 +220,32 @@ namespace TableJson.ViewModels
             string result = customMethod(text);
             Console.WriteLine(result);//stub
         }
-        public Func<TextArea> ExtractHandler(byte[] dllArray)
+        public Action<TextArea> ExtractHandler(byte[] dllArray)
         {
-            Assembly asm = Assembly.Load(dllArray);
-            MethodInfo entrypoint = asm.EntryPoint;
-            if (entrypoint != null)
+
+            try
             {
-                //Type type = asm.GetType("ContextItemPlugin.Program");
-                //MethodInfo entrypoint1 = type.GetMethod("Main");
-                Func<TextArea> handler = (Func<TextArea>)entrypoint.CreateDelegate(typeof(Func<TextArea>));
-                return handler;
-            } else
-            {
+                Assembly asm = Assembly.Load(dllArray);
+                Type type = asm.GetType("ContextItemPlugin.Program");
+                MethodInfo entrypoint = type.GetMethod("Main");
+                if (entrypoint != null)
+                {
+                    try
+                    {
+                        //instance Func<TextArea> handler = (Func<TextArea>)entrypoint.CreateDelegate(typeof(Func<TextArea>));
+                        //static Func<TextArea> handler = (Func<TextArea>)Delegate.CreateDelegate(typeof(Func<TextArea>),entrypoint);
+                        return (Action<TextArea>)Delegate.CreateDelegate(typeof(Action<TextArea>), entrypoint);
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            }
+            catch (Exception ex) { 
+                Console.WriteLine(ex.Message);
                 return null;
             }
         }
@@ -250,9 +264,13 @@ namespace TableJson.ViewModels
                 List<Macros> selectedMacros = DataSource.MacrosTable.Where(i => i.IsActive == true).Where(i => i.BinaryExecutable != null).ToList();
                 foreach (Macros macro in selectedMacros)
                 {
-                    Func<TextArea> customMethod = ExtractHandler(macro.BinaryExecutable);
-                    MacrosMenuItem t = new MacrosMenuItem { Header = macro.Name, Command = ReactiveCommand.Create<TextArea>(customMethod) };
-                    menuItems.Add(item: t);
+                    Action<TextArea> customMethod = ExtractHandler(macro.BinaryExecutable);
+                    if (customMethod != null)
+                    {
+                        MacrosMenuItem t = new MacrosMenuItem { Header = macro.Name, Command = ReactiveCommand.Create<TextArea>(customMethod) };
+                        menuItems.Add(item: t);
+                    }
+                    
                 }
             }
             return new ObservableCollection<MacrosMenuItem>(menuItems);
