@@ -1,4 +1,6 @@
-﻿using AvaloniaEdit.Document;
+﻿using AvaloniaEdit;
+using AvaloniaEdit.Document;
+using AvaloniaEdit.Editing;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -15,6 +17,22 @@ namespace TableJson.ViewModels
 {
     public class MacrosWindowViewModel : ViewModelBase
     {
+        public void CopyMouseCommand(TextArea textArea)
+        {
+            ApplicationCommands.Copy.Execute(null, textArea);
+        }
+        public void CutMouseCommand(TextArea textArea)
+        {
+            ApplicationCommands.Cut.Execute(null, textArea);
+        }
+        public void PasteMouseCommand(TextArea textArea)
+        {
+            ApplicationCommands.Paste.Execute(null, textArea);
+        }
+        public void SelectAllMouseCommand(TextArea textArea)
+        {
+            ApplicationCommands.SelectAll.Execute(null, textArea);
+        }
         public void SaveCode()
         {
             if (SelectedRow != null) {
