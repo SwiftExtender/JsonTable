@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:bh="using:TableJson.ViewModels"
 		xmlns:convert="clr-namespace:Avalonia.Data.Converters;assembly=Avalonia.Base"
-		xmlns:controlconvert="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls.ColorPicker.Converters"
+		xmlns:controlconvert="using:Avalonia.Controls.Converters"
 		x:Class="TableJson.Views.MacrosCodeWindow"
 		x:DataType="vm:MacrosWindowViewModel"
         mc:Ignorable="d"
@@ -18,7 +18,7 @@
 		Title="Macros editor"
 		>
 	<Window.Resources>
-		
+		<controlconvert:ColorToHexConverter x:Key="ColorToHexConverter"/>
 	</Window.Resources>
 	<Border BorderThickness="1.5" BorderBrush="DarkSalmon" IsVisible="True">
 		<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -34,19 +34,16 @@
 					<DataGridTemplateColumn Header="MenuItemColor">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								
-									<ColorPicker IsHexInputVisible="True"></ColorPicker>
-								
+									<ColorPicker IsAlphaEnabled="False"
+                                 IsAlphaVisible="False" IsHexInputVisible="True" Color="{Binding MenuItemColor, Converter={StaticResource ColorToHexConverter}}"></ColorPicker>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 					<DataGridTemplateColumn Header="MenuTextColor">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<DockPanel>
 									<ColorPicker IsAlphaEnabled="False"
-                                 IsAlphaVisible="False" IsHexInputVisible="True" Color="{Binding MenuTextColor}"></ColorPicker>
-								</DockPanel>
+                                 IsAlphaVisible="False" IsHexInputVisible="True" Color="{Binding MenuTextColor, Converter={StaticResource ColorToHexConverter}}"></ColorPicker>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
