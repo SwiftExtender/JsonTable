@@ -1,12 +1,7 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Platform;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
-using AvaloniaEdit;
-using AvaloniaEdit.Editing;
 using System;
 using TableJson.ViewModels;
 

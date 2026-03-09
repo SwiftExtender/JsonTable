@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:bh="using:TableJson.ViewModels"
 		xmlns:convert="clr-namespace:Avalonia.Data.Converters;assembly=Avalonia.Base"
+		xmlns:controlconvert="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls.ColorPicker.Converters"
 		x:Class="TableJson.Views.MacrosCodeWindow"
 		x:DataType="vm:MacrosWindowViewModel"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d"
 		xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
 		WindowStartupLocation="CenterScreen"
 		ExtendClientAreaToDecorationsHint="True"
@@ -16,33 +17,26 @@
 		Background="#1A1A1A"
 		Title="Macros editor"
 		>
-	<Border BorderThickness="1.5" BorderBrush="DarkSalmon" IsVisible="True">
+	<Window.Resources>
 		
+	</Window.Resources>
+	<Border BorderThickness="1.5" BorderBrush="DarkSalmon" IsVisible="True">
 		<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-			
 		<Grid RowDefinitions="50,*,*" Margin="10,5,10,5">
-				<Button Grid.Row="0" Content="Add Macros" Margin="10,5,10,5" Command="{Binding AddMacrosCommand}"/>
+			<Button Grid.Row="0" Content="Add Macros" Margin="10,5,10,5" Command="{Binding AddMacrosCommand}"/>
 			<DataGrid Grid.Row="1" x:Name="mgrid" ScrollViewer.AllowAutoHide="False" MinHeight="195" MaxHeight="195" ItemsSource="{Binding MacrosGridData}" SelectedItem="{Binding SelectedRow}" Margin="10,5,10,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray">
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 					<DataGridTextColumn Header="HotKey" Binding="{Binding HotKey}"/>
 					<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}"/>
 					<DataGridTextColumn Header="Checksum" Binding="{Binding Checksum}" IsReadOnly="True" />
-					<DataGridTemplateColumn Header="Actions">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<DockPanel>
-									<Button Content="Save" Command="{Binding $parent[DataGrid].DataContext.SaveMacrosCommand}" CommandParameter="{Binding .}"/>
-									<Button Content="Delete" Command="{Binding $parent[DataGrid].DataContext.RemoveMacrosCommand}" CommandParameter="{Binding .}"/>
-								</DockPanel>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
+					
 					<DataGridTemplateColumn Header="MenuItemColor">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<DockPanel>
-								</DockPanel>
+								
+									<ColorPicker IsHexInputVisible="True"></ColorPicker>
+								
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
@@ -50,6 +44,18 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<DockPanel>
+									<ColorPicker IsAlphaEnabled="False"
+                                 IsAlphaVisible="False" IsHexInputVisible="True" Color="{Binding MenuTextColor}"></ColorPicker>
+								</DockPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn Header="Actions">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<DockPanel>
+									<Button Content="Save" Command="{Binding $parent[DataGrid].DataContext.SaveMacrosCommand}" CommandParameter="{Binding .}"/>
+									<Button Content="Delete" Command="{Binding $parent[DataGrid].DataContext.RemoveMacrosCommand}" CommandParameter="{Binding .}"/>
 								</DockPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
