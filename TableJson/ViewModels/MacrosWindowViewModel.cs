@@ -148,6 +148,7 @@ namespace TableJson.ViewModels
             List<PortableExecutableReference> refs = new List<PortableExecutableReference>();
             refs.Add(AssemblyMetadata.CreateFromFile(typeof(object).Assembly.Location).GetReference());
             refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.dll").GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Base.dll").GetReference());
             refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Desktop.dll").GetReference());
             refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Controls.dll").GetReference());
             refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Dialogs.dll").GetReference());
