@@ -30,6 +30,8 @@
 									<Setter Property="CommandParameter" Value="{Binding #TextEditingControl.TextArea}"/>
 									<Setter Property="Command" Value="{Binding Command}"/>
 									<Setter Property="Header" Value="{Binding Header}"/>
+									<Setter Property="Background" Value="{Binding ItemColor}"/>
+									<Setter Property="Foreground" Value="{Binding TextColor}"/>
 								</ControlTheme>
 							</MenuFlyout.ItemContainerTheme>
 					</MenuFlyout>

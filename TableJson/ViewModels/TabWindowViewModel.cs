@@ -223,9 +223,7 @@ namespace TableJson.ViewModels
                 Type type = asm.GetType("ContextItemPlugin.Plugin");
                 MethodInfo entrypoint = type.GetMethod("Handler");
                 if (entrypoint != null)
-                {
-                    //instance Func<TextArea> handler = (Func<TextArea>)entrypoint.CreateDelegate(typeof(Func<TextArea>));
-                    //static Func<TextArea> handler = (Func<TextArea>)Delegate.CreateDelegate(typeof(Func<TextArea>),entrypoint);
+                {                    
                     return (Action<TextArea>)Delegate.CreateDelegate(typeof(Action<TextArea>), entrypoint);
 
                 } else {
@@ -237,15 +235,25 @@ namespace TableJson.ViewModels
                 return null;
             }
         }
+        public KeyGesture GetValidatedHotkey(string rawHotKey)
+        {
+            if (rawHotKey != null)
+            {
+                return KeyGesture.Parse(rawHotKey);
+            }
+            else {
+                return null;
+            }
+        }
         public ObservableCollection<MacrosMenuItem> PopulateMacroMenu()
         {
             List<MacrosMenuItem> menuItems = new();
-            menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey=new KeyGesture(Key.C, KeyModifiers.Control) });
-            menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control) });
-            menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.P, KeyModifiers.Control) });
-            menuItems.Add(new MacrosMenuItem { Header = "Select All", Command = ReactiveCommand.Create<TextArea>(SelectAllMouseCommand), HotKey = new KeyGesture(Key.A, KeyModifiers.Control) });
-            menuItems.Add(new MacrosMenuItem { Header = "Open as Folder", Command = ReactiveCommand.Create<TextArea>(OpenFolderPathCommand) });
-            menuItems.Add(new MacrosMenuItem { Header = "Open as URL", Command = ReactiveCommand.Create<TextArea>(OpenUrlCommand) });
+            menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey=new KeyGesture(Key.C, KeyModifiers.Control), ItemColor= "#FF1A1918", TextColor= "#FF767676" });
+            menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
+            menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.P, KeyModifiers.Control), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
+            menuItems.Add(new MacrosMenuItem { Header = "Select All", Command = ReactiveCommand.Create<TextArea>(SelectAllMouseCommand), HotKey = new KeyGesture(Key.A, KeyModifiers.Control), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
+            menuItems.Add(new MacrosMenuItem { Header = "Open as Folder", Command = ReactiveCommand.Create<TextArea>(OpenFolderPathCommand), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
+            menuItems.Add(new MacrosMenuItem { Header = "Open as URL", Command = ReactiveCommand.Create<TextArea>(OpenUrlCommand), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
 
             using (var DataSource = new HelpContext())
             {
@@ -255,10 +263,11 @@ namespace TableJson.ViewModels
                     Action<TextArea> customMethod = ExtractHandler(macro.BinaryExecutable);
                     if (customMethod != null)
                     {
-                        MacrosMenuItem t = new MacrosMenuItem { Header = macro.Name, Command = ReactiveCommand.Create<TextArea>(customMethod) };
+                        MacrosMenuItem t = new MacrosMenuItem { Header = macro.Name, Command = ReactiveCommand.Create<TextArea>(customMethod), 
+                            HotKey = GetValidatedHotkey(macro.HotKey), 
+                            ItemColor = macro.MenuItemColor, TextColor = macro.MenuTextColor };
                         menuItems.Add(item: t);
                     }
-                    
                 }
             }
             return new ObservableCollection<MacrosMenuItem>(menuItems);
