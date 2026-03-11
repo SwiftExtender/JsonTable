@@ -52,8 +52,8 @@
 									</Style>-->
 									<Style Selector="^:selected /template/ Border">
 										<Setter Property="Background" Value="{Binding $parent[MenuItem].Background}"/>
-										<Setter Property="BorderBrush" Value="Wheat"/>
-										<Setter Property="BorderThickness" Value="1"/>
+										<!--<Setter Property="BorderBrush" Value="Wheat"/>
+										<Setter Property="BorderThickness" Value="1"/>-->
 									</Style>
 									<Style Selector="^:selected /template/ ContentPresenter">
 										<Setter Property="Foreground" Value="{Binding $parent[MenuItem].Foreground}"/>
