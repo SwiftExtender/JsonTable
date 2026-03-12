@@ -26,16 +26,10 @@
 			<aedit:TextEditor.ContextFlyout>
 						<MenuFlyout ItemsSource="{Binding MacrosContextMenu}" VerticalOffset="0">
 							<MenuFlyout.FlyoutPresenterTheme>
-								<!--<Setter Property="BorderThickness" Value="0"/>
-								<Setter Property="CornerRadius" Value="0"/>
-								<Setter Property="Margin" Value="0"/>-->
+								<ControlTheme TargetType="MenuFlyoutPresenter" BasedOn="{StaticResource {x:Type MenuFlyoutPresenter}}">
+									<Setter Property="Background" Value="Transparent"/>
+								</ControlTheme>
 							</MenuFlyout.FlyoutPresenterTheme>
-							<MenuFlyout.FlyoutPresenterClasses>
-								<!--<Setter Property="BorderThickness" Value="0"/>
-								<Setter Property="CornerRadius" Value="0"/>
-								<Setter Property="Margin" Value="0"/>-->
-							</MenuFlyout.FlyoutPresenterClasses>
-
 							<MenuFlyout.ItemContainerTheme>
 								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" x:DataType="vm:MacrosMenuItem">
 									<Setter Property="CommandParameter" Value="{Binding #TextEditingControl.TextArea}"/>
@@ -43,25 +37,23 @@
 									<Setter Property="Header" Value="{Binding Header}"/>
 									<Setter Property="Background" Value="{Binding ItemColor}"/>
 									<Setter Property="Foreground" Value="{Binding TextColor}"/>
-									<!--<Setter Property="Padding" Value="0"/>-->
-									<Setter Property="BorderThickness" Value="0"/> 
+									<Setter Property="Padding" Value="4"/>
+									<!--<Setter Property="BorderThickness" Value="0"/> 
 									<Setter Property="CornerRadius" Value="0"/> 
-									<Setter Property="Margin" Value="0"/> 
-									<!--<Style Selector="^:pointerover /template/ Border#Background">
-										<Setter Property="Background" Value="Wheat"/>
-									</Style>-->
+									<Setter Property="Margin" Value="0"/> -->
+									<Style Selector="^ /template/ ContentPresenter">
+										<Setter Property="FontWeight" Value="Medium"/>
+									</Style>
 									<Style Selector="^:selected /template/ Border">
 										<Setter Property="Background" Value="{Binding $parent[MenuItem].Background}"/>
 										<!--<Setter Property="BorderBrush" Value="Wheat"/>
 										<Setter Property="BorderThickness" Value="1"/>-->
 									</Style>
 									<Style Selector="^:selected /template/ ContentPresenter">
-										<Setter Property="Foreground" Value="{Binding $parent[MenuItem].Foreground}"/>
+										<Setter Property="FontWeight" Value="Medium"/>
+										<Setter Property="Foreground" Value="Wheat"/>
 									</Style>
-
-									<!--<Style Selector="^:pointerover /template/ ItemsPresenter">
-										
-									</Style>-->
+									
 								</ControlTheme>
 							</MenuFlyout.ItemContainerTheme>
 					</MenuFlyout>
