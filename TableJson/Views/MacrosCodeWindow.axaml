@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:bh="using:TableJson.ViewModels"
 		xmlns:convert="clr-namespace:Avalonia.Data.Converters;assembly=Avalonia.Base"
-		xmlns:controlconvert="using:Avalonia.Controls.Converters"
+		xmlns:controlconvert="using:TableJson.Converters"
 		x:Class="TableJson.Views.MacrosCodeWindow"
 		x:DataType="vm:MacrosWindowViewModel"
         mc:Ignorable="d"
@@ -18,7 +18,9 @@
 		Title="Macros editor"
 		>
 	<Window.Resources>
-		<controlconvert:ColorToHexConverter x:Key="ColorToHexConverter"/>
+		<!--<controlconvert:ColorToHexConverter x:Key="ColorToHexConverter"/>
+		<controlconvert:ToBrushConverter x:Key="ToBrushConverter"/>-->
+		<controlconvert:ColorSetConverter x:Key="ColorSetConverter"/>
 	</Window.Resources>
 	<Border BorderThickness="1.5" BorderBrush="DarkSalmon" IsVisible="True">
 		<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -35,7 +37,7 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 									<ColorPicker IsAlphaEnabled="False"
-                                 IsAlphaVisible="False" IsHexInputVisible="True" Color="{Binding MenuItemColor, Converter={StaticResource ColorToHexConverter}}"></ColorPicker>
+                                 IsAlphaVisible="False" IsHexInputVisible="True" Color="{Binding MenuItemColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}" IsColorSpectrumVisible="True" IsColorPreviewVisible="True" ColorModel="Rgba"></ColorPicker>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
@@ -43,7 +45,7 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 									<ColorPicker IsAlphaEnabled="False"
-                                 IsAlphaVisible="False" IsHexInputVisible="True" Color="{Binding MenuTextColor, Converter={StaticResource ColorToHexConverter}}"></ColorPicker>
+                                 IsAlphaVisible="False" IsHexInputVisible="True" Color="{Binding MenuTextColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}" IsColorSpectrumVisible="True" IsColorPreviewVisible="True" ColorModel="Rgba"></ColorPicker>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>

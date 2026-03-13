@@ -1,4 +1,5 @@
 ﻿using Avalonia.Input;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using AvaloniaEdit;
@@ -17,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TableJson.Models;
+using Avalonia.Media;
 
 namespace TableJson.ViewModels
 {
@@ -248,12 +250,14 @@ namespace TableJson.ViewModels
         public ObservableCollection<MacrosMenuItem> PopulateMacroMenu()
         {
             List<MacrosMenuItem> menuItems = new();
-            menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey=new KeyGesture(Key.C, KeyModifiers.Control), ItemColor= "#FF1A1918", TextColor= "#FF767676" });
-            menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
-            menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.P, KeyModifiers.Control), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
-            menuItems.Add(new MacrosMenuItem { Header = "Select All", Command = ReactiveCommand.Create<TextArea>(SelectAllMouseCommand), HotKey = new KeyGesture(Key.A, KeyModifiers.Control), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
-            menuItems.Add(new MacrosMenuItem { Header = "Open as Folder", Command = ReactiveCommand.Create<TextArea>(OpenFolderPathCommand), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
-            menuItems.Add(new MacrosMenuItem { Header = "Open as URL", Command = ReactiveCommand.Create<TextArea>(OpenUrlCommand), ItemColor = "#FF1A1918", TextColor = "#FF767676" });
+            string defaultMenuItemColor = "#FF3C453E";// Color.Parse("#FF3C453E"); //Color.Parse("#FF5C5C5C");
+            string defaultMenuTextColor = "#FFFFFBD6";// Color.Parse("#FFFFFBD6"); //Color.Parse("#FF0A0C01");
+            menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey=new KeyGesture(Key.C, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
+            menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
+            menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.P, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
+            menuItems.Add(new MacrosMenuItem { Header = "Select All", Command = ReactiveCommand.Create<TextArea>(SelectAllMouseCommand), HotKey = new KeyGesture(Key.A, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
+            menuItems.Add(new MacrosMenuItem { Header = "Open as Folder", Command = ReactiveCommand.Create<TextArea>(OpenFolderPathCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
+            menuItems.Add(new MacrosMenuItem { Header = "Open as URL", Command = ReactiveCommand.Create<TextArea>(OpenUrlCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
 
             using (var DataSource = new HelpContext())
             {
@@ -265,7 +269,8 @@ namespace TableJson.ViewModels
                     {
                         MacrosMenuItem t = new MacrosMenuItem { Header = macro.Name, Command = ReactiveCommand.Create<TextArea>(customMethod), 
                             HotKey = GetValidatedHotkey(macro.HotKey), 
-                            ItemColor = macro.MenuItemColor, TextColor = macro.MenuTextColor };
+                            ItemColor = macro.MenuItemColor, TextColor = macro.MenuTextColor
+                        };
                         menuItems.Add(item: t);
                     }
                 }

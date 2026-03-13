@@ -6,12 +6,14 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using ReactiveUI;
 using System;
+using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using TableJson.Models;
+using Avalonia.Media;
 
 namespace TableJson.ViewModels
 {
@@ -36,7 +38,8 @@ namespace TableJson.ViewModels
         }
         public void SaveCode()
         {
-            if (SelectedRow != null) {
+            if (SelectedRow != null)
+            {
                 SelectedRow.SourceCode = SourceCode.Text;
                 SaveMacros(SelectedRow);
                 if (SelectedRow.Name != "")
@@ -47,7 +50,7 @@ namespace TableJson.ViewModels
                 {
                     CompileStatusText = "Macros saved";
                 }
-            } 
+            }
         }
         public void RemoveMacros(Macros remHint)
         {
@@ -144,22 +147,37 @@ namespace TableJson.ViewModels
         }
         public List<PortableExecutableReference> GetRefs()
         {
-            string dir = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "imports");
+            string framework = RuntimeEnvironment.GetRuntimeDirectory();
+            string customImportsDir = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "imports");
             List<PortableExecutableReference> refs = new List<PortableExecutableReference>();
             refs.Add(AssemblyMetadata.CreateFromFile(typeof(object).Assembly.Location).GetReference());
-            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.dll").GetReference());
-            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Base.dll").GetReference());
-            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Desktop.dll").GetReference());
-            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Controls.dll").GetReference());
-            refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Dialogs.dll").GetReference());
-            refs.Add(AssemblyMetadata.CreateFromFile("AvaloniaEdit.dll").GetReference());
-            refs.Add(AssemblyMetadata.CreateFromFile("AvaloniaEdit.TextMate.dll").GetReference());
-            foreach (string file in Directory.GetFiles(dir))
+            refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework,"System.Private.Corelib.dll")).GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework,"System.Runtime.dll")).GetReference());
+            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.dll").GetReference());
+            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Base.dll").GetReference());
+            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Desktop.dll").GetReference());
+            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Controls.dll").GetReference());
+            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Dialogs.dll").GetReference());
+            //refs.Add(AssemblyMetadata.CreateFromFile("AvaloniaEdit.dll").GetReference());
+            //refs.Add(AssemblyMetadata.CreateFromFile("AvaloniaEdit.TextMate.dll").GetReference());
+            foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
             {
                 try
                 {
-                    PortableExecutableReference t = MetadataReference.CreateFromFile(file);
-                    refs.Add(t);
+                    PortableExecutableReference defaultImport = MetadataReference.CreateFromFile(file);
+                    refs.Add(defaultImport);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+            foreach (string file in Directory.GetFiles(customImportsDir, "*.dll"))
+            {
+                try
+                {
+                    PortableExecutableReference customImport = MetadataReference.CreateFromFile(file);
+                    refs.Add(customImport);
                 }
                 catch (Exception e)
                 {
@@ -170,7 +188,7 @@ namespace TableJson.ViewModels
         }
         public void CompileSourceCode()
         {
-            CSharpCompilationOptions options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true); //deterministic: true, platform: Platform.AnyCpu, optimizationLevel: OptimizationLevel.Release, 
+            CSharpCompilationOptions options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true, optimizationLevel: OptimizationLevel.Release); //deterministic: true, platform: Platform.AnyCpu, optimizationLevel: OptimizationLevel.Release, 
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
             CSharpCompilation compilation = CSharpCompilation.Create(SelectedRow.Name + "_" + TimeStamp().ToString(), references: RefsGridData.ToArray(), options: options)
                 .AddSyntaxTrees(syntaxTree);
