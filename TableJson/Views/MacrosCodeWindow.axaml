@@ -18,21 +18,18 @@
 		Title="Macros editor"
 		>
 	<Window.Resources>
-		<!--<controlconvert:ColorToHexConverter x:Key="ColorToHexConverter"/>
-		<controlconvert:ToBrushConverter x:Key="ToBrushConverter"/>-->
 		<controlconvert:ColorSetConverter x:Key="ColorSetConverter"/>
 	</Window.Resources>
 	<Border BorderThickness="1.5" BorderBrush="DarkSalmon" IsVisible="True">
 		<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 		<Grid RowDefinitions="50,*,*" Margin="10,5,10,5">
-			<Button Grid.Row="0" Content="Add Macros" Margin="10,5,10,5" Command="{Binding AddMacrosCommand}"/>
+			<Button Grid.Row="0" Content="Add Script" Background="#F92684D7" Margin="10,5,10,5" Command="{Binding AddMacrosCommand}"/>
 			<DataGrid Grid.Row="1" x:Name="mgrid" ScrollViewer.AllowAutoHide="False" MinHeight="195" MaxHeight="195" ItemsSource="{Binding MacrosGridData}" SelectedItem="{Binding SelectedRow}" Margin="10,5,10,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="2"  BorderBrush="Gray">
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 					<DataGridTextColumn Header="HotKey" Binding="{Binding HotKey}"/>
-					<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}"/>
-					<DataGridTextColumn Header="Checksum" Binding="{Binding Checksum}" IsReadOnly="True" />
-					
+					<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}">
+					</DataGridCheckBoxColumn>
 					<DataGridTemplateColumn Header="MenuItemColor">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
@@ -49,12 +46,13 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
+					<DataGridTextColumn Header="Checksum" Binding="{Binding Checksum}" IsReadOnly="True"/>
 					<DataGridTemplateColumn Header="Actions">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<DockPanel>
-									<Button Content="Save" Command="{Binding $parent[DataGrid].DataContext.SaveMacrosCommand}" CommandParameter="{Binding .}"/>
-									<Button Content="Delete" Command="{Binding $parent[DataGrid].DataContext.RemoveMacrosCommand}" CommandParameter="{Binding .}"/>
+									<Button Content="Save" Background="#FD429118" Command="{Binding $parent[DataGrid].DataContext.SaveMacrosCommand}" CommandParameter="{Binding .}"/>
+									<Button Content="Delete" Background="#D1D91C82" Command="{Binding $parent[DataGrid].DataContext.RemoveMacrosCommand}" CommandParameter="{Binding .}"/>
 								</DockPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
@@ -85,7 +83,7 @@
 		</ae:TextEditor>
 			<SelectableTextBlock Margin="15,5,10,5" Text="{Binding CompileStatusText}"></SelectableTextBlock>
 			<DockPanel>
-				<Button Background="Green" Content="Save Code" Margin="10,5,10,5" Command="{Binding SaveCodeCommand}" IsEnabled="{Binding SelectedRow, Converter={x:Static convert:ObjectConverters.IsNotNull}}" HotKey="Ctrl+S"/>
+				<Button Background="#FD429118" Content="Save Code" Margin="10,5,10,5" Command="{Binding SaveCodeCommand}" IsEnabled="{Binding SelectedRow, Converter={x:Static convert:ObjectConverters.IsNotNull}}" HotKey="Ctrl+S"/>
 				<Button Background="LightSeaGreen" Content="Compile" Margin="10,5,10,5" Command="{Binding CompileSourceCodeCommand}" IsEnabled="{Binding SelectedRow, Converter={x:Static convert:ObjectConverters.IsNotNull}}" HotKey="Ctrl+B"/>
 			</DockPanel>
 	</StackPanel>		

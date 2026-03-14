@@ -83,7 +83,7 @@ namespace TableJson.Views
         }
         private void MacrosOpenWindow_Clicked(object sender, RoutedEventArgs args)
         {
-            MacrosCodeWindow w1 = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Normal };
+            MacrosCodeWindow w1 = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Maximized };
             w1.Show();
         }
         private async void OpenFile_Clicked(object sender, RoutedEventArgs args)
