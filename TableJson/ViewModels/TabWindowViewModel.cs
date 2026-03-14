@@ -250,8 +250,8 @@ namespace TableJson.ViewModels
         public ObservableCollection<MacrosMenuItem> PopulateMacroMenu()
         {
             List<MacrosMenuItem> menuItems = new();
-            string defaultMenuItemColor = "#FF3C453E";// Color.Parse("#FF3C453E"); //Color.Parse("#FF5C5C5C");
-            string defaultMenuTextColor = "#FFFFFBD6";// Color.Parse("#FFFFFBD6"); //Color.Parse("#FF0A0C01");
+            string defaultMenuItemColor = "#D55C5C5C";// Color.Parse("#FF3C453E"); //Color.Parse("#FF5C5C5C");
+            string defaultMenuTextColor = "#FF0A0C01";// Color.Parse("#FFFFFBD6"); //Color.Parse("#FF0A0C01");
             menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey=new KeyGesture(Key.C, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.P, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
