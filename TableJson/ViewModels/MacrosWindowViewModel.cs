@@ -13,7 +13,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using TableJson.Models;
-using Avalonia.Media;
 
 namespace TableJson.ViewModels
 {

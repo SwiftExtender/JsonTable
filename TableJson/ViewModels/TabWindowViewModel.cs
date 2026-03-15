@@ -254,7 +254,7 @@ namespace TableJson.ViewModels
             string defaultMenuTextColor = "#FF0A0C01";// Color.Parse("#FFFFFBD6"); //Color.Parse("#FF0A0C01");
             menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey=new KeyGesture(Key.C, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
-            menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.P, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
+            menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.V, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Select All", Command = ReactiveCommand.Create<TextArea>(SelectAllMouseCommand), HotKey = new KeyGesture(Key.A, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Open as Folder", Command = ReactiveCommand.Create<TextArea>(OpenFolderPathCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Open as URL", Command = ReactiveCommand.Create<TextArea>(OpenUrlCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
@@ -280,13 +280,6 @@ namespace TableJson.ViewModels
 
         public TabWindowViewModel()
         {
-            //ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);
-            //ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
-            //RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
-
-            //OneCycleJsonTablifyCommand = ReactiveCommand.Create(OneCycleJsonTablify);
-            //RecursiveJsonTablifyCommand = ReactiveCommand.Create(RecursiveJsonTablify);
-            //SaveQueryFastWindowCommand = ReactiveCommand.Create(SaveQueryFastWindow);
             MacrosContextMenu = PopulateMacroMenu();
         }
         public TabWindowViewModel(IStorageFile file)
@@ -294,13 +287,6 @@ namespace TableJson.ViewModels
             LoadFileAsync(file.TryGetLocalPath());
             FileFullPath = file.TryGetLocalPath();
 
-            //ToggleKeysShowModeCommand = ReactiveCommand.Create(ToggleKeysShowMode);
-            //ToggleValuesShowModeCommand = ReactiveCommand.Create(ToggleValuesShowMode);
-            //RunJsonPathQueryCommand = ReactiveCommand.Create(RunJsonPathQuery);
-
-            //OneCycleJsonTablifyCommand = ReactiveCommand.Create(OneCycleJsonTablify);
-            //RecursiveJsonTablifyCommand = ReactiveCommand.Create(RecursiveJsonTablify);
-            //SaveQueryFastWindowCommand = ReactiveCommand.Create(SaveQueryFastWindow);
             MacrosContextMenu = PopulateMacroMenu();
             //UpdateQueries();
         }

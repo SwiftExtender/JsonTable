@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:aedit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
 		xmlns:vm="using:TableJson.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d"
 		xmlns:bh="using:TableJson.Behaviors"
 		xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
         x:Class="TableJson.Views.TabWindow"
@@ -33,6 +33,7 @@
 									<Setter Property="Background" Value="{Binding ItemColor}"/>
 									<Setter Property="Foreground" Value="{Binding TextColor}"/>
 									<Setter Property="Padding" Value="4"/>
+									<Setter Property="InputGesture" Value="{Binding HotKey}"/>
 									<Style Selector="^ /template/ ContentPresenter">
 										<Setter Property="FontWeight" Value="Medium"/>
 									</Style>
