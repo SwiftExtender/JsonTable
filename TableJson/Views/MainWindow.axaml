@@ -18,38 +18,13 @@
 		Background="#1A1A1A"
 		Topmost="{Binding IsPinnedWindow}"
 		>
-	<Window.Styles><!--
-						<ScrollViewer HorizontalScrollBarVisibility="Auto"
-									  VerticalScrollBarVisibility="Hidden">
-							<ItemsPresenter Name="PART_ItemsPresenter"
-											Margin="2"
-											Grid.Row="0"/>
-						</ScrollViewer>
-
-						--><!-- Custom Content Area --><!--
-						<Border Grid.Row="1"
-								BorderBrush="Gray"
-								BorderThickness="1"
-								Margin="5"
-								Background="#F0F0F0">
-							<ContentPresenter Name="PART_SelectedContentHost"
-											  Content="{Binding SelectedContent, RelativeSource={RelativeSource TemplatedParent}}"
-											  Margin="10"/>
-						</Border>
-					</Grid>
-				</ControlTemplate>
-			</Setter>
-		</Style>-->
-	</Window.Styles>
 	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
 	<Grid RowDefinitions="0,50,*" ColumnDefinitions="*">
 		<Label Margin="5,5,5,0" Grid.Row="1" BorderBrush="Wheat">TableJson</Label>
 		<StackPanel Grid.Row="1" Margin="10,22,10,0" Orientation="Horizontal">
-			
 			<Button Content="Open file" Classes="Ribbon" Background="#F92684D7" Click="OpenFile_Clicked" HotKey="Ctrl+O"/>
 			<Button Content="Save" Classes="Ribbon" Background="#FD429118" Click="SaveFile_Clicked" HotKey="Ctrl+S"/>
 			<Button Content="Scripts" Classes="Ribbon" Background="#D1CB1DD9" Click="MacrosOpenWindow_Clicked" HotKey="Ctrl+Q"/>
-			<!--<Button Background="DarkCyan" Margin="15,0,15,0" Content="Parse" Command="{Binding ParseCommand}" SelectedItem="{Binding #editor.FontSize, Mode=TwoWay}"/>-->
 			<!--<Label Margin="15,15,5,0" BorderBrush="Wheat">Font Size</Label>-->
 			<!--<ComboBox ItemsSource="{Binding EditorFontSizes}"  Height="30" Width="70" Margin="0,10,0,0"></ComboBox>-->
 			<ToggleButton Margin="170,10,10,10" IsChecked="{Binding IsPinnedWindow, Mode = TwoWay}" IsDefault="False" Width="95" Height="30" Classes="Pin"/>
@@ -62,15 +37,10 @@
 							<ScrollViewer Classes="TabScroll" Name="TabScroller" Grid.Row="0"
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Hidden" >
-								<!--<ScrollViewer>
-									<ScrollBar MaxHeight="6" MinHeight="5" Orientation="Horizontal"></ScrollBar>
-								</ScrollViewer.>-->
 							<ItemsPresenter Name="PART_ItemsPresenter">
 								<ItemsPresenter.ItemsPanel>
 									<ItemsPanelTemplate>
-
-										<StackPanel Orientation="Horizontal">
-											
+										<StackPanel Orientation="Horizontal">				
 										</StackPanel>
 									</ItemsPanelTemplate>
 								</ItemsPresenter.ItemsPanel>

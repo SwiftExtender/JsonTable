@@ -12,7 +12,7 @@ namespace TableJson.Views
     {
         public MainWindow()
         {
-            this.Name = "TheHighestWindow";
+            Name = "TheHighestWindow";
             InitializeComponent();
             AddTabButton(HighestMultiTab);
             TabItem initTab = AddTab("New " + HighestMultiTab.Items.Count, new TabWindow());
@@ -125,7 +125,6 @@ namespace TableJson.Views
                             }
                         }
                         
-                        //tab.Content = file;
                         DockPanel panel = new DockPanel();
                         panel.Children.Add(new Label() { Content = file.Name });
                         Button btn = AddTabDeleteButton();
