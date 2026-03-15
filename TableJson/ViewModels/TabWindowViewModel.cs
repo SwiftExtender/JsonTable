@@ -60,16 +60,6 @@ namespace TableJson.ViewModels
         public string ItemColor { get; set; }
         public string TextColor { get; set; }
     }
-    public class JsonQueryMenuItem
-    {
-        public string? Query { get; set; }
-        public string? Description { get; set; }
-        public JsonQueryMenuItem(string query, string desc)
-        {
-            Query = query;
-            Description = desc;
-        }
-    }
     public class TabWindowViewModel : ViewModelBase
     {
         public void CopyMouseCommand(TextArea textArea)
@@ -136,7 +126,7 @@ namespace TableJson.ViewModels
             set => this.RaiseAndSetIfChanged(ref _ResultText, value);
         }
 
-        private TextDocument _RawText = new TextDocument("");
+        private TextDocument _RawText = new TextDocument();
         public TextDocument RawText
         {
             get => _RawText;
