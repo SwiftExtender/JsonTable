@@ -1,5 +1,8 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Styles.Resources>
+		<Thickness x:Key="MenuFlyoutScrollerMargin">0</Thickness>
+	</Styles.Resources>
 	<Style Selector="ScrollViewer.TabScroll /template/ ScrollBar:horizontal">
 		<Setter Property="Background" Value="Blue"/>
 		<Setter Property="MaxHeight" Value="8"/>
@@ -98,12 +101,26 @@
 	<Style Selector="TabItem:pointerover /template/ Border#PART_LayoutRoot">
 		<Setter Property="TextElement.Foreground" Value="#F3D2F52A" />
 	</Style>
-
-	<!--  Selected PointerOver state  -->
 	<Style Selector="TabItem:selected:pointerover /template/ Border#PART_LayoutRoot">
 		<Setter Property="TextElement.Foreground" Value="#F3F5AE2A" />
 	</Style>
-
+	<!--<Style Selector="DataGridCell">
+		<Setter Property="Background" Value=""/>
+		<Setter Property="Foreground" Value=""/>
+	</Style>-->
+	<!--<Style Selector="CheckBox:checked">
+		<Setter Property="Background" Value="Yellow"/>
+		<Setter Property="Foreground" Value="AliceBlue"/>
+	</Style>-->
+	<Style Selector="CheckBox:checked /template/ Path#CheckGlyph">
+		<Setter Property="Fill" Value="Yellow"/>
+	</Style>
+	<Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
+		<Setter Property="Background" Value="DarkGreen"/>
+	</Style>
+	<Style Selector="DataGridRow:invalid">
+		<Setter Property="Background" Value="Orange"/>
+	</Style>
 	<!--  Pressed state  -->
 	<!--<Style Selector="^:pressed /template/ Border#PART_LayoutRoot">
 		<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPressed}" />
