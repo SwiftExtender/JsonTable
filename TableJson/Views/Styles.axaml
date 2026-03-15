@@ -95,7 +95,6 @@
 	<Style Selector="TabItem:selected">
 		<Setter Property="Foreground" Value="#F3F5AE2A" />
 	</Style>
-	<!--  PointerOver state  -->
 	<Style Selector="TabItem:pointerover /template/ Border#PART_LayoutRoot">
 		<Setter Property="TextElement.Foreground" Value="#F3D2F52A" />
 	</Style>
