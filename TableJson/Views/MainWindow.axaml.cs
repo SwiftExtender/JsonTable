@@ -31,9 +31,11 @@ namespace TableJson.Views
             Button btn = new Button() { Content = "X" };
             btn.Click += (sender, e) =>
             {
-                if (sender is Button btn && btn.Parent is DockPanel dckPanel && dckPanel.Parent is TabItem titem)
+                if (sender is Button btn && btn.Parent is DockPanel dckPanel && dckPanel.Parent is TabItem tabItem && tabItem.Content is TabWindow tabWindow)
                 {
-                    HighestMultiTab.Items.Remove(titem);
+                    //tabWindow.Dispose();
+                    HighestMultiTab.Items.Remove(tabItem);
+                    tabItem = null;
                 }
             };
             return btn;
@@ -121,7 +123,7 @@ namespace TableJson.Views
                         {
                             using (StreamWriter writer = new StreamWriter(stream))
                             {
-                                await writer.WriteAsync(tabWindowViewModel.RawText.Text);
+                                await writer.WriteAsync(tabWindowViewModel.RawText);
                             }
                         }
                         
@@ -145,7 +147,7 @@ namespace TableJson.Views
             {
                 try
                 {
-                    File.WriteAllText(tabWindowViewModel.FileFullPath, tabWindowViewModel.RawText.Text);
+                    File.WriteAllText(tabWindowViewModel.FileFullPath, tabWindowViewModel.RawText);
                     tabWindowViewModel.StatusText = "File saved " + tabWindowViewModel.FileFullPath;
                 }
                 catch (Exception e)

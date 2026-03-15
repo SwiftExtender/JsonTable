@@ -1,7 +1,4 @@
-﻿using AvaloniaEdit;
-using AvaloniaEdit.Document;
-using AvaloniaEdit.Editing;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using ReactiveUI;
@@ -19,27 +16,27 @@ namespace TableJson.ViewModels
     public class MacrosWindowViewModel : ViewModelBase
     {
         const string templateCode = "using System;\r\nusing AvaloniaEdit.Editing;\r\n\r\nnamespace ContextItemPlugin {\r\nclass Plugin\r\n{\r\n}\r\n}\r\n";
-        public void CopyMouseCommand(TextArea textArea)
-        {
-            ApplicationCommands.Copy.Execute(null, textArea);
-        }
-        public void CutMouseCommand(TextArea textArea)
-        {
-            ApplicationCommands.Cut.Execute(null, textArea);
-        }
-        public void PasteMouseCommand(TextArea textArea)
-        {
-            ApplicationCommands.Paste.Execute(null, textArea);
-        }
-        public void SelectAllMouseCommand(TextArea textArea)
-        {
-            ApplicationCommands.SelectAll.Execute(null, textArea);
-        }
+        //public void CopyMouseCommand(TextArea textArea)
+        //{
+        //    ApplicationCommands.Copy.Execute(null, textArea);
+        //}
+        //public void CutMouseCommand(TextArea textArea)
+        //{
+        //    ApplicationCommands.Cut.Execute(null, textArea);
+        //}
+        //public void PasteMouseCommand(TextArea textArea)
+        //{
+        //    ApplicationCommands.Paste.Execute(null, textArea);
+        //}
+        //public void SelectAllMouseCommand(TextArea textArea)
+        //{
+        //    ApplicationCommands.SelectAll.Execute(null, textArea);
+        //}
         public void SaveCode()
         {
             if (SelectedRow != null)
             {
-                SelectedRow.SourceCode = SourceCode.Text;
+                SelectedRow.SourceCode = SourceCode;
                 SaveMacros(SelectedRow);
                 if (SelectedRow.Name != "")
                 {
@@ -104,8 +101,8 @@ namespace TableJson.ViewModels
             get => _CompileStatusText;
             set => this.RaiseAndSetIfChanged(ref _CompileStatusText, value);
         }
-        private TextDocument _SourceCode = new("");
-        public TextDocument SourceCode
+        private string _SourceCode = new("");
+        public string SourceCode
         {
             get => _SourceCode;
             set => this.RaiseAndSetIfChanged(ref _SourceCode, value);
@@ -188,7 +185,7 @@ namespace TableJson.ViewModels
         public void CompileSourceCode()
         {
             CSharpCompilationOptions options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true, optimizationLevel: OptimizationLevel.Release); //deterministic: true, platform: Platform.AnyCpu, optimizationLevel: OptimizationLevel.Release, 
-            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(SourceCode.Text);
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(SourceCode);
             CSharpCompilation compilation = CSharpCompilation.Create(SelectedRow.Name + "_" + TimeStamp().ToString(), references: RefsGridData.ToArray(), options: options)
                 .AddSyntaxTrees(syntaxTree);
             SaveSourceCode(compilation);
@@ -245,7 +242,7 @@ namespace TableJson.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _SelectedRow, value);
-                SourceCode.Text = _SelectedRow.SourceCode;
+                SourceCode = _SelectedRow.SourceCode;
             }
         }
         public void SetRefsGrid()
