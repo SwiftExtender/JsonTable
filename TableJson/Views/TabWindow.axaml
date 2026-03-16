@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="using:TableJson.ViewModels"
-		xmlns:controls="clr-namespace:TextEdit.Controls;assembly=TextEdit.Controls"
+		xmlns:controls="clr-namespace:TextEdit.Controls"
         mc:Ignorable="d"
 		xmlns:bh="using:TableJson.Behaviors"
 		xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
@@ -14,7 +14,7 @@
 	<Grid DockPanel.Dock="Top" Grid.Row="2" RowDefinitions="0.9*, 0.1*" ColumnDefinitions="*" HorizontalAlignment="Stretch"
     VerticalAlignment="Stretch">
 		<TextBox x:Name="TextEditingControl" Text="{Binding RawText}"/>
-		<controls:CodeEditorControl Name="TextEditingControl1"
+		<controls:CodeEditorControl x:Name="TextEditingControl1" 
 										Height="320" MaxHeight="500"/>
 		
 			<!--<aedit:TextEditor.ContextFlyout>

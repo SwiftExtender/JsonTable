@@ -19,6 +19,7 @@ namespace TableJson.Views
             ColumnTip.Text = "-";
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
+            //TextEditingControl1
             //TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
         }
         public TabWindow(IStorageFile file)
