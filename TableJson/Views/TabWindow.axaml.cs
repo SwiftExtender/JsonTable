@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+//using AvaloniaEdit.Rendering;
 using System;
 using TableJson.ViewModels;
 
@@ -11,13 +12,14 @@ namespace TableJson.Views
     {
         public TabWindow()
         {
+
             InitializeComponent();
             DataContext = new TabWindowViewModel();
             RowTip.Text = "-";
             ColumnTip.Text = "-";
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
-            TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
+            //TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
         }
         public TabWindow(IStorageFile file)
         {
@@ -27,7 +29,7 @@ namespace TableJson.Views
             ColumnTip.Text = "-";
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
-            TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
+            //TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
         }
         private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs e)
         {
@@ -50,10 +52,10 @@ namespace TableJson.Views
                 }
             }
         }
-        private void CaretPositionChanged(object sender, EventArgs e)
-        {
-            RowTip.Text = TextEditingControl.TextArea.Caret.Line.ToString();
-            ColumnTip.Text = TextEditingControl.TextArea.Caret.Column.ToString();
-        }
+        //private void CaretPositionChanged(object sender, EventArgs e)
+        //{
+        //    RowTip.Text = TextEditingControl.TextArea.Caret.Line.ToString();
+        //    ColumnTip.Text = TextEditingControl.TextArea.Caret.Column.ToString();
+        //}
     }
 }

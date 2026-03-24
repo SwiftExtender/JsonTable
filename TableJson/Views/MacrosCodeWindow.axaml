@@ -9,7 +9,6 @@
 		x:Class="TableJson.Views.MacrosCodeWindow"
 		x:DataType="vm:MacrosWindowViewModel"
         mc:Ignorable="d"
-		xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
 		WindowStartupLocation="CenterScreen"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaTitleBarHeightHint="-1"
@@ -66,7 +65,7 @@
 				</DataGrid.Columns>
 			</DataGrid>
 		</Grid>
-		<ae:TextEditor x:Name="Editor" MaxHeight="300" SyntaxHighlighting="C#" MinHeight="300" VerticalAlignment="Stretch" BorderBrush="#008b8b" Document="{Binding SourceCode, Mode=TwoWay}" BorderThickness="2" Margin="10,5,10,5" ShowLineNumbers="True" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
+		<!--<ae:TextEditor x:Name="Editor" MaxHeight="300" SyntaxHighlighting="C#" MinHeight="300" VerticalAlignment="Stretch" BorderBrush="#008b8b" Document="{Binding SourceCode, Mode=TwoWay}" BorderThickness="2" Margin="10,5,10,5" ShowLineNumbers="True" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible"
                                VerticalScrollBarVisibility="Visible" IsVisible="{Binding SelectedRow, Converter={x:Static convert:ObjectConverters.IsNotNull}}">
 			<ae:TextEditor.Options>
 				<ae:TextEditorOptions EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
@@ -80,7 +79,7 @@
 					<MenuItem Header="Select All" InputGesture="ctrl+A" Command="{Binding SelectAllMouseCommand}" CommandParameter="{Binding #Editor.TextArea}"></MenuItem>
 				</MenuFlyout>
 			</ae:TextEditor.ContextFlyout>
-		</ae:TextEditor>
+		</ae:TextEditor>-->
 			<SelectableTextBlock Margin="15,5,10,5" Text="{Binding CompileStatusText}"></SelectableTextBlock>
 			<DockPanel>
 				<Button Background="#FD429118" Content="Save Code" Margin="10,5,10,5" Command="{Binding SaveCodeCommand}" IsEnabled="{Binding SelectedRow, Converter={x:Static convert:ObjectConverters.IsNotNull}}" HotKey="Ctrl+S"/>
