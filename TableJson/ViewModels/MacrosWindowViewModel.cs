@@ -154,6 +154,7 @@ namespace TableJson.ViewModels
             refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework, "System.Runtime.dll")).GetReference());
             refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework, "System.ObjectModel.dll")).GetReference());
             refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework, "System.Collections.dll")).GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework, "System.Security.Cryptography.dll")).GetReference());
             try
             {
                 foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
