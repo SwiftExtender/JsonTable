@@ -6,12 +6,12 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using ReactiveUI;
 using System;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Runtime.InteropServices;
 using TableJson.Models;
 
 namespace TableJson.ViewModels
@@ -150,38 +150,33 @@ namespace TableJson.ViewModels
             string customImportsDir = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "imports");
             List<PortableExecutableReference> refs = new List<PortableExecutableReference>();
             refs.Add(AssemblyMetadata.CreateFromFile(typeof(object).Assembly.Location).GetReference());
-            refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework,"System.Private.Corelib.dll")).GetReference());
-            refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework,"System.Runtime.dll")).GetReference());
-            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.dll").GetReference());
-            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Base.dll").GetReference());
-            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Desktop.dll").GetReference());
-            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Controls.dll").GetReference());
-            //refs.Add(AssemblyMetadata.CreateFromFile("Avalonia.Dialogs.dll").GetReference());
-            //refs.Add(AssemblyMetadata.CreateFromFile("AvaloniaEdit.dll").GetReference());
-            //refs.Add(AssemblyMetadata.CreateFromFile("AvaloniaEdit.TextMate.dll").GetReference());
-            foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
+            refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework, "System.Private.Corelib.dll")).GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework, "System.Runtime.dll")).GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework, "System.ObjectModel.dll")).GetReference());
+            refs.Add(AssemblyMetadata.CreateFromFile(Path.Combine(framework, "System.Collections.dll")).GetReference());
+            try
             {
-                try
+                foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
                 {
                     PortableExecutableReference defaultImport = MetadataReference.CreateFromFile(file);
                     refs.Add(defaultImport);
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
             }
-            foreach (string file in Directory.GetFiles(customImportsDir, "*.dll"))
+            catch (Exception e)
             {
-                try
+                Console.WriteLine(e.ToString());
+            }
+            try
+            {
+                foreach (string file in Directory.GetFiles(customImportsDir, "*.dll"))
                 {
                     PortableExecutableReference customImport = MetadataReference.CreateFromFile(file);
                     refs.Add(customImport);
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
             }
             return refs;
         }

@@ -1,5 +1,4 @@
 ﻿using Avalonia.Input;
-using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using AvaloniaEdit;
@@ -12,13 +11,12 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TableJson.Models;
-using Avalonia.Media;
 
 namespace TableJson.ViewModels
 {
@@ -105,9 +103,11 @@ namespace TableJson.ViewModels
         public void OpenUrlCommand(TextArea textArea)
         {
             string url = textArea.Selection.GetText();
-            if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
                 Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-            } else
+            }
+            else
             {
                 StatusText = "Invalid URL";
             }
@@ -215,14 +215,17 @@ namespace TableJson.ViewModels
                 Type type = asm.GetType("ContextItemPlugin.Plugin");
                 MethodInfo entrypoint = type.GetMethod("Handler");
                 if (entrypoint != null)
-                {                    
+                {
                     return (Action<TextArea>)Delegate.CreateDelegate(typeof(Action<TextArea>), entrypoint);
 
-                } else {
+                }
+                else
+                {
                     return null;
                 }
             }
-            catch (Exception ex) { 
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.Message);
                 return null;
             }
@@ -233,7 +236,8 @@ namespace TableJson.ViewModels
             {
                 return KeyGesture.Parse(rawHotKey);
             }
-            else {
+            else
+            {
                 return null;
             }
         }
@@ -242,12 +246,12 @@ namespace TableJson.ViewModels
             List<MacrosMenuItem> menuItems = new();
             string defaultMenuItemColor = "#D55C5C5C";// Color.Parse("#FF3C453E"); //Color.Parse("#FF5C5C5C");
             string defaultMenuTextColor = "#FF0A0C01";// Color.Parse("#FFFFFBD6"); //Color.Parse("#FF0A0C01");
-            menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey=new KeyGesture(Key.C, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
+            menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey = new KeyGesture(Key.C, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.V, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Select All", Command = ReactiveCommand.Create<TextArea>(SelectAllMouseCommand), HotKey = new KeyGesture(Key.A, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
-            menuItems.Add(new MacrosMenuItem { Header = "Open as Folder", Command = ReactiveCommand.Create<TextArea>(OpenFolderPathCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
-            menuItems.Add(new MacrosMenuItem { Header = "Open as URL", Command = ReactiveCommand.Create<TextArea>(OpenUrlCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
+            //menuItems.Add(new MacrosMenuItem { Header = "Open as Folder", Command = ReactiveCommand.Create<TextArea>(OpenFolderPathCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
+            //menuItems.Add(new MacrosMenuItem { Header = "Open as URL", Command = ReactiveCommand.Create<TextArea>(OpenUrlCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
 
             using (var DataSource = new HelpContext())
             {
@@ -257,9 +261,13 @@ namespace TableJson.ViewModels
                     Action<TextArea> customMethod = ExtractHandler(macro.BinaryExecutable);
                     if (customMethod != null)
                     {
-                        MacrosMenuItem t = new MacrosMenuItem { Header = macro.Name, Command = ReactiveCommand.Create<TextArea>(customMethod), 
-                            HotKey = GetValidatedHotkey(macro.HotKey), 
-                            ItemColor = macro.MenuItemColor, TextColor = macro.MenuTextColor
+                        MacrosMenuItem t = new MacrosMenuItem
+                        {
+                            Header = macro.Name,
+                            Command = ReactiveCommand.Create<TextArea>(customMethod),
+                            HotKey = GetValidatedHotkey(macro.HotKey),
+                            ItemColor = macro.MenuItemColor,
+                            TextColor = macro.MenuTextColor
                         };
                         menuItems.Add(item: t);
                     }
