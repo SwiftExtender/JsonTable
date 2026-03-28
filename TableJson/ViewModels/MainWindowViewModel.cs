@@ -22,6 +22,7 @@ namespace TableJson.ViewModels
         {
             SettingsService settingsService = new SettingsService();
             AppSettings = settingsService.Load();
+            settingsService.CreateDefaultConfig();
         }
         public MainWindowViewModel()
         {

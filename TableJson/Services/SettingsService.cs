@@ -6,16 +6,16 @@ namespace TableJson.Services
 {
     public class AppSettings
     {
-        public string ContextMenuItemColor = "#D55C5C5C";
-        public string ContextMenuTextColor = "#FF0A0C01";
-        public string ContextMenuHotkeyTextColor = "#FF0A0C01";
-        public string MainWindowColor = "#1A1A1A";
-        public string MacrosWindowColor = "#1A1A1A";
-        public string MacrosEditorColor = "#FF604213";
-        public string MacrosEditorTextColor = "#FFFFE0";
-        public string TabWindowColor = "#FF0A0C01";
-        public string TabWindowTextColor = "#FFFFE0";
-        public int FontSize = 14;
+        public string ContextMenuItemColor { get; set; } = "#D55C5C5C";
+        public string ContextMenuTextColor { get; set; } = "#FF0A0C01";
+        public string ContextMenuHotkeyTextColor { get; set; } = "#FF0A0C01";
+        public string MainWindowColor { get; set; } = "#1A1A1A";
+        public string MacrosWindowColor { get; set; } = "#1A1A1A";
+        public string MacrosEditorColor { get; set; } = "#FF604213";
+        public string MacrosEditorTextColor { get; set; } = "#FFFFE0";
+        public string TabWindowColor { get; set; } = "#FF0A0C01";
+        public string TabWindowTextColor { get; set; } = "#FFFFE0";
+        public int FontSize { get; set; } = 14;
     }
     public class SettingsService
     {
@@ -28,6 +28,16 @@ namespace TableJson.Services
             }
             string settings = File.ReadAllText(_settingsPath);
             return JsonSerializer.Deserialize<AppSettings>(settings) ?? new AppSettings();
+        }
+        public void CreateDefaultConfig()
+        {
+            if (!File.Exists(_settingsPath)) {
+                string config = JsonSerializer.Serialize(new AppSettings(), new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+                File.WriteAllText(_settingsPath, config);
+            }
         }
         public void Save(AppSettings settings)
         {
