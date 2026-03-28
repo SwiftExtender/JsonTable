@@ -15,9 +15,9 @@ namespace TableJson.Views
             DataContext = new TabWindowViewModel();
             RowTip.Text = "-";
             ColumnTip.Text = "-";
+            FontSize = ((TabWindowViewModel)DataContext).DefaultFontSize;
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
-            TextEditingControl.FontSize = ((TabWindowViewModel)DataContext).DefaultFontSize;
             TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
         }
         public TabWindow(IStorageFile file)
@@ -34,7 +34,7 @@ namespace TableJson.Views
         {
             if (e.KeyModifiers != KeyModifiers.Control) return;
             if (e.Delta.Y > 0) FontSize = FontSize < 74 ? FontSize + 1 : 74;
-            else FontSize = FontSize > 9 ? FontSize - 1 : 9;
+            else FontSize = FontSize > 7 ? FontSize - 1 : 7;
             e.Handled = true;
         }
         private void KeyboardFontSizer(object sender, KeyEventArgs e)
@@ -47,7 +47,7 @@ namespace TableJson.Views
                 }
                 else if (e.PhysicalKey == PhysicalKey.Minus || e.PhysicalKey == PhysicalKey.NumPadSubtract)
                 {
-                    FontSize = FontSize > 9 ? FontSize - 1 : 9;
+                    FontSize = FontSize > 7 ? FontSize - 1 : 7;
                 }
             }
         }
