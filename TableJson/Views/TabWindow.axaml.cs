@@ -37,7 +37,7 @@ namespace TableJson.Views
         {
             SettingsService settingsService = new SettingsService();
             AppSettings settings = settingsService.Load();
-            this.Background = Brush.Parse(settings.TabWindowColor);
+            TextEditingControl.Background = Brush.Parse(settings.TabWindowColor);
         }
         private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs e)
         {
