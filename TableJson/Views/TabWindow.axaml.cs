@@ -1,10 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using System;
-using TableJson.Services;
 using TableJson.ViewModels;
 
 namespace TableJson.Views
@@ -14,30 +12,23 @@ namespace TableJson.Views
         public TabWindow()
         {
             InitializeComponent();
-            LoadSettings();
             DataContext = new TabWindowViewModel();
             RowTip.Text = "-";
             ColumnTip.Text = "-";
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
+            TextEditingControl.FontSize = ((TabWindowViewModel)DataContext).DefaultFontSize;
             TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
         }
         public TabWindow(IStorageFile file)
         {
             InitializeComponent();
-            LoadSettings();
             DataContext = new TabWindowViewModel(file);
             RowTip.Text = "-";
             ColumnTip.Text = "-";
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
             TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
-        }
-        public void LoadSettings()
-        {
-            SettingsService settingsService = new SettingsService();
-            AppSettings settings = settingsService.Load();
-            TextEditingControl.Background = Brush.Parse(settings.TabWindowColor);
         }
         private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs e)
         {

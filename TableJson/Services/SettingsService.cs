@@ -4,11 +4,11 @@ using System.Text.Json;
 
 namespace TableJson.Services
 {
-    public class AppSettings()
+    public class AppSettings
     {
         public string ContextMenuItemColor = "#D55C5C5C";
         public string ContextMenuTextColor = "#FF0A0C01";
-        public string ContextMenuHotkryTextColor = "#FF0A0C01";
+        public string ContextMenuHotkeyTextColor = "#FF0A0C01";
         public string MainWindowColor = "#1A1A1A";
         public string MacrosWindowColor = "#1A1A1A";
         public string TabWindowColor = "#FF0A0C01";

@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using TableJson.ViewModels;
 
 namespace TableJson.Views
 {
@@ -7,6 +8,7 @@ namespace TableJson.Views
         public MacrosCodeWindow()
         {
             InitializeComponent();
+            DataContext = new MacrosWindowViewModel();
             DataGrid grid = GetGrid();
         }
         private DataGrid GetGrid()

@@ -23,23 +23,17 @@ namespace TableJson.Models
         public string? HotKey { get; set; }
         public string? MenuItemColor { get; set; }
         public string? MenuTextColor { get; set; }
+        public string? MenuHotkeyTextColor { get; set; }
         public byte[]? BinaryExecutable { get; set; }
         [NotMapped]
         public bool IsSaved { get; set; } = true; //false = temp, true = in DB
-        public Macros(bool isSaved)
-        {
-            IsSaved = isSaved;
-        }
-        public Macros(bool isSaved, string code)
+        public Macros() { }
+        public Macros(bool isSaved, string code, string menuItemColor, string menuTextColor)
         {
             IsSaved = isSaved;
             SourceCode = code;
-        }
-        public Macros(int id, bool isActive, string name)
-        {
-            Id = id;
-            IsActive = isActive;
-            Name = name;
+            MenuItemColor = menuItemColor;
+            MenuTextColor = menuTextColor;
         }
     }
     public class HelpContext : DbContext

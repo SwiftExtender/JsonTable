@@ -1,11 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using System;
 using System.IO;
-using TableJson.Services;
 using TableJson.ViewModels;
 
 namespace TableJson.Views
@@ -15,9 +13,6 @@ namespace TableJson.Views
         public MainWindow()
         {
             Name = "TheHighestWindow";
-            SettingsService settingsService = new SettingsService();
-            AppSettings settings = settingsService.Load();
-            this.Background = Brush.Parse(settings.MainWindowColor);
             InitializeComponent();
             AddTabButton(HighestMultiTab);
             TabItem initTab = AddTab("New " + HighestMultiTab.Items.Count, new TabWindow());
@@ -129,7 +124,7 @@ namespace TableJson.Views
                                 await writer.WriteAsync(tabWindowViewModel.RawText.Text);
                             }
                         }
-                        
+
                         DockPanel panel = new DockPanel();
                         panel.Children.Add(new Label() { Content = file.Name });
                         Button btn = AddTabDeleteButton();

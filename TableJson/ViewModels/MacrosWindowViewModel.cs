@@ -13,12 +13,20 @@ using System.Linq;
 using System.Reactive;
 using System.Runtime.InteropServices;
 using TableJson.Models;
+using TableJson.Services;
 
 namespace TableJson.ViewModels
 {
     public class MacrosWindowViewModel : ViewModelBase
     {
+        private string _WindowColor;
+        public string WindowColor
+        {
+            get => _WindowColor;
+            set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
+        }
         const string templateCode = "using System;\r\nusing AvaloniaEdit.Editing;\r\n\r\nnamespace ContextItemPlugin {\r\nclass Plugin\r\n{\r\n}\r\n}\r\n";
+        public AppSettings AppSettings { get; set; }
         public void CopyMouseCommand(TextArea textArea)
         {
             ApplicationCommands.Copy.Execute(null, textArea);
@@ -126,7 +134,7 @@ namespace TableJson.ViewModels
         {
             try
             {
-                MacrosGridData.Add(new Macros(false, templateCode));
+                MacrosGridData.Add(new Macros(false, templateCode, AppSettings.ContextMenuItemColor, AppSettings.ContextMenuTextColor));
             }
             catch (Exception e)
             {
@@ -248,8 +256,14 @@ namespace TableJson.ViewModels
         {
             RefsGridData = new ObservableCollection<PortableExecutableReference>(GetRefs());
         }
+        public void LoadSettings()
+        {
+            SettingsService settingsService = new SettingsService();
+            AppSettings = settingsService.Load();
+        }
         public MacrosWindowViewModel()
         {
+            LoadSettings();
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
             RemoveMacrosCommand = ReactiveCommand.Create<Macros>(RemoveMacros);
             SaveMacrosCommand = ReactiveCommand.Create<Macros>(SaveMacros);

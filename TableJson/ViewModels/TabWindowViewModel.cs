@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TableJson.Models;
+using TableJson.Services;
 
 namespace TableJson.ViewModels
 {
@@ -57,9 +58,24 @@ namespace TableJson.ViewModels
         public bool IsArgsRequired { get; set; }
         public string ItemColor { get; set; }
         public string TextColor { get; set; }
+        public string HotkeyTextColor { get; set; }
     }
     public class TabWindowViewModel : ViewModelBase
     {
+        private string _WindowColor;
+        public string WindowColor
+        {
+            get => _WindowColor;
+            set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
+        }
+        private string _TextColor;
+        public string TextColor
+        {
+            get => _TextColor;
+            set => this.RaiseAndSetIfChanged(ref _TextColor, value);
+        }
+        public int DefaultFontSize;
+        public AppSettings AppSettings { get; set; }
         public void CopyMouseCommand(TextArea textArea)
         {
             ApplicationCommands.Copy.Execute(null, textArea);
@@ -217,7 +233,6 @@ namespace TableJson.ViewModels
                 if (entrypoint != null)
                 {
                     return (Action<TextArea>)Delegate.CreateDelegate(typeof(Action<TextArea>), entrypoint);
-
                 }
                 else
                 {
@@ -244,8 +259,9 @@ namespace TableJson.ViewModels
         public ObservableCollection<MacrosMenuItem> PopulateMacroMenu()
         {
             List<MacrosMenuItem> menuItems = new();
-            string defaultMenuItemColor = "#D55C5C5C";// Color.Parse("#FF3C453E"); //Color.Parse("#FF5C5C5C");
-            string defaultMenuTextColor = "#FF0A0C01";// Color.Parse("#FFFFFBD6"); //Color.Parse("#FF0A0C01");
+            string defaultMenuItemColor = AppSettings.ContextMenuItemColor;
+            string defaultMenuTextColor = AppSettings.ContextMenuTextColor;
+            string defaultMenuHotkeyTextColor = AppSettings.ContextMenuHotkeyTextColor;
             menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey = new KeyGesture(Key.C, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.V, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
@@ -275,13 +291,22 @@ namespace TableJson.ViewModels
             }
             return new ObservableCollection<MacrosMenuItem>(menuItems);
         }
-
+        public void LoadSettings()
+        {
+            SettingsService settingsService = new SettingsService();
+            AppSettings = settingsService.Load();
+            WindowColor = AppSettings.TabWindowColor;
+            TextColor = AppSettings.TabWindowTextColor;
+            DefaultFontSize = AppSettings.FontSize;
+        }
         public TabWindowViewModel()
         {
+            LoadSettings();
             MacrosContextMenu = PopulateMacroMenu();
         }
         public TabWindowViewModel(IStorageFile file)
         {
+            LoadSettings();
             LoadFileAsync(file.TryGetLocalPath());
             FileFullPath = file.TryGetLocalPath();
 

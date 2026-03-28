@@ -14,7 +14,7 @@
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaTitleBarHeightHint="-1"
 		WindowState="Maximized"
-		Background="#1A1A1A"
+		Background="{Binding WindowColor}"
 		Title="Scripts Editor"
 		>
 	<Window.Resources>
@@ -28,8 +28,7 @@
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 					<DataGridTextColumn Header="HotKey" Binding="{Binding HotKey}"/>
-					<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}">
-					</DataGridCheckBoxColumn>
+					<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}"/>
 					<DataGridTemplateColumn Header="MenuItemColor">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
