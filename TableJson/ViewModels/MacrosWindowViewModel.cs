@@ -25,6 +25,18 @@ namespace TableJson.ViewModels
             get => _WindowColor;
             set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
         }
+        private string _EditorColor;
+        public string EditorColor
+        {
+            get => _EditorColor;
+            set => this.RaiseAndSetIfChanged(ref _EditorColor, value);
+        }
+        private string _EditorTextColor;
+        public string EditorTextColor
+        {
+            get => _EditorTextColor;
+            set => this.RaiseAndSetIfChanged(ref _EditorTextColor, value);
+        }
         const string templateCode = "using System;\r\nusing AvaloniaEdit.Editing;\r\n\r\nnamespace ContextItemPlugin {\r\nclass Plugin\r\n{\r\n}\r\n}\r\n";
         public AppSettings AppSettings { get; set; }
         public void CopyMouseCommand(TextArea textArea)
@@ -260,6 +272,9 @@ namespace TableJson.ViewModels
         {
             SettingsService settingsService = new SettingsService();
             AppSettings = settingsService.Load();
+            WindowColor = AppSettings.MacrosWindowColor;
+            EditorColor = AppSettings.MacrosEditorColor;
+            EditorTextColor = AppSettings.MacrosEditorTextColor;
         }
         public MacrosWindowViewModel()
         {

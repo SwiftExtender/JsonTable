@@ -11,6 +11,8 @@ namespace TableJson.Services
         public string ContextMenuHotkeyTextColor = "#FF0A0C01";
         public string MainWindowColor = "#1A1A1A";
         public string MacrosWindowColor = "#1A1A1A";
+        public string MacrosEditorColor = "#FF604213";
+        public string MacrosEditorTextColor = "#FFFFE0";
         public string TabWindowColor = "#FF0A0C01";
         public string TabWindowTextColor = "#FFFFE0";
         public int FontSize = 14;

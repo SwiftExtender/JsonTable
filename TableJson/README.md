@@ -11,7 +11,7 @@ using System.Text;
 
 namespace ContextItemPlugin
 {
-    static class Plugin
+    class Plugin
     {
         public static void Handler(TextArea textarea)
         {
