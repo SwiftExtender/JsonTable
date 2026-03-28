@@ -17,7 +17,7 @@ namespace TableJson.Views
             Name = "TheHighestWindow";
             SettingsService settingsService = new SettingsService();
             AppSettings settings = settingsService.Load();
-            this.Background = Brush.Parse(settings.DefaultMainWindowColor);
+            this.Background = Brush.Parse(settings.MainWindowColor);
             InitializeComponent();
             AddTabButton(HighestMultiTab);
             TabItem initTab = AddTab("New " + HighestMultiTab.Items.Count, new TabWindow());

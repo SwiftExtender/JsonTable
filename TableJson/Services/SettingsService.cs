@@ -6,14 +6,14 @@ namespace TableJson.Services
 {
     public class AppSettings()
     {
-        public string DefaultContextMenuItemColor = "#D55C5C5C";
-        public string DefaultContextMenuTextColor = "#FF0A0C01";
-        public string DefaultContextMenuHotkryTextColor = "#FF0A0C01";
-        public string DefaultMainWindowColor = "#1A1A1A";
-        public string DefaultMacrosWindowColor = "#1A1A1A";
-        public string DefaultTabWindowColor = "#FF0A0C01";
-        public string DefaultTabWindowTextColor = "#FFFFE0";
-        public int DefaultFontSize = 14;
+        public string ContextMenuItemColor = "#D55C5C5C";
+        public string ContextMenuTextColor = "#FF0A0C01";
+        public string ContextMenuHotkryTextColor = "#FF0A0C01";
+        public string MainWindowColor = "#1A1A1A";
+        public string MacrosWindowColor = "#1A1A1A";
+        public string TabWindowColor = "#FF0A0C01";
+        public string TabWindowTextColor = "#FFFFE0";
+        public int FontSize = 14;
     }
     public class SettingsService
     {

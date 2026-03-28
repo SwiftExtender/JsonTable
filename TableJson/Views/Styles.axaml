@@ -98,9 +98,10 @@
 	<Style Selector="TabItem:selected">
 		<Setter Property="Foreground" Value="#F3F5AE2A" />
 	</Style>
+	<!--think about better styling for pointover
 	<Style Selector="TabItem:pointerover /template/ Border#PART_LayoutRoot">
 		<Setter Property="TextElement.Foreground" Value="#F3D2F52A" />
-	</Style>
+	</Style>-->
 	<Style Selector="TabItem:selected:pointerover /template/ Border#PART_LayoutRoot">
 		<Setter Property="TextElement.Foreground" Value="#F3F5AE2A" />
 	</Style>
