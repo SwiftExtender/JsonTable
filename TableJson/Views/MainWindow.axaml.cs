@@ -86,6 +86,11 @@ namespace TableJson.Views
             MacrosCodeWindow w1 = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Maximized };
             w1.Show();
         }
+        private void SettingsOpenWindow_Clicked(object sender, RoutedEventArgs args)
+        {
+            Window w1 = new SettingsWindow() { WindowState = WindowState.Maximized };
+            w1.Show();
+        }
         private async void OpenFile_Clicked(object sender, RoutedEventArgs args)
         {
             TopLevel topLevel = GetTopLevel(this);

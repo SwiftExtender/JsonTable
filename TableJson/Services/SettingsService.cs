@@ -15,7 +15,7 @@ namespace TableJson.Services
         public string MacrosEditorTextColor { get; set; } = "#FFFFE0";
         public string TabWindowColor { get; set; } = "#FF0A0C01";
         public string TabWindowTextColor { get; set; } = "#FFFFE0";
-        public int FontSize { get; set; } = 14;
+        public int NewTabFontSize { get; set; } = 14;
     }
     public class SettingsService
     {
