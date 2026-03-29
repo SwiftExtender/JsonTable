@@ -15,7 +15,7 @@ namespace TableJson.Services
         public string MacrosEditorTextColor { get; set; } = "#FFFFE0";
         public string TabWindowColor { get; set; } = "#FF0A0C01";
         public string TabWindowTextColor { get; set; } = "#FFFFE0";
-        public int NewTabFontSize { get; set; } = 14;
+        public string NewTabFontSize { get; set; } = "14";
     }
     public class SettingsService
     {
@@ -43,7 +43,6 @@ namespace TableJson.Services
         {
             var directory = Path.GetDirectoryName(_settingsPath)!;
             Directory.CreateDirectory(directory);
-
             var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions
             {
                 WriteIndented = true

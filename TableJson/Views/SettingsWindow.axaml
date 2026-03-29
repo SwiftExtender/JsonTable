@@ -1,0 +1,40 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TableJson.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:convert="clr-namespace:Avalonia.Data.Converters;assembly=Avalonia.Base"
+		xmlns:controlconvert="using:TableJson.Converters"
+		x:Class="TableJson.Views.SettingsWindow"
+		x:DataType="vm:SettingsWindowViewModel"
+        mc:Ignorable="d"
+		WindowState="Maximized"
+		Title="Settings"
+		>
+	<Window.Resources>
+		<controlconvert:ColorSetConverter x:Key="ColorSetConverter"/>
+	</Window.Resources>
+	<StackPanel>
+		<Button Content="Save Settings" Command="{Binding SaveCommand}"/>
+		<TextBlock Text="Tab font size"/>
+		<TextBox Text="{Binding NewTabFontSize}"/>
+		<TextBlock Text="Main window color"/>
+		<ColorPicker Color="{Binding MainWindowColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+		<TextBlock Text="Scripts window background color"/>
+		<ColorPicker Color="{Binding MacrosWindowColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+		<TextBlock Text="Scripts editor background color"/>
+		<ColorPicker Color="{Binding MacrosEditorColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+		<TextBlock Text="Scripts editor text color"/>
+		<ColorPicker Color="{Binding MacrosEditorTextColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+		<TextBlock Text="Context menu items color"/>
+		<ColorPicker Color="{Binding ContextMenuTextColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+		<TextBlock Text="Context menu labels color"/>
+		<ColorPicker Color="{Binding ContextMenuItemColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+		<TextBlock Text="Context menu hotkey labels color"/>
+		<ColorPicker Color="{Binding ContextMenuHotkeyTextColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+		<TextBlock Text="Tab background color"/>
+		<ColorPicker Color="{Binding TabWindowColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+		<TextBlock Text="Tab text color"/>
+		<ColorPicker Color="{Binding TabWindowTextColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+	</StackPanel>
+	</Window>

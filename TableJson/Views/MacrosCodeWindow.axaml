@@ -10,7 +10,6 @@
 		x:DataType="vm:MacrosWindowViewModel"
         mc:Ignorable="d"
 		xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
-		WindowStartupLocation="CenterScreen"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaTitleBarHeightHint="-1"
 		WindowState="Maximized"

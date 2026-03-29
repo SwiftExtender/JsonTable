@@ -297,7 +297,7 @@ namespace TableJson.ViewModels
             AppSettings = settingsService.Load();
             WindowColor = AppSettings.TabWindowColor;
             TextColor = AppSettings.TabWindowTextColor;
-            DefaultFontSize = AppSettings.NewTabFontSize;
+            DefaultFontSize = Int16.Parse(AppSettings.NewTabFontSize);
         }
         public TabWindowViewModel()
         {

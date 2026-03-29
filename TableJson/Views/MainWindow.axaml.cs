@@ -88,7 +88,7 @@ namespace TableJson.Views
         }
         private void SettingsOpenWindow_Clicked(object sender, RoutedEventArgs args)
         {
-            Window w1 = new SettingsWindow() { WindowState = WindowState.Maximized };
+            Window w1 = new SettingsWindow() { DataContext=new SettingsWindowViewModel(), WindowState = WindowState.Maximized };
             w1.Show();
         }
         private async void OpenFile_Clicked(object sender, RoutedEventArgs args)
