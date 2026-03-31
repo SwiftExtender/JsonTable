@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using Avalonia;
+using ReactiveUI;
 using System.Reactive;
 using TableJson.Services;
 
@@ -6,7 +7,7 @@ namespace TableJson.ViewModels
 {
     public class SettingsWindowViewModel : ViewModelBase
     {
-        private SettingsService _settingsService;
+        //private SettingsService _settingsService;
         private string _NewTabFontSize;
         public string NewTabFontSize
         {
@@ -16,6 +17,13 @@ namespace TableJson.ViewModels
         private string _MainWindowColor;
         public string MainWindowColor
         {
+            //get => (Application.Current as App).Settings.MainWindowColor;
+            //set
+            //{
+            //    this.RaisePropertyChanging();
+            //    (Application.Current as App).Settings.MainWindowColor = value;
+            //    this.RaisePropertyChanged();
+            //}
             get => _MainWindowColor;
             set => this.RaiseAndSetIfChanged(ref _MainWindowColor, value);
         }
@@ -67,16 +75,22 @@ namespace TableJson.ViewModels
             get => _TabWindowTextColor;
             set => this.RaiseAndSetIfChanged(ref _TabWindowTextColor, value);
         }
+        private string _SettingsWindowColor;
+        public string SettingsWindowColor
+        {
+            get => _SettingsWindowColor;
+            set => this.RaiseAndSetIfChanged(ref _SettingsWindowColor, value);
+        }
         public void SaveSettings()
         {
             AppSettings newSettings = new() { ContextMenuHotkeyTextColor = ContextMenuHotkeyTextColor, ContextMenuItemColor = ContextMenuItemColor, ContextMenuTextColor = ContextMenuTextColor, MacrosEditorColor = MacrosEditorColor, MacrosEditorTextColor = MacrosEditorTextColor, MacrosWindowColor = MacrosWindowColor, MainWindowColor = MainWindowColor, NewTabFontSize = NewTabFontSize, TabWindowColor = TabWindowColor, TabWindowTextColor = TabWindowTextColor };
-            _settingsService.Save(newSettings);
+            (Application.Current as App).Settings = newSettings;
         }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
         public SettingsWindowViewModel()
         {
-            _settingsService = new SettingsService();
-            AppSettings _settings = _settingsService.Load();
+            //_settingsService = new SettingsService();
+            AppSettings _settings = (Application.Current as App).Settings;
             NewTabFontSize = _settings.NewTabFontSize;
             MainWindowColor = _settings.MainWindowColor;
             MacrosWindowColor = _settings.MacrosWindowColor;
@@ -87,6 +101,7 @@ namespace TableJson.ViewModels
             ContextMenuHotkeyTextColor = _settings.ContextMenuHotkeyTextColor;
             TabWindowColor = _settings.TabWindowColor;
             TabWindowTextColor = _settings.TabWindowTextColor;
+            SettingsWindowColor = _settings.SettingsWindowTextColor;
             SaveCommand = ReactiveCommand.Create(SaveSettings);
         }
     }

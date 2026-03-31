@@ -10,6 +10,7 @@
         mc:Ignorable="d"
 		WindowState="Maximized"
 		Title="Settings"
+		Background="{Binding SettingsWindowColor}"
 		>
 	<Window.Resources>
 		<controlconvert:ColorSetConverter x:Key="ColorSetConverter"/>
@@ -36,5 +37,7 @@
 		<ColorPicker Color="{Binding TabWindowColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
 		<TextBlock Text="Tab text color"/>
 		<ColorPicker Color="{Binding TabWindowTextColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
+		<TextBlock Text="Settings window color"/>
+		<ColorPicker Color="{Binding SettingsWindowColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>
 	</StackPanel>
 	</Window>

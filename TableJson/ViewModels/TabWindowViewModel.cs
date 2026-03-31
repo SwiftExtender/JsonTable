@@ -1,4 +1,5 @@
 ﻿using Avalonia.Input;
+using Avalonia;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using AvaloniaEdit;
@@ -65,8 +66,10 @@ namespace TableJson.ViewModels
         private string _WindowColor;
         public string WindowColor
         {
-            get => _WindowColor;
-            set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
+            get => (Application.Current as App).Settings.TabWindowColor;
+            set => (Application.Current as App).Settings.TabWindowColor = value;
+            //get => _WindowColor;
+            //set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
         }
         private string _TextColor;
         public string TextColor
@@ -295,7 +298,7 @@ namespace TableJson.ViewModels
         {
             SettingsService settingsService = new SettingsService();
             AppSettings = settingsService.Load();
-            WindowColor = AppSettings.TabWindowColor;
+            //WindowColor = AppSettings.TabWindowColor;
             TextColor = AppSettings.TabWindowTextColor;
             DefaultFontSize = Int16.Parse(AppSettings.NewTabFontSize);
         }

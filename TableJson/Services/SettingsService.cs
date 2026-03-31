@@ -1,21 +1,147 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
 
 namespace TableJson.Services
 {
-    public class AppSettings
+    public class AppSettings : INotifyPropertyChanged
     {
-        public string ContextMenuItemColor { get; set; } = "#D55C5C5C";
-        public string ContextMenuTextColor { get; set; } = "#FF0A0C01";
-        public string ContextMenuHotkeyTextColor { get; set; } = "#FF0A0C01";
-        public string MainWindowColor { get; set; } = "#1A1A1A";
-        public string MacrosWindowColor { get; set; } = "#1A1A1A";
-        public string MacrosEditorColor { get; set; } = "#FF604213";
-        public string MacrosEditorTextColor { get; set; } = "#FFFFE0";
-        public string TabWindowColor { get; set; } = "#FF0A0C01";
-        public string TabWindowTextColor { get; set; } = "#FFFFE0";
-        public string NewTabFontSize { get; set; } = "14";
+        private string _ContextMenuItemColor { get; set; } = "#D55C5C5C";
+        public string ContextMenuItemColor {
+            get { return _ContextMenuItemColor; }
+            set
+            {
+                { _ContextMenuItemColor = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            } }
+        private string _ContextMenuTextColor { get; set; } = "#FF0A0C01";
+        public string ContextMenuTextColor
+        {
+            get { return _ContextMenuTextColor; }
+            set
+            {
+                {
+                    _ContextMenuTextColor = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            }
+        }
+        private string _ContextMenuHotkeyTextColor { get; set; } = "#FF0A0C01";
+        public string ContextMenuHotkeyTextColor
+        {
+            get { return _ContextMenuHotkeyTextColor; }
+            set
+            {
+                {
+                    _ContextMenuHotkeyTextColor = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            }
+        }
+        private string _MainWindowColor { get; set; } = "#1A1A1A";
+        public string MainWindowColor
+        {
+            get { return _MainWindowColor; }
+            set
+            {
+                {
+                    _MainWindowColor = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            }
+        }
+        private string _MacrosWindowColor { get; set; } = "#1A1A1A";
+        public string MacrosWindowColor
+        {
+            get { return _MacrosWindowColor; }
+            set
+            {
+                {
+                    _MacrosWindowColor = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            }
+        }
+        private string _MacrosEditorColor { get; set; } = "#FF604213";
+        public string MacrosEditorColor
+        {
+            get { return _MacrosEditorColor; }
+            set
+            {
+                {
+                    _MacrosEditorColor = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            }
+        }
+        private string _MacrosEditorTextColor { get; set; } = "#FFFFE0";
+        public string MacrosEditorTextColor
+        {
+            get { return _MacrosEditorTextColor; }
+            set
+            {
+                {
+                    _MacrosEditorTextColor = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            }
+        }
+        private string _TabWindowColor { get; set; } = "#FF0A0C01";
+        public string TabWindowColor
+        {
+            get { return _TabWindowColor; }
+            set
+            {
+                {
+                    _TabWindowColor = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            }
+        }
+        private string _TabWindowTextColor { get; set; } = "#FFFFE0";
+        public string TabWindowTextColor
+        {
+            get { return _TabWindowTextColor; }
+            set
+            {
+                {
+                    _TabWindowTextColor = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            }
+        }
+        private string _NewTabFontSize { get; set; } = "14";
+        public string NewTabFontSize
+        {
+            get { return _NewTabFontSize; }
+            set
+            {
+                {
+                    _NewTabFontSize = value;
+                    OnPropertyChanged("ContextMenuItemColor");
+                }
+            }
+        }
+        private string _SettingsWindowTextColor { get; set; } = "#1A1A1A";
+        public string SettingsWindowTextColor
+        {
+            get { return _SettingsWindowTextColor; }
+            set
+            {
+                {
+                    _SettingsWindowTextColor = value;
+                    OnPropertyChanged("SettingsWindowTextColor");
+                }
+            }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void OnPropertyChanged(string propertyName) {
+            if (PropertyChanged != null) { 
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
     public class SettingsService
     {
