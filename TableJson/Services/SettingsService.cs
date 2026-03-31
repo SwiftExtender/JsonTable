@@ -7,17 +7,20 @@ namespace TableJson.Services
 {
     public class AppSettings : INotifyPropertyChanged
     {
-        private string _ContextMenuItemColor { get; set; } = "#D55C5C5C";
-        public string ContextMenuItemColor {
+        public string _ContextMenuItemColor = "#D55C5C5C";
+        public string ContextMenuItemColor
+        {
             get { return _ContextMenuItemColor; }
             set
             {
-                { _ContextMenuItemColor = value;
+                {
+                    _ContextMenuItemColor = value;
                     OnPropertyChanged("ContextMenuItemColor");
                 }
-            } }
-        private string _ContextMenuTextColor { get; set; } = "#FF0A0C01";
-        public string ContextMenuTextColor
+            }
+        }
+        public string ContextMenuTextColor = "#FF0A0C01";
+        public string _ContextMenuTextColor
         {
             get { return _ContextMenuTextColor; }
             set
@@ -28,7 +31,7 @@ namespace TableJson.Services
                 }
             }
         }
-        private string _ContextMenuHotkeyTextColor { get; set; } = "#FF0A0C01";
+        public string _ContextMenuHotkeyTextColor = "#FF0A0C01";
         public string ContextMenuHotkeyTextColor
         {
             get { return _ContextMenuHotkeyTextColor; }
@@ -40,7 +43,7 @@ namespace TableJson.Services
                 }
             }
         }
-        private string _MainWindowColor { get; set; } = "#1A1A1A";
+        public string _MainWindowColor = "#1A1A1A";
         public string MainWindowColor
         {
             get { return _MainWindowColor; }
@@ -52,7 +55,7 @@ namespace TableJson.Services
                 }
             }
         }
-        private string _MacrosWindowColor { get; set; } = "#1A1A1A";
+        public string _MacrosWindowColor = "#1A1A1A";
         public string MacrosWindowColor
         {
             get { return _MacrosWindowColor; }
@@ -64,7 +67,7 @@ namespace TableJson.Services
                 }
             }
         }
-        private string _MacrosEditorColor { get; set; } = "#FF604213";
+        public string _MacrosEditorColor = "#FF604213";
         public string MacrosEditorColor
         {
             get { return _MacrosEditorColor; }
@@ -76,7 +79,7 @@ namespace TableJson.Services
                 }
             }
         }
-        private string _MacrosEditorTextColor { get; set; } = "#FFFFE0";
+        public string _MacrosEditorTextColor = "#FFFFE0";
         public string MacrosEditorTextColor
         {
             get { return _MacrosEditorTextColor; }
@@ -88,7 +91,7 @@ namespace TableJson.Services
                 }
             }
         }
-        private string _TabWindowColor { get; set; } = "#FF0A0C01";
+        public string _TabWindowColor = "#FF0A0C01";
         public string TabWindowColor
         {
             get { return _TabWindowColor; }
@@ -100,7 +103,7 @@ namespace TableJson.Services
                 }
             }
         }
-        private string _TabWindowTextColor { get; set; } = "#FFFFE0";
+        public string _TabWindowTextColor = "#FFFFE0";
         public string TabWindowTextColor
         {
             get { return _TabWindowTextColor; }
@@ -112,7 +115,7 @@ namespace TableJson.Services
                 }
             }
         }
-        private string _NewTabFontSize { get; set; } = "14";
+        public string _NewTabFontSize = "14";
         public string NewTabFontSize
         {
             get { return _NewTabFontSize; }
@@ -124,21 +127,23 @@ namespace TableJson.Services
                 }
             }
         }
-        private string _SettingsWindowTextColor { get; set; } = "#1A1A1A";
-        public string SettingsWindowTextColor
-        {
-            get { return _SettingsWindowTextColor; }
-            set
-            {
-                {
-                    _SettingsWindowTextColor = value;
-                    OnPropertyChanged("SettingsWindowTextColor");
-                }
-            }
-        }
+        public string SettingsWindowColor = "#1A1A1A";
+        //public string SettingsWindowTextColor
+        //{
+        //    get { return _SettingsWindowTextColor; }
+        //    set
+        //    {
+        //        {
+        //            _SettingsWindowTextColor = value;
+        //            OnPropertyChanged("SettingsWindowTextColor");
+        //        }
+        //    }
+        //}
         public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged(string propertyName) {
-            if (PropertyChanged != null) { 
+        public void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }

@@ -24,8 +24,8 @@ namespace TableJson.ViewModels
             //    (Application.Current as App).Settings.MainWindowColor = value;
             //    this.RaisePropertyChanged();
             //}
-            get => _MainWindowColor;
-            set => this.RaiseAndSetIfChanged(ref _MainWindowColor, value);
+            get => (Application.Current as App).Settings.MainWindowColor;
+            set => this.RaiseAndSetIfChanged(ref (Application.Current as App).Settings._MainWindowColor, value);
         }
         private string _MacrosWindowColor;
         public string MacrosWindowColor
@@ -78,13 +78,14 @@ namespace TableJson.ViewModels
         private string _SettingsWindowColor;
         public string SettingsWindowColor
         {
-            get => _SettingsWindowColor;
-            set => this.RaiseAndSetIfChanged(ref _SettingsWindowColor, value);
+            get => (Application.Current as App).Settings.SettingsWindowColor;
+            set => this.RaiseAndSetIfChanged(ref (Application.Current as App).Settings.SettingsWindowColor, value);
         }
         public void SaveSettings()
         {
-            AppSettings newSettings = new() { ContextMenuHotkeyTextColor = ContextMenuHotkeyTextColor, ContextMenuItemColor = ContextMenuItemColor, ContextMenuTextColor = ContextMenuTextColor, MacrosEditorColor = MacrosEditorColor, MacrosEditorTextColor = MacrosEditorTextColor, MacrosWindowColor = MacrosWindowColor, MainWindowColor = MainWindowColor, NewTabFontSize = NewTabFontSize, TabWindowColor = TabWindowColor, TabWindowTextColor = TabWindowTextColor };
+            AppSettings newSettings = new() { ContextMenuHotkeyTextColor = ContextMenuHotkeyTextColor, ContextMenuItemColor = ContextMenuItemColor, ContextMenuTextColor = ContextMenuTextColor, MacrosEditorColor = MacrosEditorColor, MacrosEditorTextColor = MacrosEditorTextColor, MacrosWindowColor = MacrosWindowColor, MainWindowColor = MainWindowColor, NewTabFontSize = NewTabFontSize, TabWindowColor = TabWindowColor, TabWindowTextColor = TabWindowTextColor, SettingsWindowColor = SettingsWindowColor };
             (Application.Current as App).Settings = newSettings;
+            (Application.Current as App).SettingsService.Save(newSettings);
         }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
         public SettingsWindowViewModel()
@@ -101,7 +102,7 @@ namespace TableJson.ViewModels
             ContextMenuHotkeyTextColor = _settings.ContextMenuHotkeyTextColor;
             TabWindowColor = _settings.TabWindowColor;
             TabWindowTextColor = _settings.TabWindowTextColor;
-            SettingsWindowColor = _settings.SettingsWindowTextColor;
+            SettingsWindowColor = _settings.SettingsWindowColor;
             SaveCommand = ReactiveCommand.Create(SaveSettings);
         }
     }

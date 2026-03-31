@@ -25,15 +25,15 @@ namespace TableJson.ViewModels
             //get => _WindowColor;
             //set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
         }
-        public void LoadSettings()
-        {
-            SettingsService settingsService = new SettingsService();
-            AppSettings = settingsService.Load();
-            settingsService.CreateDefaultConfig();
-        }
+        //public void LoadSettings()
+        //{
+        //    SettingsService settingsService = new SettingsService();
+        //    AppSettings = settingsService.Load();
+        //    settingsService.CreateDefaultConfig();
+        //}
         public MainWindowViewModel()
         {
-            LoadSettings();
+            //LoadSettings();
             //WindowColor = AppSettings.MainWindowColor;
         }
     }

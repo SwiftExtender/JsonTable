@@ -14,6 +14,7 @@ namespace TableJson
     public partial class App : Application
     {
         public AppSettings Settings;
+        public SettingsService SettingsService;
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -28,9 +29,9 @@ namespace TableJson
             var tempdb = new HelpContext();
             tempdb.Database.EnsureCreated();
             Directory.CreateDirectory("imports");
-            var _settingsService = new SettingsService();
-            _settingsService.CreateDefaultConfig();
-            Settings = _settingsService.Load();
+            SettingsService = new SettingsService();
+            SettingsService.CreateDefaultConfig();
+            Settings = SettingsService.Load();
             this.AttachDevTools();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
