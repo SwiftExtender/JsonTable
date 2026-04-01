@@ -17,7 +17,7 @@
 	</Window.Resources>
 	<StackPanel>
 		<Button Content="Save Settings" Command="{Binding SaveCommand}"/>
-		<TextBlock Text="Tab font size"/>
+		<TextBlock Text=" Default tab font size"/>
 		<TextBox Text="{Binding NewTabFontSize}"/>
 		<TextBlock Text="Main window color"/>
 		<ColorPicker Color="{Binding MainWindowColor, Converter={StaticResource ColorSetConverter}, Mode=TwoWay}"/>

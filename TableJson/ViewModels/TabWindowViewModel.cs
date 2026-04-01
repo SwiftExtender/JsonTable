@@ -63,22 +63,36 @@ namespace TableJson.ViewModels
     }
     public class TabWindowViewModel : ViewModelBase
     {
-        private string _WindowColor;
-        public string WindowColor
+        private string _TabWindowColor = "";
+        public string TabWindowColor
         {
-            get => (Application.Current as App).Settings.TabWindowColor;
-            //set => (Application.Current as App).Settings.TabWindowColor = value;
-            //get => _WindowColor;
-            //set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
+            get => _TabWindowColor;
+            set => this.RaiseAndSetIfChanged(ref _TabWindowColor, value);
         }
-        private string _TextColor;
-        public string TextColor
+        private string _TabWindowTextColor = "";
+        public string TabWindowTextColor
         {
-            get => _TextColor;
-            set => this.RaiseAndSetIfChanged(ref _TextColor, value);
+            get => _TabWindowTextColor;
+            set => this.RaiseAndSetIfChanged(ref _TabWindowTextColor, value);
         }
-        public int DefaultFontSize;
-        public AppSettings AppSettings { get; set; }
+        private string _ContextMenuItemColor = "";
+        public string ContextMenuItemColor
+        {
+            get { return _ContextMenuItemColor; }
+            set => this.RaiseAndSetIfChanged(ref _ContextMenuItemColor, value);
+        }
+        private string _ContextMenuTextColor = "";
+        public string ContextMenuTextColor
+        {
+            get { return _ContextMenuTextColor; }
+            set => this.RaiseAndSetIfChanged(ref _ContextMenuTextColor, value);
+        }
+        private string _ContextMenuHotkeyTextColor = "";
+        public string ContextMenuHotkeyTextColor
+        {
+            get { return _ContextMenuHotkeyTextColor; }
+            set => this.RaiseAndSetIfChanged(ref _ContextMenuHotkeyTextColor, value);
+        }
         public void CopyMouseCommand(TextArea textArea)
         {
             ApplicationCommands.Copy.Execute(null, textArea);
@@ -262,9 +276,9 @@ namespace TableJson.ViewModels
         public ObservableCollection<MacrosMenuItem> PopulateMacroMenu()
         {
             List<MacrosMenuItem> menuItems = new();
-            string defaultMenuItemColor = AppSettings.ContextMenuItemColor;
-            string defaultMenuTextColor = AppSettings.ContextMenuTextColor;
-            string defaultMenuHotkeyTextColor = AppSettings.ContextMenuHotkeyTextColor;
+            string defaultMenuItemColor = ContextMenuItemColor;
+            string defaultMenuTextColor = ContextMenuTextColor;
+            string defaultMenuHotkeyTextColor = ContextMenuHotkeyTextColor;
             menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey = new KeyGesture(Key.C, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
             menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.V, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
@@ -294,25 +308,49 @@ namespace TableJson.ViewModels
             }
             return new ObservableCollection<MacrosMenuItem>(menuItems);
         }
-        public void LoadSettings()
+        public void SettingsSubscribe()
         {
-            SettingsService settingsService = new SettingsService();
-            AppSettings = settingsService.Load();
-            //WindowColor = AppSettings.TabWindowColor;
-            TextColor = AppSettings.TabWindowTextColor;
-            DefaultFontSize = Int16.Parse(AppSettings.NewTabFontSize);
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.TabWindowColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.TabWindowColor = s;
+                });
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.TabWindowTextColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.TabWindowTextColor = s;
+                });
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.ContextMenuTextColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.ContextMenuTextColor = s;
+                });
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.ContextMenuItemColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.ContextMenuItemColor = s;
+                });
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.ContextMenuHotkeyTextColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.ContextMenuHotkeyTextColor = s;
+                });
         }
         public TabWindowViewModel()
         {
-            LoadSettings();
+            SettingsSubscribe();
             MacrosContextMenu = PopulateMacroMenu();
         }
         public TabWindowViewModel(IStorageFile file)
         {
-            LoadSettings();
             LoadFileAsync(file.TryGetLocalPath());
             FileFullPath = file.TryGetLocalPath();
-
+            SettingsSubscribe();
             MacrosContextMenu = PopulateMacroMenu();
             //UpdateQueries();
         }

@@ -57,10 +57,11 @@ namespace TableJson.ViewModels
             get => (Application.Current as App).Settings.TabWindowTextColor;
             set { (Application.Current as App).Settings.TabWindowTextColor = value; }
         }
+        private string _SettingsWindowColor = "";
         public string SettingsWindowColor
         {
-            get => (Application.Current as App).Settings.SettingsWindowColor;
-            set { (Application.Current as App).Settings.SettingsWindowColor = value; }
+            get { return _SettingsWindowColor; }
+            set => this.RaiseAndSetIfChanged(ref _SettingsWindowColor, value);
         }
         public void SaveSettings()
         {
@@ -84,6 +85,7 @@ namespace TableJson.ViewModels
         public SettingsWindowViewModel()
         {
             SaveCommand = ReactiveCommand.Create(SaveSettings);
+            SettingsWindowColor = (Application.Current as App).Settings.SettingsWindowColor;
         }
     }
 }

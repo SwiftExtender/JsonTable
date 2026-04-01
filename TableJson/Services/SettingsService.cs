@@ -1,6 +1,5 @@
 ﻿using ReactiveUI;
 using System;
-using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
 
@@ -89,7 +88,8 @@ namespace TableJson.Services
         }
         public void CreateDefaultConfig()
         {
-            if (!File.Exists(_settingsPath)) {
+            if (!File.Exists(_settingsPath))
+            {
                 string config = JsonSerializer.Serialize(new AppSettings(), new JsonSerializerOptions
                 {
                     WriteIndented = true

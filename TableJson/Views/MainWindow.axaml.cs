@@ -10,6 +10,8 @@ namespace TableJson.Views
 {
     public partial class MainWindow : Window
     {
+        private SettingsWindow settingsWindow;
+        private MacrosCodeWindow macrosWindow;
         public MainWindow()
         {
             Name = "TheHighestWindow";
@@ -83,13 +85,27 @@ namespace TableJson.Views
         }
         private void MacrosOpenWindow_Clicked(object sender, RoutedEventArgs args)
         {
-            MacrosCodeWindow w1 = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Maximized };
-            w1.Show();
+            if (macrosWindow != null)
+            {
+                macrosWindow.Activate();
+            }
+            else {
+                macrosWindow = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Maximized };
+                macrosWindow.Show();
+            }
+                
         }
         private void SettingsOpenWindow_Clicked(object sender, RoutedEventArgs args)
         {
-            Window w1 = new SettingsWindow() { DataContext=new SettingsWindowViewModel(), WindowState = WindowState.Maximized };
-            w1.Show();
+            if (settingsWindow != null)
+            {
+                settingsWindow.Activate();
+            }
+            else
+            {
+                settingsWindow = new SettingsWindow() { DataContext = new SettingsWindowViewModel(), WindowState = WindowState.Maximized };
+                settingsWindow.Show();
+            }
         }
         private async void OpenFile_Clicked(object sender, RoutedEventArgs args)
         {

@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia;
 using System;
 using TableJson.ViewModels;
 
@@ -15,7 +16,7 @@ namespace TableJson.Views
             DataContext = new TabWindowViewModel();
             RowTip.Text = "-";
             ColumnTip.Text = "-";
-            FontSize = ((TabWindowViewModel)DataContext).DefaultFontSize;
+            FontSize = Double.Parse((Application.Current as App).Settings.NewTabFontSize);
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
             TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;

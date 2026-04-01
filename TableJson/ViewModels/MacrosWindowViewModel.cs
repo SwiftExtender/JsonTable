@@ -19,25 +19,36 @@ namespace TableJson.ViewModels
 {
     public class MacrosWindowViewModel : ViewModelBase
     {
-        private string _WindowColor;
-        public string WindowColor
+        const string templateCode = """
+            using System;
+            using AvaloniaEdit.Editing;
+            
+            namespace ContextItemPlugin {
+                class Plugin {
+                    public static void Handler(TextArea textarea) {
+                        //your code
+                    }
+                }
+            }
+            """;
+        private string _MacrosWindowColor;
+        public string MacrosWindowColor
         {
-            get => _WindowColor;
-            set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
+            get => _MacrosWindowColor;
+            set => this.RaiseAndSetIfChanged(ref _MacrosWindowColor, value);
         }
-        private string _EditorColor;
-        public string EditorColor
+        private string _MacrosEditorColor;
+        public string MacrosEditorColor
         {
-            get => _EditorColor;
-            set => this.RaiseAndSetIfChanged(ref _EditorColor, value);
+            get => _MacrosEditorColor;
+            set => this.RaiseAndSetIfChanged(ref _MacrosEditorColor, value);
         }
-        private string _EditorTextColor;
-        public string EditorTextColor
+        private string _MacrosEditorTextColor;
+        public string MacrosEditorTextColor
         {
-            get => _EditorTextColor;
-            set => this.RaiseAndSetIfChanged(ref _EditorTextColor, value);
+            get => _MacrosEditorTextColor;
+            set => this.RaiseAndSetIfChanged(ref _MacrosEditorTextColor, value);
         }
-        const string templateCode = "using System;\r\nusing AvaloniaEdit.Editing;\r\n\r\nnamespace ContextItemPlugin {\r\nclass Plugin\r\n{\r\n}\r\n}\r\n";
         public AppSettings AppSettings { get; set; }
         public void CopyMouseCommand(TextArea textArea)
         {
