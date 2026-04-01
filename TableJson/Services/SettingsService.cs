@@ -1,151 +1,78 @@
-﻿using System;
+﻿using ReactiveUI;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
 
 namespace TableJson.Services
 {
-    public class AppSettings : INotifyPropertyChanged
+    public class AppSettings : ReactiveObject
     {
-        public string _ContextMenuItemColor = "#D55C5C5C";
+        private string _ContextMenuItemColor = "#D55C5C5C";
         public string ContextMenuItemColor
         {
             get { return _ContextMenuItemColor; }
-            set
-            {
-                {
-                    _ContextMenuItemColor = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _ContextMenuItemColor, value);
         }
-        public string ContextMenuTextColor = "#FF0A0C01";
-        public string _ContextMenuTextColor
+        private string _ContextMenuTextColor = "#FF0A0C01";
+        public string ContextMenuTextColor
         {
             get { return _ContextMenuTextColor; }
-            set
-            {
-                {
-                    _ContextMenuTextColor = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _ContextMenuTextColor, value);
         }
-        public string _ContextMenuHotkeyTextColor = "#FF0A0C01";
+        private string _ContextMenuHotkeyTextColor = "#FF0A0C01";
         public string ContextMenuHotkeyTextColor
         {
             get { return _ContextMenuHotkeyTextColor; }
-            set
-            {
-                {
-                    _ContextMenuHotkeyTextColor = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _ContextMenuHotkeyTextColor, value);
         }
-        public string _MainWindowColor = "#1A1A1A";
+        private string _MainWindowColor = "#1A1A1A";
         public string MainWindowColor
         {
             get { return _MainWindowColor; }
-            set
-            {
-                {
-                    _MainWindowColor = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _MainWindowColor, value);
         }
-        public string _MacrosWindowColor = "#1A1A1A";
+        private string _MacrosWindowColor = "#1A1A1A";
         public string MacrosWindowColor
         {
             get { return _MacrosWindowColor; }
-            set
-            {
-                {
-                    _MacrosWindowColor = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _MacrosWindowColor, value);
         }
-        public string _MacrosEditorColor = "#FF604213";
+        private string _MacrosEditorColor = "#FF604213";
         public string MacrosEditorColor
         {
             get { return _MacrosEditorColor; }
-            set
-            {
-                {
-                    _MacrosEditorColor = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _MacrosEditorColor, value);
         }
-        public string _MacrosEditorTextColor = "#FFFFE0";
+        private string _MacrosEditorTextColor = "#FFFFE0";
         public string MacrosEditorTextColor
         {
             get { return _MacrosEditorTextColor; }
-            set
-            {
-                {
-                    _MacrosEditorTextColor = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _MacrosEditorTextColor, value);
         }
-        public string _TabWindowColor = "#FF0A0C01";
+        private string _TabWindowColor = "#FF0A0C01";
         public string TabWindowColor
         {
             get { return _TabWindowColor; }
-            set
-            {
-                {
-                    _TabWindowColor = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _TabWindowColor, value);
         }
-        public string _TabWindowTextColor = "#FFFFE0";
+        private string _TabWindowTextColor = "#FFFFE0";
         public string TabWindowTextColor
         {
             get { return _TabWindowTextColor; }
-            set
-            {
-                {
-                    _TabWindowTextColor = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _TabWindowTextColor, value);
         }
-        public string _NewTabFontSize = "14";
+        private string _NewTabFontSize = "14";
         public string NewTabFontSize
         {
             get { return _NewTabFontSize; }
-            set
-            {
-                {
-                    _NewTabFontSize = value;
-                    OnPropertyChanged("ContextMenuItemColor");
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _NewTabFontSize, value);
         }
-        public string SettingsWindowColor = "#1A1A1A";
-        //public string SettingsWindowTextColor
-        //{
-        //    get { return _SettingsWindowTextColor; }
-        //    set
-        //    {
-        //        {
-        //            _SettingsWindowTextColor = value;
-        //            OnPropertyChanged("SettingsWindowTextColor");
-        //        }
-        //    }
-        //}
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged(string propertyName)
+        private string _SettingsWindowColor = "#1A1A1A";
+        public string SettingsWindowColor
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            get { return _SettingsWindowColor; }
+            set => this.RaiseAndSetIfChanged(ref _SettingsWindowColor, value);
         }
     }
     public class SettingsService

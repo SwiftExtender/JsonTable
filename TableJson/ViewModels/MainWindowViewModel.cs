@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using ReactiveUI;
+using System;
 using TableJson.Services;
 
 namespace TableJson.ViewModels
@@ -13,28 +14,20 @@ namespace TableJson.ViewModels
             get => _IsPinnedWindow;
             set => this.RaiseAndSetIfChanged(ref _IsPinnedWindow, value);
         }
-        //private string _WindowColor;
+        private string _MainWindowColor = "";
         public string MainWindowColor
         {
-            get => (Application.Current as App).Settings.MainWindowColor;
-            set { 
-                this.RaisePropertyChanging();
-                (Application.Current as App).Settings.MainWindowColor = value;
-                this.RaisePropertyChanged();
-            }
-            //get => _WindowColor;
-            //set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
+            get => _MainWindowColor;
+            set => this.RaiseAndSetIfChanged(ref _MainWindowColor, value);
         }
-        //public void LoadSettings()
-        //{
-        //    SettingsService settingsService = new SettingsService();
-        //    AppSettings = settingsService.Load();
-        //    settingsService.CreateDefaultConfig();
-        //}
         public MainWindowViewModel()
         {
-            //LoadSettings();
-            //WindowColor = AppSettings.MainWindowColor;
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.MainWindowColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.MainWindowColor = s;
+                });
         }
     }
 }

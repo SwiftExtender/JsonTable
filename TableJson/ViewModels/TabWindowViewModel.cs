@@ -67,7 +67,7 @@ namespace TableJson.ViewModels
         public string WindowColor
         {
             get => (Application.Current as App).Settings.TabWindowColor;
-            set => (Application.Current as App).Settings.TabWindowColor = value;
+            //set => (Application.Current as App).Settings.TabWindowColor = value;
             //get => _WindowColor;
             //set => this.RaiseAndSetIfChanged(ref _WindowColor, value);
         }
