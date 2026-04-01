@@ -1,4 +1,5 @@
-﻿using AvaloniaEdit;
+﻿using Avalonia;
+using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using Microsoft.CodeAnalysis;
@@ -49,7 +50,7 @@ namespace TableJson.ViewModels
             get => _MacrosEditorTextColor;
             set => this.RaiseAndSetIfChanged(ref _MacrosEditorTextColor, value);
         }
-        public AppSettings AppSettings { get; set; }
+        //public AppSettings AppSettings { get; set; }
         public void CopyMouseCommand(TextArea textArea)
         {
             ApplicationCommands.Copy.Execute(null, textArea);
@@ -157,7 +158,7 @@ namespace TableJson.ViewModels
         {
             try
             {
-                MacrosGridData.Add(new Macros(false, templateCode, AppSettings.ContextMenuItemColor, AppSettings.ContextMenuTextColor));
+                MacrosGridData.Add(new Macros(false, templateCode, (Application.Current as App).Settings.ContextMenuItemColor, (Application.Current as App).Settings.ContextMenuTextColor));
             }
             catch (Exception e)
             {
@@ -279,17 +280,9 @@ namespace TableJson.ViewModels
         {
             RefsGridData = new ObservableCollection<PortableExecutableReference>(GetRefs());
         }
-        public void LoadSettings()
-        {
-            SettingsService settingsService = new SettingsService();
-            AppSettings = settingsService.Load();
-            WindowColor = AppSettings.MacrosWindowColor;
-            EditorColor = AppSettings.MacrosEditorColor;
-            EditorTextColor = AppSettings.MacrosEditorTextColor;
-        }
         public MacrosWindowViewModel()
         {
-            LoadSettings();
+
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
             RemoveMacrosCommand = ReactiveCommand.Create<Macros>(RemoveMacros);
             SaveMacrosCommand = ReactiveCommand.Create<Macros>(SaveMacros);
@@ -301,6 +294,24 @@ namespace TableJson.ViewModels
                 MacrosGridData = new ObservableCollection<Macros>(selectedMacros);
                 SetRefsGrid();
             }
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.MacrosWindowColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.MacrosWindowColor = s;
+                });
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.MacrosEditorColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.MacrosEditorColor = s;
+                });
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.MacrosEditorTextColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.MacrosEditorTextColor = s;
+                });
         }
     }
 }

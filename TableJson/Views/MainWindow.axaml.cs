@@ -91,6 +91,7 @@ namespace TableJson.Views
             }
             else {
                 macrosWindow = new MacrosCodeWindow() { DataContext = new MacrosWindowViewModel(), WindowState = WindowState.Maximized };
+                macrosWindow.Closed += (s ,e) => macrosWindow = null;
                 macrosWindow.Show();
             }
                 
@@ -104,6 +105,7 @@ namespace TableJson.Views
             else
             {
                 settingsWindow = new SettingsWindow() { DataContext = new SettingsWindowViewModel(), WindowState = WindowState.Maximized };
+                settingsWindow.Closed += (s, e) => settingsWindow = null;
                 settingsWindow.Show();
             }
         }

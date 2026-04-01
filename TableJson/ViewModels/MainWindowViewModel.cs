@@ -1,13 +1,11 @@
 ﻿using Avalonia;
 using ReactiveUI;
 using System;
-using TableJson.Services;
 
 namespace TableJson.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public AppSettings AppSettings { get; set; }
         private bool _IsPinnedWindow = false;
         public bool IsPinnedWindow
         {
