@@ -7,106 +7,82 @@ namespace TableJson.ViewModels
 {
     public class SettingsWindowViewModel : ViewModelBase
     {
-        //private SettingsService _settingsService;
-        private string _NewTabFontSize;
         public string NewTabFontSize
         {
-            get => _NewTabFontSize;
-            set => this.RaiseAndSetIfChanged(ref _NewTabFontSize, value);
+            get => (Application.Current as App).Settings.NewTabFontSize;
+            set { (Application.Current as App).Settings.NewTabFontSize = value; }
         }
-        private string _MainWindowColor;
         public string MainWindowColor
         {
-            //get => (Application.Current as App).Settings.MainWindowColor;
-            //set
-            //{
-            //    this.RaisePropertyChanging();
-            //    (Application.Current as App).Settings.MainWindowColor = value;
-            //    this.RaisePropertyChanged();
-            //}
             get => (Application.Current as App).Settings.MainWindowColor;
-            set {
-                (Application.Current as App).Settings.MainWindowColor = value;
-                //this.RaisePropertyChanged(nameof(MainWindowColor));
-             }
+            set {(Application.Current as App).Settings.MainWindowColor = value;}
         }
-        private string _MacrosWindowColor;
         public string MacrosWindowColor
         {
-            get => _MacrosWindowColor;
-            set => this.RaiseAndSetIfChanged(ref _MacrosWindowColor, value);
+            get => (Application.Current as App).Settings.MacrosWindowColor;
+            set { (Application.Current as App).Settings.MacrosWindowColor = value; }
         }
-        private string _MacrosEditorColor;
         public string MacrosEditorColor
         {
-            get => _MacrosEditorColor;
-            set => this.RaiseAndSetIfChanged(ref _MacrosEditorColor, value);
+            get => (Application.Current as App).Settings.MacrosEditorColor;
+            set { (Application.Current as App).Settings.MacrosEditorColor = value; }
         }
-        private string _MacrosEditorTextColor;
         public string MacrosEditorTextColor
         {
-            get => _MacrosEditorTextColor;
-            set => this.RaiseAndSetIfChanged(ref _MacrosEditorTextColor, value);
+            get => (Application.Current as App).Settings.MacrosEditorTextColor;
+            set { (Application.Current as App).Settings.MacrosEditorTextColor = value; }
         }
-        private string _ContextMenuTextColor;
         public string ContextMenuTextColor
         {
-            get => _ContextMenuTextColor;
-            set => this.RaiseAndSetIfChanged(ref _ContextMenuTextColor, value);
+            get => (Application.Current as App).Settings.ContextMenuTextColor;
+            set { (Application.Current as App).Settings.ContextMenuTextColor = value; }
         }
-        private string _ContextMenuItemColor;
         public string ContextMenuItemColor
         {
-            get => _ContextMenuItemColor;
-            set => this.RaiseAndSetIfChanged(ref _ContextMenuItemColor, value);
+            get => (Application.Current as App).Settings.ContextMenuItemColor;
+            set { (Application.Current as App).Settings.ContextMenuItemColor = value; }
         }
-        private string _ContextMenuHotkeyTextColor;
         public string ContextMenuHotkeyTextColor
         {
-            get => _ContextMenuHotkeyTextColor;
-            set => this.RaiseAndSetIfChanged(ref _ContextMenuHotkeyTextColor, value);
+            get => (Application.Current as App).Settings.ContextMenuHotkeyTextColor;
+            set { (Application.Current as App).Settings.ContextMenuHotkeyTextColor = value; }
         }
-        private string _TabWindowColor;
         public string TabWindowColor
         {
-            get => _TabWindowColor;
-            set => this.RaiseAndSetIfChanged(ref _TabWindowColor, value);
+            get => (Application.Current as App).Settings.TabWindowColor;
+            set { (Application.Current as App).Settings.TabWindowColor = value; }
         }
-        private string _TabWindowTextColor;
         public string TabWindowTextColor
         {
-            get => _TabWindowTextColor;
-            set => this.RaiseAndSetIfChanged(ref _TabWindowTextColor, value);
+            get => (Application.Current as App).Settings.TabWindowTextColor;
+            set { (Application.Current as App).Settings.TabWindowTextColor = value; }
         }
-        private string _SettingsWindowColor;
         public string SettingsWindowColor
         {
             get => (Application.Current as App).Settings.SettingsWindowColor;
-            //set => this.RaiseAndSetIfChanged(ref (Application.Current as App).Settings.SettingsWindowColor, value);
+            set { (Application.Current as App).Settings.SettingsWindowColor = value; }
         }
         public void SaveSettings()
         {
-            AppSettings newSettings = new() { 
-                MainWindowColor = MainWindowColor, SettingsWindowColor = SettingsWindowColor};//, 
+            AppSettings newSettings = new() {
+                ContextMenuHotkeyTextColor = ContextMenuHotkeyTextColor,
+                ContextMenuItemColor = ContextMenuItemColor,
+                ContextMenuTextColor = ContextMenuTextColor,
+                MacrosEditorColor = MacrosEditorColor,
+                MacrosEditorTextColor = MacrosEditorTextColor,
+                MacrosWindowColor = MacrosWindowColor,
+                MainWindowColor = MainWindowColor,
+                NewTabFontSize = NewTabFontSize,
+                TabWindowColor = TabWindowColor,
+                TabWindowTextColor = TabWindowTextColor,
+                SettingsWindowColor = SettingsWindowColor
+            }; 
             (Application.Current as App).Settings = newSettings;
             (Application.Current as App).SettingsService.Save(newSettings);
         }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
         public SettingsWindowViewModel()
         {
-            //_settingsService = new SettingsService();
-            //AppSettings _settings = (Application.Current as App).Settings;
-            //NewTabFontSize = _settings.NewTabFontSize;
-            //MainWindowColor = _settings._MainWindowColor;
-            //MacrosWindowColor = _settings.MacrosWindowColor;
-            //MacrosEditorColor = _settings.MacrosEditorColor;
-            //MacrosEditorTextColor = _settings.MacrosEditorTextColor;
-            //ContextMenuTextColor = _settings.ContextMenuTextColor;
-            //ContextMenuItemColor = _settings.ContextMenuItemColor;
-            //ContextMenuHotkeyTextColor = _settings.ContextMenuHotkeyTextColor;
-            //TabWindowColor = _settings.TabWindowColor;
-            //TabWindowTextColor = _settings.TabWindowTextColor;
-            //SettingsWindowColor = _settings.SettingsWindowColor;
             SaveCommand = ReactiveCommand.Create(SaveSettings);
         }
     }
