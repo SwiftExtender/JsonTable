@@ -63,18 +63,6 @@ namespace TableJson.ViewModels
     }
     public class TabWindowViewModel : ViewModelBase
     {
-        private string _TabWindowColor = "";
-        public string TabWindowColor
-        {
-            get => _TabWindowColor;
-            set => this.RaiseAndSetIfChanged(ref _TabWindowColor, value);
-        }
-        private string _TabWindowTextColor = "";
-        public string TabWindowTextColor
-        {
-            get => _TabWindowTextColor;
-            set => this.RaiseAndSetIfChanged(ref _TabWindowTextColor, value);
-        }
         private string _ContextMenuItemColor = "";
         public string ContextMenuItemColor
         {
@@ -310,18 +298,6 @@ namespace TableJson.ViewModels
         }
         public void SettingsSubscribe()
         {
-            (Application.Current as App).Settings.
-                WhenAnyValue(x => x.TabWindowColor).
-                Subscribe<string>(onNext: s =>
-                {
-                    this.TabWindowColor = s;
-                });
-            (Application.Current as App).Settings.
-                WhenAnyValue(x => x.TabWindowTextColor).
-                Subscribe<string>(onNext: s =>
-                {
-                    this.TabWindowTextColor = s;
-                });
             (Application.Current as App).Settings.
                 WhenAnyValue(x => x.ContextMenuTextColor).
                 Subscribe<string>(onNext: s =>

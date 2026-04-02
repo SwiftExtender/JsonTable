@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using ReactiveUI;
 using System.Reactive;
-using TableJson.Services;
 
 namespace TableJson.ViewModels
 {
@@ -15,7 +14,7 @@ namespace TableJson.ViewModels
         public string MainWindowColor
         {
             get => (Application.Current as App).Settings.MainWindowColor;
-            set {(Application.Current as App).Settings.MainWindowColor = value;}
+            set { (Application.Current as App).Settings.MainWindowColor = value; }
         }
         public string MacrosWindowColor
         {
@@ -65,21 +64,18 @@ namespace TableJson.ViewModels
         }
         public void SaveSettings()
         {
-            AppSettings newSettings = new() {
-                ContextMenuHotkeyTextColor = ContextMenuHotkeyTextColor,
-                ContextMenuItemColor = ContextMenuItemColor,
-                ContextMenuTextColor = ContextMenuTextColor,
-                MacrosEditorColor = MacrosEditorColor,
-                MacrosEditorTextColor = MacrosEditorTextColor,
-                MacrosWindowColor = MacrosWindowColor,
-                MainWindowColor = MainWindowColor,
-                NewTabFontSize = NewTabFontSize,
-                TabWindowColor = TabWindowColor,
-                TabWindowTextColor = TabWindowTextColor,
-                SettingsWindowColor = SettingsWindowColor
-            }; 
-            (Application.Current as App).Settings = newSettings;
-            (Application.Current as App).SettingsService.Save(newSettings);
+            (Application.Current as App).Settings.ContextMenuHotkeyTextColor = ContextMenuHotkeyTextColor;
+            (Application.Current as App).Settings.ContextMenuItemColor = ContextMenuItemColor;
+            (Application.Current as App).Settings.ContextMenuTextColor = ContextMenuTextColor;
+            (Application.Current as App).Settings.MacrosEditorColor = MacrosEditorColor;
+            (Application.Current as App).Settings.MacrosEditorTextColor = MacrosEditorTextColor;
+            (Application.Current as App).Settings.MacrosWindowColor = MacrosWindowColor;
+            (Application.Current as App).Settings.MainWindowColor = MainWindowColor;
+            (Application.Current as App).Settings.NewTabFontSize = NewTabFontSize;
+            (Application.Current as App).Settings.TabWindowColor = TabWindowColor;
+            (Application.Current as App).Settings.TabWindowTextColor = TabWindowTextColor;
+            (Application.Current as App).Settings.SettingsWindowColor = SettingsWindowColor;
+            (Application.Current as App).SettingsService.Save((Application.Current as App).Settings);
         }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
         public SettingsWindowViewModel()

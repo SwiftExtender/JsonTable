@@ -1,10 +1,8 @@
-﻿using Avalonia;
-using ReactiveUI;
-using System;
+﻿using ReactiveUI;
 
 namespace TableJson.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase//, IActivatableViewModel
     {
         private bool _IsPinnedWindow = false;
         public bool IsPinnedWindow
@@ -12,20 +10,9 @@ namespace TableJson.ViewModels
             get => _IsPinnedWindow;
             set => this.RaiseAndSetIfChanged(ref _IsPinnedWindow, value);
         }
-        private string _MainWindowColor = "";
-        public string MainWindowColor
-        {
-            get => _MainWindowColor;
-            set => this.RaiseAndSetIfChanged(ref _MainWindowColor, value);
-        }
         public MainWindowViewModel()
         {
-            (Application.Current as App).Settings.
-                WhenAnyValue(x => x.MainWindowColor).
-                Subscribe<string>(onNext: s =>
-                {
-                    this.MainWindowColor = s;
-                });
+
         }
     }
 }

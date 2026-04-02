@@ -1,14 +1,17 @@
 using Avalonia.Controls;
+using Avalonia;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using ReactiveUI;
 using System;
 using System.IO;
 using TableJson.ViewModels;
+using Avalonia.Media;
 
 namespace TableJson.Views
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IActivatableView
     {
         private SettingsWindow settingsWindow;
         private MacrosCodeWindow macrosWindow;
@@ -23,6 +26,15 @@ namespace TableJson.Views
                 initTab.IsSelected = true;
                 initTab.Focus();
             }
+            this.WhenActivated(disposables =>
+            {
+                (Application.Current as App).Settings.
+                WhenAnyValue(x => x.MainWindowColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    this.Background = Brush.Parse(s);
+                });
+            });
         }
         private TabItem GetActiveTab()
         {

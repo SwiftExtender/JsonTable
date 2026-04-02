@@ -32,25 +32,6 @@ namespace TableJson.ViewModels
                 }
             }
             """;
-        private string _MacrosWindowColor;
-        public string MacrosWindowColor
-        {
-            get => _MacrosWindowColor;
-            set => this.RaiseAndSetIfChanged(ref _MacrosWindowColor, value);
-        }
-        private string _MacrosEditorColor;
-        public string MacrosEditorColor
-        {
-            get => _MacrosEditorColor;
-            set => this.RaiseAndSetIfChanged(ref _MacrosEditorColor, value);
-        }
-        private string _MacrosEditorTextColor;
-        public string MacrosEditorTextColor
-        {
-            get => _MacrosEditorTextColor;
-            set => this.RaiseAndSetIfChanged(ref _MacrosEditorTextColor, value);
-        }
-        //public AppSettings AppSettings { get; set; }
         public void CopyMouseCommand(TextArea textArea)
         {
             ApplicationCommands.Copy.Execute(null, textArea);
@@ -294,24 +275,6 @@ namespace TableJson.ViewModels
                 MacrosGridData = new ObservableCollection<Macros>(selectedMacros);
                 SetRefsGrid();
             }
-            (Application.Current as App).Settings.
-                WhenAnyValue(x => x.MacrosWindowColor).
-                Subscribe<string>(onNext: s =>
-                {
-                    this.MacrosWindowColor = s;
-                });
-            (Application.Current as App).Settings.
-                WhenAnyValue(x => x.MacrosEditorColor).
-                Subscribe<string>(onNext: s =>
-                {
-                    this.MacrosEditorColor = s;
-                });
-            (Application.Current as App).Settings.
-                WhenAnyValue(x => x.MacrosEditorTextColor).
-                Subscribe<string>(onNext: s =>
-                {
-                    this.MacrosEditorTextColor = s;
-                });
         }
     }
 }

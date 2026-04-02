@@ -1,14 +1,16 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using Avalonia;
+using ReactiveUI;
 using System;
 using TableJson.ViewModels;
 
 namespace TableJson.Views
 {
-    public partial class TabWindow : UserControl
+    public partial class TabWindow : UserControl, IActivatableView
     {
         public TabWindow()
         {
@@ -20,6 +22,7 @@ namespace TableJson.Views
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
             TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
+            TabColorsUpdate();
         }
         public TabWindow(IStorageFile file)
         {
@@ -30,6 +33,25 @@ namespace TableJson.Views
             AddHandler(PointerWheelChangedEvent, MouseWheelFontSizer, RoutingStrategies.Tunnel, true);
             AddHandler(KeyDownEvent, KeyboardFontSizer, RoutingStrategies.Tunnel, true);
             TextEditingControl.TextArea.Caret.PositionChanged += CaretPositionChanged;
+            TabColorsUpdate();
+        }
+        private void TabColorsUpdate()
+        {
+            this.WhenActivated(disposables =>
+            {
+                (Application.Current as App).Settings.
+                WhenAnyValue(x => x.TabWindowColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    TextEditingControl.Background = Brush.Parse(s);
+                });
+            (Application.Current as App).Settings.
+                WhenAnyValue(x => x.TabWindowTextColor).
+                Subscribe<string>(onNext: s =>
+                {
+                    TextEditingControl.Foreground = Brush.Parse(s);
+                });
+            });
         }
         private void MouseWheelFontSizer(object? sender, PointerWheelEventArgs e)
         {

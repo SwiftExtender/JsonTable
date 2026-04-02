@@ -15,7 +15,6 @@
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaTitleBarHeightHint="-1"
 		Title="TableJson"
-		Background="{Binding MainWindowColor}"
 		Topmost="{Binding IsPinnedWindow}"
 		>
 	<Border BorderThickness="1.5" BorderBrush="#D2B1A38E" IsVisible="True">
