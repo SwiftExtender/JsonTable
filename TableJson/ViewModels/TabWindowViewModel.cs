@@ -1,137 +1,23 @@
-﻿using Avalonia.Input;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using AvaloniaEdit;
 using AvaloniaEdit.Document;
-using AvaloniaEdit.Editing;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using TableJson.Models;
+using System.Reactive.Linq;
+using System.Collections.ObjectModel;
 using TableJson.Services;
 
 namespace TableJson.ViewModels
 {
-    //public class ContextCommand<T> : ICommand
-    //{
-    //    private readonly Action<T> _execute;
-    //    private readonly Predicate<T> _canExecute;
-    //    private event EventHandler? _canExecuteChanged;
-
-    //    public ContextCommand(Action<T> execute, Predicate<T> canExecute)
-    //    {
-    //        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-    //        _canExecute = canExecute;
-    //    }
-    //    public event EventHandler? CanExecuteChanged
-    //    {
-    //        add => _canExecuteChanged += value;
-    //        remove => _canExecuteChanged -= value;
-    //    }
-    //    public bool CanExecute(object? parameter)
-    //    {
-    //        if (parameter == null)
-    //        {
-    //            return true;
-    //        }
-    //        return _canExecute((T)parameter);
-    //    }
-    //    public void Execute(object? parameter)
-    //    {
-    //        _execute((T)parameter);
-    //    }
-    //}
-    public class MacrosMenuItem()
-    {
-        public string Header { get; set; }
-        public ICommand Command { get; set; }
-        public KeyGesture HotKey { get; set; }
-        public bool IsArgsRequired { get; set; }
-        public string ItemColor { get; set; }
-        public string TextColor { get; set; }
-        public string HotkeyTextColor { get; set; }
-    }
     public class TabWindowViewModel : ViewModelBase
     {
-        private string _ContextMenuItemColor = "";
-        public string ContextMenuItemColor
+        public ObservableCollection<ScriptMenuItem> TabMenu
         {
-            get { return _ContextMenuItemColor; }
-            set => this.RaiseAndSetIfChanged(ref _ContextMenuItemColor, value);
-        }
-        private string _ContextMenuTextColor = "";
-        public string ContextMenuTextColor
-        {
-            get { return _ContextMenuTextColor; }
-            set => this.RaiseAndSetIfChanged(ref _ContextMenuTextColor, value);
-        }
-        private string _ContextMenuHotkeyTextColor = "";
-        public string ContextMenuHotkeyTextColor
-        {
-            get { return _ContextMenuHotkeyTextColor; }
-            set => this.RaiseAndSetIfChanged(ref _ContextMenuHotkeyTextColor, value);
-        }
-        public void CopyMouseCommand(TextArea textArea)
-        {
-            ApplicationCommands.Copy.Execute(null, textArea);
-        }
-        public void CutMouseCommand(TextArea textArea)
-        {
-            ApplicationCommands.Cut.Execute(null, textArea);
-        }
-        public void PasteMouseCommand(TextArea textArea)
-        {
-            ApplicationCommands.Paste.Execute(null, textArea);
-        }
-        public void SelectAllMouseCommand(TextArea textArea)
-        {
-            ApplicationCommands.SelectAll.Execute(null, textArea);
-        }
-        public void OpenFolderPathCommand(TextArea textArea)
-        {
-            string path = textArea.Selection.GetText();
-            if (Directory.Exists(path))
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    Process.Start("explorer", path);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    Process.Start("open", path);
-                }
-                else
-                {
-                    Process.Start("xdg-open", path);
-                }
-            }
-            else
-            {
-                StatusText = "Invalid Folder";
-            }
-
-        }
-        public void OpenUrlCommand(TextArea textArea)
-        {
-            string url = textArea.Selection.GetText();
-            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-            }
-            else
-            {
-                StatusText = "Invalid URL";
-            }
+            get => (Application.Current as App).ContextMenuService.ScriptsContextMenu;
         }
         private string _FileFullPath = "";
         public string FileFullPath
@@ -139,32 +25,23 @@ namespace TableJson.ViewModels
             get => _FileFullPath;
             set => this.RaiseAndSetIfChanged(ref _FileFullPath, value);
         }
-
         private string _ResultText = "";
         public string ResultText
         {
             get => _ResultText;
             set => this.RaiseAndSetIfChanged(ref _ResultText, value);
         }
-
         private TextDocument _RawText = new TextDocument();
         public TextDocument RawText
         {
             get => _RawText;
             set => this.RaiseAndSetIfChanged(ref _RawText, value);
         }
-
         private string _StatusText = "No macros launched";
         public string StatusText
         {
             get => _StatusText;
             set => this.RaiseAndSetIfChanged(ref _StatusText, value);
-        }
-        private ObservableCollection<MacrosMenuItem> _MacrosContextMenu;
-        public ObservableCollection<MacrosMenuItem> MacrosContextMenu
-        {
-            get => _MacrosContextMenu;
-            set => this.RaiseAndSetIfChanged(ref _MacrosContextMenu, value);
         }
         //public async Task LoadFileAs(IStorageFile file) {
         //    await using var stream = await file.OpenReadAsync();
@@ -228,107 +105,15 @@ namespace TableJson.ViewModels
                 }
             }, DispatcherPriority.Background);
         }
-        public Action<TextArea> ExtractHandler(byte[] dllArray)
-        {
-            try
-            {
-                Assembly asm = Assembly.Load(dllArray);
-                Type type = asm.GetType("ContextItemPlugin.Plugin");
-                MethodInfo entrypoint = type.GetMethod("Handler");
-                if (entrypoint != null)
-                {
-                    return (Action<TextArea>)Delegate.CreateDelegate(typeof(Action<TextArea>), entrypoint);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }
-        public KeyGesture GetValidatedHotkey(string rawHotKey)
-        {
-            if (rawHotKey != null)
-            {
-                return KeyGesture.Parse(rawHotKey);
-            }
-            else
-            {
-                return null;
-            }
-        }
-        public ObservableCollection<MacrosMenuItem> PopulateMacroMenu()
-        {
-            List<MacrosMenuItem> menuItems = new();
-            string defaultMenuItemColor = ContextMenuItemColor;
-            string defaultMenuTextColor = ContextMenuTextColor;
-            string defaultMenuHotkeyTextColor = ContextMenuHotkeyTextColor;
-            menuItems.Add(new MacrosMenuItem { Header = "Copy", Command = ReactiveCommand.Create<TextArea>(CopyMouseCommand), HotKey = new KeyGesture(Key.C, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
-            menuItems.Add(new MacrosMenuItem { Header = "Cut", Command = ReactiveCommand.Create<TextArea>(CutMouseCommand), HotKey = new KeyGesture(Key.X, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
-            menuItems.Add(new MacrosMenuItem { Header = "Paste", Command = ReactiveCommand.Create<TextArea>(PasteMouseCommand), HotKey = new KeyGesture(Key.V, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
-            menuItems.Add(new MacrosMenuItem { Header = "Select All", Command = ReactiveCommand.Create<TextArea>(SelectAllMouseCommand), HotKey = new KeyGesture(Key.A, KeyModifiers.Control), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
-            //menuItems.Add(new MacrosMenuItem { Header = "Open as Folder", Command = ReactiveCommand.Create<TextArea>(OpenFolderPathCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
-            //menuItems.Add(new MacrosMenuItem { Header = "Open as URL", Command = ReactiveCommand.Create<TextArea>(OpenUrlCommand), ItemColor = defaultMenuItemColor, TextColor = defaultMenuTextColor });
-
-            using (var DataSource = new HelpContext())
-            {
-                List<Macros> selectedMacros = DataSource.MacrosTable.Where(i => i.IsActive == true).Where(i => i.BinaryExecutable != null).ToList();
-                foreach (Macros macro in selectedMacros)
-                {
-                    Action<TextArea> customMethod = ExtractHandler(macro.BinaryExecutable);
-                    if (customMethod != null)
-                    {
-                        MacrosMenuItem t = new MacrosMenuItem
-                        {
-                            Header = macro.Name,
-                            Command = ReactiveCommand.Create<TextArea>(customMethod),
-                            HotKey = GetValidatedHotkey(macro.HotKey),
-                            ItemColor = macro.MenuItemColor,
-                            TextColor = macro.MenuTextColor
-                        };
-                        menuItems.Add(item: t);
-                    }
-                }
-            }
-            return new ObservableCollection<MacrosMenuItem>(menuItems);
-        }
-        public void SettingsSubscribe()
-        {
-            (Application.Current as App).Settings.
-                WhenAnyValue(x => x.ContextMenuTextColor).
-                Subscribe<string>(onNext: s =>
-                {
-                    this.ContextMenuTextColor = s;
-                });
-            (Application.Current as App).Settings.
-                WhenAnyValue(x => x.ContextMenuItemColor).
-                Subscribe<string>(onNext: s =>
-                {
-                    this.ContextMenuItemColor = s;
-                });
-            (Application.Current as App).Settings.
-                WhenAnyValue(x => x.ContextMenuHotkeyTextColor).
-                Subscribe<string>(onNext: s =>
-                {
-                    this.ContextMenuHotkeyTextColor = s;
-                });
-        }
         public TabWindowViewModel()
         {
-            SettingsSubscribe();
-            MacrosContextMenu = PopulateMacroMenu();
+            //MacrosContextMenu = PopulateMacroMenu();
         }
         public TabWindowViewModel(IStorageFile file)
         {
             LoadFileAsync(file.TryGetLocalPath());
             FileFullPath = file.TryGetLocalPath();
-            SettingsSubscribe();
-            MacrosContextMenu = PopulateMacroMenu();
-            //UpdateQueries();
+            //MacrosContextMenu = PopulateMacroMenu();
         }
     }
 }

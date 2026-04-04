@@ -15,6 +15,7 @@ namespace TableJson
     {
         public AppSettings Settings;
         public SettingsService SettingsService;
+        public ContextMenuService ContextMenuService;
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -32,6 +33,7 @@ namespace TableJson
             SettingsService = new SettingsService();
             SettingsService.CreateDefaultConfig();
             Settings = SettingsService.Load();
+            ContextMenuService = new ContextMenuService();
             this.AttachDevTools();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {

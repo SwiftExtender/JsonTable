@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:aedit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
 		xmlns:vm="using:TableJson.ViewModels"
+		xmlns:serv="using:TableJson.Services"
         mc:Ignorable="d"
 		xmlns:bh="using:TableJson.Behaviors"
 		xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
@@ -24,9 +25,9 @@
 				<aedit:TextEditorOptions EnableRectangularSelection="False" AllowScrollBelowDocument="False" EnableTextDragDrop="False" EnableEmailHyperlinks="False" EnableHyperlinks="False"/>
 			</aedit:TextEditor.Options>
 			<aedit:TextEditor.ContextFlyout>
-						<MenuFlyout ItemsSource="{Binding MacrosContextMenu}" VerticalOffset="0">
+						<MenuFlyout ItemsSource="{Binding TabMenu}"  VerticalOffset="0">
 							<MenuFlyout.ItemContainerTheme>
-								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" x:DataType="vm:MacrosMenuItem">
+								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" x:DataType="serv:ScriptMenuItem">
 									<Setter Property="CommandParameter" Value="{Binding #TextEditingControl.TextArea}"/>
 									<Setter Property="Command" Value="{Binding Command}"/>
 									<Setter Property="Header" Value="{Binding Header}"/>

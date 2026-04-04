@@ -14,7 +14,6 @@ using System.Linq;
 using System.Reactive;
 using System.Runtime.InteropServices;
 using TableJson.Models;
-using TableJson.Services;
 
 namespace TableJson.ViewModels
 {
@@ -263,7 +262,6 @@ namespace TableJson.ViewModels
         }
         public MacrosWindowViewModel()
         {
-
             CompileSourceCodeCommand = ReactiveCommand.Create(CompileSourceCode);
             RemoveMacrosCommand = ReactiveCommand.Create<Macros>(RemoveMacros);
             SaveMacrosCommand = ReactiveCommand.Create<Macros>(SaveMacros);
@@ -275,6 +273,7 @@ namespace TableJson.ViewModels
                 MacrosGridData = new ObservableCollection<Macros>(selectedMacros);
                 SetRefsGrid();
             }
+            (Application.Current as App).ContextMenuService.PopulateScriptsMenu();
         }
     }
 }

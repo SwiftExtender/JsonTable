@@ -61,7 +61,7 @@ namespace ContextItemPlugin
         {
             var w1 = new Window();
             var panel = new Panel();
-           var grid = new ListBox();
+            var grid = new ListBox();
 		
             var t_result = new ObservableCollection<string>(result);
             grid.ItemTemplate = new FuncDataTemplate<string>((s, ns) => 
@@ -76,9 +76,7 @@ namespace ContextItemPlugin
         public static void Handler(TextArea textarea)
         {
             var selection = textarea.Selection;
-	    string text = selection.GetText();
-            //string text = textarea.Document.Text;
-
+	        string text = selection.GetText();
             string[] lines = text
                 .Split(
                     new[] { Environment.NewLine, "\r\n", "\r", "\n" },
@@ -100,6 +98,72 @@ namespace ContextItemPlugin
             }
 
             ShowDataGridResults(result);
+        }
+    }
+}
+```
+
+3) Open as folder in file explorer
+
+```
+using AvaloniaEdit.Editing;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+
+namespace ContextItemPlugin
+{
+    class Plugin
+    {
+        public static void Handler(TextArea textarea)
+        {
+            string path = textarea.Selection.GetText();
+            if (Directory.Exists(path))
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    Process.Start("explorer", path);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", path);
+                }
+                else
+                {
+                    Process.Start("xdg-open", path);
+                }
+            }
+            else
+            {
+                StatusText = "Invalid Folder";
+            }
+        }
+    }
+}
+```
+
+4) Open as web link
+
+```
+using AvaloniaEdit.Editing;
+using System;
+using System.Diagnostics;
+
+namespace ContextItemPlugin
+{
+    class Plugin
+    {
+        public static void Handler(TextArea textarea)
+        {
+            string url = textarea.Selection.GetText();
+            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            else
+            {
+                StatusText = "Invalid URL";
+            }
         }
     }
 }
